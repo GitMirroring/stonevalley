@@ -197,33 +197,33 @@ XSortError svXSort(FILE * fpout, FILE * fpin, size_t len, size_t num, size_t siz
 		while (uValidCount > 0)
 		{
 			FILE * fp;
-			ptrdiff_t min_index = -1;
+			ptrdiff_t iMinIndex = -1;
 			for (i = 0; i < uChunkCount; ++i)
 			{
 				if
 				(
 					strGetBitBMap(pbmValid, 0, i) &&
 					(
-						min_index == -1 ||
-						cbfcmp(strLocateItemArrayZ(parrBuffer, size, i), strLocateItemArrayZ(parrBuffer, size, min_index)) < 0
+						iMinIndex == -1 ||
+						cbfcmp(strLocateItemArrayZ(parrBuffer, size, i), strLocateItemArrayZ(parrBuffer, size, iMinIndex)) < 0
 					)
 				)
 				{
-					min_index = (ptrdiff_t)i;
+					iMinIndex = (ptrdiff_t)i;
 				}
 			}
 
-			fwrite(strLocateItemArrayZ(parrBuffer, size, min_index), size, 1, fpout);
+			fwrite(strLocateItemArrayZ(parrBuffer, size, iMinIndex), size, 1, fpout);
 			
-			fp = ((P_MFILE)strLocateItemArrayZ(parrChunkFile, sizeof(MFILE), min_index))->fp;
+			fp = ((P_MFILE)strLocateItemArrayZ(parrChunkFile, sizeof(MFILE), iMinIndex))->fp;
 			if (feof(fp))
 			{
-				strSetBitBMap(pbmValid, 0, min_index, FALSE);
+				strSetBitBMap(pbmValid, 0, iMinIndex, FALSE);
 				--uValidCount;
 			}
 			else
 			{
-				fread(strLocateItemArrayZ(parrBuffer, size, min_index), size, 1, fp);
+				fread(strLocateItemArrayZ(parrBuffer, size, iMinIndex), size, 1, fp);
 			}
 		}
 
