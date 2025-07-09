@@ -2,7 +2,7 @@
  * Name:        mksvh.c
  * Description: Make one StoneValley header tool.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0709250909A0709250910L00134
+ * File ID:     0709250909A0709250933L00168
  * License:     LGPLv3
  * Copyright (C) 2025 John Cage
  *
@@ -26,9 +26,10 @@
  * Please include sv.h whenever and wherever you want.
  *
  */
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdio.h>  /* Using type FILE, function fopen, fputs, feof, fgetc, fputc and fclose. */
+#include <stdlib.h> /* Using function exit. */
 
+/* Make type boolean. */
 typedef unsigned bool;
 
 #ifndef true
@@ -39,8 +40,10 @@ typedef unsigned bool;
 #define false 0
 #endif
 
+/* One header name. */
 #define SZ_HEADER "sv.h"
 
+/* StoneValley files array. */
 const char * SZFILE[] = 
 {
 	"svdef.h",
@@ -68,6 +71,12 @@ const char * SZFILE[] =
 	"svgraph.c"
 };
 
+/* Function name: GetFile
+ * Description:   Fetch file pointer.
+ * Parameter:
+ *    szfile File name string.
+ * Return value:  File pointer.
+ */
 FILE * GetFile(const char * szfile)
 {
 	FILE * fp;
@@ -77,6 +86,14 @@ FILE * GetFile(const char * szfile)
 	return fp;
 }
 
+/* Function name: PutFile
+ * Description:   Copy a file into another file.
+ * Parameters:
+ *       fpin Pointer to the destined file.
+ *      fpout Pointer to the file to be copied.
+ * Return value:  true  Coping succeeded.
+ *                false Coping failed.
+ */
 bool PutFile(FILE * fpin, FILE * fpout)
 {
 	if (NULL == fpin || NULL == fpout)
@@ -86,7 +103,7 @@ bool PutFile(FILE * fpin, FILE * fpout)
 	{
 		register int c;
 		c = fgetc(fpout);
-		if (EOF != c)
+		if (EOF != c)       /* Filter out EOF. */
 			fputc(c, fpin); /* Move a char in the file. */
 	}
 	
@@ -95,18 +112,32 @@ bool PutFile(FILE * fpin, FILE * fpout)
 	return true;
 }
 
+/* Function name: PAssert
+ * Description:   Phony assert function.
+ * Parameters:
+ *        exp An expression that returns boolean.
+ *         sz File name to locate error.
+ * Return value:  N/A.
+ */
 void PAssert(bool exp, const char * sz)
 {
 	if (!exp)
 	{
-		printf("File operation failure at file %s!\n", sz);
+		printf("File operation failure at file \"%s\"!\n", sz);
 		exit(2);
 	}
 }
 
+/* Function name: main
+ * Description:   Program entry.
+ * Parameters:    N/A.
+ * Return value:  0: No error.
+ *                1: Can not open sv.h for writing.
+ *                2: Can not open a StoneValley file for reading.
+ */
 int main()
 {
-	FILE * fpsvh;
+	FILE * fpsvh; /* Open sv.h for writing. */
 	
 	fpsvh = fopen(SZ_HEADER, "w");
 	
@@ -114,14 +145,17 @@ int main()
 	{
 		size_t i;
 		
+		/* Add pre-compiling header. */
 		fputs("#ifndef _SV_H_\r\n", fpsvh);
 		fputs("#define _SV_H_\r\n", fpsvh);
 		
+		/* Copy files. */
 		for (i = 0; i < sizeof(SZFILE) / sizeof(SZFILE[0]); ++i)
 		{
 			PAssert(PutFile(fpsvh, GetFile(SZFILE[i])), SZFILE[i]);
 		}
 		
+		/* Terminate pre-compiling header. */
 		fputs("#endif\r\n\r\n", fpsvh);
 		
 		fclose(fpsvh);
