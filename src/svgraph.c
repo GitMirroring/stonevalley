@@ -1066,7 +1066,7 @@ int _grpCBFMSTInsertEdges(void * pitem, size_t param)
 			sizeof(_EDGEREC),
 			_grpCBFCompareInteger,
 			EBS_LAST_LESS_THAN_OR_EQUAL_TO_KEY
-		) - parrz->pdata + sizeof(_EDGEREC)) / sizeof(_EDGEREC)
+		) - parrz->pdata) / sizeof(_EDGEREC) + 1
 	);
 	return CBF_CONTINUE;
 }
@@ -1204,7 +1204,7 @@ BOOL _grpDisjointSetInsert(P_ARRAY_Z parrz, size_t x, size_t y)
 				sizeof(size_t),
 				_grpCBFCompareInteger,
 				EBS_LAST_LESS_THAN_OR_EQUAL_TO_KEY
-			) - pvarr->pdata + sizeof(size_t)) / sizeof(size_t);
+			) - pvarr->pdata) / sizeof(size_t) + 1;
 			if (NULL == strResizeArrayZ(pvarr, strLevelArrayZ(pvarr) + 1, sizeof(P_ARRAY_Z)))
 				return FALSE; /* Allocation failure. */
 			strInsertItemArrayZ(pvarr, &x, sizeof(size_t), i);

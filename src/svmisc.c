@@ -2,7 +2,7 @@
  * Name:        svmisc.c
  * Description: Miscellaneous data structures.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0306170948D0710252117L00720
+ * File ID:     0306170948D0711250110L00724
  * License:     LGPLv3
  * Copyright (C) 2017-2025 John Cage
  *
@@ -615,6 +615,7 @@ void * svHeapSort(void * pbase, size_t num, size_t size, CBF_COMPARE cbfcmp)
  *            The right pointer of function cbfcmp may point to any position in the array.
  *            Please refer to the type definition CBF_COMPARE in svdef.h.
  * Return value:  A pointer to an entry in the array that matches the searching key.
+ *                If this function cannot find key, it will return NULL.
  */
 void * svBinarySearch(const void * pkey, const void * pbase, size_t num, size_t size, CBF_COMPARE cbfcmp)
 {
@@ -663,11 +664,14 @@ void * svBinarySearch(const void * pkey, const void * pbase, size_t num, size_t 
  *            EBS_LAST_LESS_THAN_OR_EQUAL_TO_KEY     [1,2,3,5,5,5,8,9]
  *                                                              ^
  * Return value:  A pointer to an entry in the array that matches the searching key.
+ *                If the value of parameter method is not belong to BSearch, function will return NULL.
  */
 void * svBinarySearchDispatch(const void * pkey, const void * pbase, size_t num, size_t size, CBF_COMPARE cbfcmp, BSearch method)
 {
-	REGISTER ptrdiff_t l = -1, r = (ptrdiff_t)num, m, s = size;
+	REGISTER ptrdiff_t l = -1, r = (ptrdiff_t)num, s = (ptrdiff_t)size;
 	REGISTER PUCHAR p = (PUCHAR) pbase;
+	REGISTER ptrdiff_t m;
+
 	switch (method)
 	{
 	case EBS_FIRST_GREATER_THAN_OR_EQUAL_TO_KEY:
@@ -715,6 +719,6 @@ void * svBinarySearchDispatch(const void * pkey, const void * pbase, size_t num,
 		}
 		return p + l * s;
 	}
-	return NULL;
+	return NULL; /* Argument error. */
 }
 

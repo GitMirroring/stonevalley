@@ -1932,7 +1932,7 @@ BOOL treInsertTrieA(P_TRIE_A ptrie, const void * pstr, size_t num, size_t size, 
 					_ELESIZ(size),
 					cbfcmp,
 					EBS_LAST_LESS_THAN_OR_EQUAL_TO_KEY
-				) - (*ptrie)->pdata + _ELESIZ(size)) / _ELESIZ(size);
+				) - (*ptrie)->pdata) / _ELESIZ(size) + 1;
 				if (NULL == strResizeArrayZ(*ptrie, strLevelArrayZ(*ptrie) + 1, _ELESIZ(size)))
 					return FALSE; /* Allocation failure. */
 				else
