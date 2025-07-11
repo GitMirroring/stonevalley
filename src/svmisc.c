@@ -2,7 +2,7 @@
  * Name:        svmisc.c
  * Description: Miscellaneous data structures.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0306170948D0710250555L00720
+ * File ID:     0306170948D0710252117L00720
  * License:     LGPLv3
  * Copyright (C) 2017-2025 John Cage
  *
@@ -673,7 +673,7 @@ void * svBinarySearchDispatch(const void * pkey, const void * pbase, size_t num,
 	case EBS_FIRST_GREATER_THAN_OR_EQUAL_TO_KEY:
 		while (l + 1 < r)
 		{
-			m = (l + r) / 2;
+			m = (l + r) >> 1;
 
 			if (cbfcmp(p + m * s, pkey) < 0)
 				l = m;
@@ -684,7 +684,7 @@ void * svBinarySearchDispatch(const void * pkey, const void * pbase, size_t num,
 	case EBS_LAST_LESS_THAN_KEY:
 		while (l + 1 < r)
 		{
-			m = (l + r) / 2;
+			m = (l + r) >> 1;
 
 			if (cbfcmp(p + m * s, pkey) < 0)
 				l = m;
@@ -695,7 +695,7 @@ void * svBinarySearchDispatch(const void * pkey, const void * pbase, size_t num,
 	case EBS_FIRST_GREATER_THAN_KEY:
 		while (l + 1 < r)
 		{
-			m = (l + r) / 2;
+			m = (l + r) >> 1;
 
 			if (cbfcmp(p + m * s, pkey) <= 0)
 				l = m;
@@ -706,7 +706,7 @@ void * svBinarySearchDispatch(const void * pkey, const void * pbase, size_t num,
 	case EBS_LAST_LESS_THAN_OR_EQUAL_TO_KEY:
 		while (l + 1 < r)
 		{
-			m = (l + r) / 2;
+			m = (l + r) >> 1;
 
 			if (cbfcmp(p + m * s, pkey) <= 0)
 				l = m;
