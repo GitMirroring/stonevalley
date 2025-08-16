@@ -38,6 +38,7 @@ typedef struct st_VOCABULARY
 	char * pword; /* Allocated string. */
 } VOCABULARY, * P_VOCABULARY;
 
+/* File level function declarations. */
 static P_VOCABULARY CreateWord(void);
 static void DeleteWord(P_VOCABULARY pvol);
 static void DestoryArray(P_ARRAY_Z parrz);
@@ -55,13 +56,13 @@ static P_VOCABULARY CreateWord(void)
 	}
 	return pvol;
 }
- 
+
 static void DeleteWord(P_VOCABULARY pvol)
 {
 	free(pvol->pword);
 	free(pvol);
 }
- 
+
 static void DestoryArray(P_ARRAY_Z parrz)
 {
 	size_t i = 0;
@@ -75,24 +76,24 @@ static void DestoryArray(P_ARRAY_Z parrz)
 	}
 	strFreeArrayZ(parrz);
 }
- 
+
 static int CbfPrintResult(void * pitem, size_t param)
 {
 	printf("%s %lu\n", (*((P_VOCABULARY *)pitem))->pword, (*((P_VOCABULARY *)pitem))->freq);
 	DWC4100(param);
 	return CBF_CONTINUE;
 }
- 
+
 static int cbfcmpchar(const void * px, const void * py)
 {
 	return *(char *)px - *(char *)py;
 }
- 
+
 static int cbfcmpfreq(const void * px, const void * py)
 {
 	return (*(P_VOCABULARY *)py)->freq - (*(P_VOCABULARY *)px)->freq;
 }
- 
+
 int main(int argc, char * argv[])
 {
 	int c;
