@@ -20,8 +20,11 @@
 // If not, see <https://www.gnu.org/licenses/>.
 //
 #include <stdio.h>
+#include <string.h>
 #include "svstring.h"
 #include "svtree.h"
+
+#define SZ_STR "I am the architect of StoneValley. I love this library."
 
 /* This function illustrates how to use Huffman algorithm to compress data. */
 int main(void)
@@ -29,7 +32,12 @@ int main(void)
 	P_ARRAY_Z ptbl = NULL; /* Used to store a symbol table. */
 	P_BITSTREAM pbsout, pbsin; /* Bit-streams that used to contain data. */
 	/* Encode string. Caution that table is important for decoding. */
-	if (NULL == (pbsin = treHuffmanEncoding(&ptbl, (const PUCHAR)"I am the architect of StoneValley. I love this library.", 56)))
+	if (NULL == (ptbl = treCreateHuffmanTable(SZ_STR, strlen(SZ_STR) + 1)))
+	{
+		fprintf(stderr, "Error! Can create symbol table.\n");
+		return __LINE__;
+	}
+	if (NULL == (pbsin = treHuffmanEncoding(ptbl, SZ_STR, strlen(SZ_STR) + 1)))
 	{
 		fprintf(stderr, "Error! Can not Encode.\n");
 		return __LINE__;

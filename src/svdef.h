@@ -2,7 +2,7 @@
  * Name:        svdef.c
  * Description: Common definitions.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0306171808Z0503231713L00096
+ * File ID:     0306171808Z0913251430L00098
  * License:     LGPLv3
  * Copyright (C) 2017-2025 John Cage
  *
@@ -27,18 +27,20 @@
 #include <stddef.h> /* Using type size_t, ptrdiff_t. */
 
 /* Library version. */
-#define SV_LIB_VER "1.2.2.0"
+#define SV_LIB_VER "1.2.2.1"
 
-/* Boolean constants. */
-#define TRUE  1
-#define FALSE 0
+/* Boolean type and constants. */
+typedef enum bool
+{
+	FALSE, /* =0. */
+	TRUE   /* =1. */
+} BOOL;
 
 /* Callback function returning values. */
 #define CBF_TERMINATE TRUE
 #define CBF_CONTINUE FALSE
 
 /* Common data types. */
-typedef unsigned int    BOOL;
 typedef unsigned char   UCHART;
 typedef unsigned char * PUCHAR; /* Usually, sizeof(unsigned char) == 1. */
 
