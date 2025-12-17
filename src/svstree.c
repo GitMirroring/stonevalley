@@ -1034,7 +1034,7 @@ void _treRBTransplant(P_RBT prbt, P_RBTNODE u, P_RBTNODE v)
  */
 void _treRBDeleteFixup(P_RBT prbt, P_RBTNODE x)
 {
-	while (x != *prbt && BLACK == _NODE_COLOR(x, const RBTColor))
+	while (NULL != x && x != *prbt && BLACK == _NODE_COLOR(x, const RBTColor))
 	{
 		REGISTER bool A, B;
 		REGISTER P_RBTNODE w;
