@@ -242,7 +242,7 @@ void * strInsertItemArrayZ(P_ARRAY_Z parrz, const void * pitem, size_t size, siz
  *      parrz Pointer to a sized array.
  *       size Size of each element in the array.
  *      index Index of the item you want to remove. Index starts from 0.
- *    bshrink Input true to shrink array, otherwise input FASLE.
+ *    bshrink Input true to shrink array, otherwise input false.
  * Return value:  N/A.
  * Caution:       Address of parrz Must Be Allocated first.
  */
