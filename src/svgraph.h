@@ -2,7 +2,7 @@
  * Name:        svgraph.h
  * Description: Graphs interface.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0901171625S0420261300L00178
+ * File ID:     0901171625S0503260240L00202
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -86,6 +86,11 @@ size_t     grpGetDimensionM_O      (P_GRAPH_M pgrp);
 bool       grpResizeM              (P_GRAPH_M pgrp,  size_t       vtxc);
 size_t     grpGetEdgeWeightM       (P_GRAPH_M pgrp,  size_t *     pweight, size_t       vidx,    size_t       vidy);
 bool       grpSetEdgeWeightM       (P_GRAPH_M pgrp,  size_t       vidx,    size_t       vidy,    size_t       weight);
+int        grpTraverseVertexEdgesM  (P_GRAPH_M pgrp,  size_t       vid,     CBF_TRAVERSE cbftvs,  size_t       param);
+bool       grpAreAdjacentVerticesM_O(P_GRAPH_M pgrp,  size_t       vidx,    size_t       vidy);
+size_t     grpEdgesCountM           (P_GRAPH_M pgrp);
+size_t     grpIndegreeVertexM       (P_GRAPH_M pgrp, size_t vid);
+size_t     grpOutdegreeVertexM      (P_GRAPH_M pgrp, size_t vid);
 int        grpDFSM                 (P_GRAPH_M pgrp,  size_t       vid,     CBF_TRAVERSE cbftvs,  size_t       param);
 int        grpBFSM                 (P_GRAPH_M pgrp,  size_t       vid,     CBF_TRAVERSE cbftvs,  size_t       param);
 /* Functions for both adjacent matrix representation of graphs and adjacent list representation of graphs. */
@@ -107,6 +112,7 @@ P_GRAPH_M  grpCreateMFromL         (P_GRAPH_L pgrpl);
 } while (0)
 #define grpCopyM_M(pdest_M, psrc_M) (NULL != strCopyMatrix((pdest_M), (psrc_M), sizeof(size_t)))
 #define grpGetDimensionM_M(pgrp_M)  ((pgrp_M)->ln != (pgrp_M)->col ? 0 : (pgrp_M)->ln)
+#define grpAreAdjacentVerticesM_M(pgrp_M, vidx_M, vidy_M) (0 != grpGetEdgeWeightM(pgrp_M, NULL, vidx_M, vidy_M))
 
 /* Library optimal switch. */
 #if   SV_OPTIMIZATION == SV_OPT_MINISIZE
@@ -117,6 +123,7 @@ P_GRAPH_M  grpCreateMFromL         (P_GRAPH_L pgrpl);
 	#define grpDeleteM                    grpDeleteM_M
 	#define grpCopyM                      grpCopyM_M
 	#define grpGetDimensionM              grpGetDimensionM_M
+	#define grpAreAdjacentVerticesM       grpAreAdjacentVerticesM_M
 #elif SV_OPTIMIZATION == SV_OPT_MAXSPEED
 	#define grpInitL                      grpInitL_M
 	#define grpCreateL                    treCreateBST
@@ -125,6 +132,7 @@ P_GRAPH_M  grpCreateMFromL         (P_GRAPH_L pgrpl);
 	#define grpDeleteM                    grpDeleteM_M
 	#define grpCopyM                      grpCopyM_M
 	#define grpGetDimensionM              grpGetDimensionM_M
+	#define grpAreAdjacentVerticesM       grpAreAdjacentVerticesM_M
 #elif SV_OPTIMIZATION == SV_OPT_FULLOPTM
 	#define grpInitL                      grpInitL_M
 	#define grpCreateL                    treCreateBST
@@ -133,6 +141,7 @@ P_GRAPH_M  grpCreateMFromL         (P_GRAPH_L pgrpl);
 	#define grpDeleteM                    grpDeleteM_M
 	#define grpCopyM                      grpCopyM_M
 	#define grpGetDimensionM              grpGetDimensionM_M
+	#define grpAreAdjacentVerticesM       grpAreAdjacentVerticesM_M
 #else /* Optimization has been disabled. */
 	#define grpInitL                      grpInitL_O
 	#define grpCreateL                    grpCreateL_O
@@ -141,11 +150,12 @@ P_GRAPH_M  grpCreateMFromL         (P_GRAPH_L pgrpl);
 	#define grpDeleteM                    grpDeleteM_O
 	#define grpCopyM                      grpCopyM_O
     #define grpGetDimensionM              grpGetDimensionM_O
+    #define grpAreAdjacentVerticesM       grpAreAdjacentVerticesM_O
 #endif
 
 #endif
 
-/* A diagram shows users an adjacency-list graph:
+/* A diagram shows users an adjacency list graph:
  *     +-+_VERTEX_L__________  +-+_P_NODE_S__________  +-+_P_NODE_S__________
  *     | |size_t|____vid|___1| | |P_NODE_S|pnode|___*--+ |P_NODE_S|pnode|NULL|
  *     | |LIST_S|adjlist|___*--+ |PUCHAR__|pdata|___*|   |PUCHAR__|pdata|___*|
@@ -174,5 +184,19 @@ P_GRAPH_M  grpCreateMFromL         (P_GRAPH_L pgrpl);
  *    /         5 \ 7
  *  |/_      6    _\|
  * (Vertex 2)->(Vertex 3)
+ *
+ * A diagram shows users an adjacent matrix graph:
+ *     0 1 2
+ *     y y y
+ * 0 x 0 4 5 <- This is a matrix.
+ * 1 x 0 0 6                               w
+ * 2 x 7 0 0 An edge(x, y, w) represents x -> y.
+ *
+ * # The above graph equals to the following one:
+ *      (Vertex 0)
+ *   4 /         ^
+ *    /         5 \ 7
+ *  |/_      6    _\|
+ * (Vertex 1)->(Vertex 2)
  */
 
