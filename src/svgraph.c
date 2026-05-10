@@ -1118,7 +1118,7 @@ int _grpCBFDijkstraFindEdgesToVbPuppet(void * pitem, size_t param)
 	
 	if (setIsMemberT((P_SET_T)1[(size_t *)param], &pedg->vid, _grpCBFCompareInteger))
 	{
-		REGISTER P_BSTNODE pnode = treBSTFindData_R((P_BSTNODE)*(P_SET_T)3[(size_t *)param], &4[(size_t *)param], _grpCBFCompareInteger);
+		REGISTER P_BSTNODE pnode = treBSTFindData_X((P_BSTNODE)*(P_SET_T)3[(size_t *)param], &4[(size_t *)param], _grpCBFCompareInteger);
 		_SPTREC rec, t;
 		
 		rec.vid  = pedg->vid;
