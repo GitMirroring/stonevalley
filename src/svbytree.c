@@ -78,7 +78,7 @@ int _treCBFNodeLocator(void * pitem, size_t param)
 }
 
 /* Function name: treTraverseBYPre
- * Description:   Traverse a binary tree by pre order.
+ * Description:   Traverse a binary tree by pre-order.
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -98,7 +98,7 @@ int treTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 }
 
 /* Function name: treTraverseBYIn
- * Description:   Traverse a binary tree by in order.
+ * Description:   Traverse a binary tree by in-order.
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -118,7 +118,7 @@ int treTraverseBYIn(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 }
 
 /* Function name: treTraverseBYPost
- * Description:   Traverse a binary tree by post order.
+ * Description:   Traverse a binary tree by post-order.
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -138,7 +138,7 @@ int treTraverseBYPost(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 }
 
 /* Function name: treTraverseBYLevel
- * Description:   Traverse a binary tree by level order.
+ * Description:   Traverse a binary tree by level-order.
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -211,7 +211,7 @@ int treTraverseBYArray(char order[3], P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, siz
 }
 
 /* Function name: treMorrisTraverseBYPre
- * Description:   Traverse a binary tree by pre order using Morris traversal algorithm.
+ * Description:   Traverse a binary tree by pre-order using Morris traversal algorithm.
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -264,7 +264,7 @@ int treMorrisTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 }
 
 /* Function name: treMorrisTraverseBYIn
- * Description:   Traverse a binary tree by in order using Morris traversal algorithm.
+ * Description:   Traverse a binary tree by in-order using Morris traversal algorithm.
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -331,7 +331,7 @@ void treInitBY_O(P_BYTREE ptreb)
  */
 void treFreeBY(P_BYTREE ptreb)
 {
-	/* A post order traversal is needed here.
+	/* A post-order traversal is needed here.
 	 * Because we have to free nodes from the crown to the root.
 	 */
 	treTraverseBYPost(*ptreb, _strCBFDeleteNode, ENT_DOUBLE);
@@ -474,7 +474,7 @@ size_t treHeightBY(P_TNODE_BY pnode)
  */
 P_TNODE_BY treGetParentNodeBY(P_TNODE_BY proot, P_TNODE_BY pchild)
 {
-	/* A pre order traversal is needed here.
+	/* A pre-order traversal is needed here.
 	 * Because a parent node is near by the root side.
 	 */
 	if (proot == pchild)

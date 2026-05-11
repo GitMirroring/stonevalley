@@ -361,7 +361,7 @@ int grpTraverseVerticesL(P_GRAPH_L pgrp, CBF_TRAVERSE cbftvs, size_t param)
 	si.cbftvs = cbftvs;
 	si.param  = param;
 	si.bedge  = false;
-	/* Only post order traversal is needed here. */
+	/* Only post-order traversal is needed here. */
 	return setTraverseT(pgrp, _grpCBFTraversePuppet, (size_t)&si, ETM_POSTORDER);
 }
 

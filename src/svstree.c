@@ -146,7 +146,7 @@ void treInitBST_O(P_BST pbst)
  */
 void treFreeBST(P_BST pbst)
 {
-	/* A post order traversal is needed here.
+	/* A post-order traversal is needed here.
 	 * Because we have to free nodes from crown to root.
 	 */
 	treTraverseBYPost(P2P_TNODE_BY(*pbst), _treCBFFreeNodeBST, 0);
@@ -813,7 +813,7 @@ void treInitRBT_O(P_RBT prbt)
  */
 void treFreeRBT(P_RBT prbt)
 {
-	/* A post order traversal is needed here.
+	/* A post-order traversal is needed here.
 	 * Because we have to free nodes from crown to root.
 	 */
 	treTraverseBYPost(P2P_TNODE_BY(*prbt), _treCBFFreeNodeRBT, 0);

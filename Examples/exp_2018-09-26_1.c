@@ -140,7 +140,7 @@ bool SortLinkedListDC(P_NODE_D plist, CBF_COMPARE cbfcmp, bool brev)
 	a[0] = false;
 	a[1] = (size_t)&pint;
 	strTraverseLinkedListDC_A(plist, NULL, cbftvs_copy_2, (size_t)a, brev);
-	// Deallocate array.
+	// Retract array.
 	strDeleteArrayZ(parr);
 	return true;
 }
@@ -156,7 +156,7 @@ int main(void)
 	LIST_D list2, pnoded;
 	char * pstr = "helloworld";
 	strInitLinkedListDC(&list2);
-	// Assemble single-linked list 1.
+	// Assemble single linked list 1.
 	list1[0].pdata = (PUCHAR)(size_t)(*pstr++);
 	for (i = 1; i < LIST1_LEN; ++i)
 	{
@@ -174,7 +174,7 @@ int main(void)
 		puts("List 1 after sorting:"), strTraverseLinkedListSC_A(list1, NULL, cbftvs_print, ENT_SINGLE);
 	else
 		puts("Error occurred while sorting list 1.");
-	// Assemble doubly-pointer-linked list 2.
+	// Assemble doubly-pointer linked list 2.
 	srand((unsigned int)&n);
 	n = rand() % 99 + 1;
 	list2 = strCreateNodeD(&n, sizeof(int));

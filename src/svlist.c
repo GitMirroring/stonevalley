@@ -1213,7 +1213,7 @@ void strSwapContentLinkedListSD(void * pnodex, size_t sizex, void * pnodey, size
  *            Input ENT_DOUBLE for doubly linked list nodes. Cast P_NODE_D to (void *) as parameters.
  *            Input ENT_SINGLE for single linked list nodes. Cast P_NODE_S to (void *) as parameters.
  *       brev Input true to search a linked list reversely.
- *            Input false to search a linked list in order.
+ *            Input false to search a linked list in-order.
  * Return value:  Pointer of the last item of the linked list will be cast into (void *) and returned.
  */
 void * strIsCircularLinkedListSD(void * pfirst, NodeType ntp, bool brev)

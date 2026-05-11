@@ -168,7 +168,7 @@ Lbl_Allocation_Failure:
 }
 
 /* Function name: treTraverseGLevel
- * Description:   Traverse a generic tree by level order.
+ * Description:   Traverse a generic tree by level-order.
  * Parameters:
  *      pnode Pointer to the node you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -432,7 +432,7 @@ P_TNODE_G treGetParentNodeG(P_TNODE_G proot, P_TNODE_G pchild)
  *       size Size of that data.
  * Return value:  Pointer to a node in the binary tree that contains the same data as pitem referred.
  *                If the specific data could not be found in the tree, function would return a NULL.
- * Caution:       This function will only use the level order traversal.
+ * Caution:       This function will only use the level-order traversal.
  */
 P_TNODE_G treSearchDataG(P_TNODE_G proot, const void * pitem, size_t size)
 {
