@@ -49,9 +49,9 @@ void * strInitMatrix(P_MATRIX pmtx, size_t ln, size_t col, size_t size)
 }
 
 /* Function name: strFreeMatrix_O
- * Description:   Deallocate a matrix that is allocated by function strInitMatrix.
+ * Description:   Retract a matrix that is allocated by function strInitMatrix.
  * Parameter:
- *      pmtx Pointer to a matrix you want to deallocate.
+ *      pmtx Pointer to a matrix you want to retract.
  * Return value:  N/A.
  * Caution:       Address of pmtx Must Be Allocated first.
  * Tip:           A macro version of this function named strFreeMatrix_M is available.
@@ -490,7 +490,7 @@ int strM3Matrix(P_MATRIX ppmtx[3], void * ptemp, size_t size, CBF_ALGEBRA pcbfag
 #undef MAT_COL
 #undef MAT_DATA /* Undefine used macros. */
 
-/* Assume that we have a bit-map that contains 4 lines and 5 columns.
+/* Assume that we have a bit map that contains 4 lines and 5 columns.
  *         0 1 2 3 4
  * bm(0,x) 0 0 0 0 0
  * bm(1,x) 0 0 0.0 0
@@ -501,11 +501,11 @@ int strM3Matrix(P_MATRIX ppmtx[3], void * ptemp, size_t size, CBF_ALGEBRA pcbfag
  */
 
 /* Function name: strInitBMap
- * Description:   Initialize a bit-matrix.
+ * Description:   Initialize a bit matrix.
  * Parameters:
- *        pbm Pointer to a bit-matrix you want to initialize.
- *         ln Number of lines in the bit-matrix.
- *        col Number of columns in the bit-matrix.
+ *        pbm Pointer to a bit matrix you want to initialize.
+ *         ln Number of lines in the bit matrix.
+ *        col Number of columns in the bit matrix.
  *       bval Initialize all bits as true or false.
  * Return value:  Pointer to the buffer.
  * Caution:       Address of pbm Must Be Allocated first.
@@ -525,9 +525,9 @@ void * strInitBMap(P_BITMAT pbm, size_t ln, size_t col, bool bval)
 }
 
 /* Function name: strFreeBMap_O
- * Description:   Deallocate a bit-matrix.
+ * Description:   Retract a bit matrix.
  * Parameter:
- *       pbm Pointer to a bit-matrix you want to fall it into disuse.
+ *       pbm Pointer to a bit matrix you want to fall it into disuse.
  * Return value:  N/A.
  * Caution:       Address of pbm Must Be Allocated first.
  * Tip:           A macro version of this function named strFreeBMap_M is available.
@@ -538,12 +538,12 @@ void strFreeBMap_O(P_BITMAT pbm)
 }
 
 /* Function name: strCreateBMap
- * Description:   Create a bit-matrix.
+ * Description:   Create a bit matrix.
  * Parameters:
- *         ln Number of lines in a bit-matrix.
- *        col Number of columns in a bit-matrix.
+ *         ln Number of lines in a bit matrix.
+ *        col Number of columns in a bit matrix.
  *       bval Initialize all bits as value true or false.
- * Return value:  Pointer to a new created bit-matrix.
+ * Return value:  Pointer to a new created bit matrix.
  */
 P_BITMAT strCreateBMap(size_t ln, size_t col, bool val)
 {
@@ -559,9 +559,9 @@ P_BITMAT strCreateBMap(size_t ln, size_t col, bool val)
 }
 
 /* Function name: strDeleteBMap_O
- * Description:   Delete a bit-matrix.
+ * Description:   Delete a bit matrix.
  * Parameter:
- *       pbm Pointer to a bit-matrix you want to deallocate.
+ *       pbm Pointer to a bit matrix you want to retract.
  * Return value:  N/A.
  * Caution:       Address of pbm Must Be Allocated first.
  * Tip:           A macro version of this function named strDeleteBMap_M is available.
@@ -572,7 +572,7 @@ void strDeleteBMap_O(P_BITMAT pbm)
 }
 
 /* Function name: strCopyBMap_O
- * Description:   Copy a bit-matrix from source to destination.
+ * Description:   Copy a bit matrix from source to destination.
  * Parameters:
  *      pdest Pointer to the destination matrix whose content is to be copied.
  *       psrc Pointer to the source of matrix to be copied.
@@ -589,11 +589,11 @@ void * strCopyBMap_O(P_BITMAT pdest, P_BITMAT psrc)
 }
 
 /* Function name: strGetBitBMap
- * Description:   Return the value from the specific position in a bit-matrix.
+ * Description:   Return the value from the specific position in a bit matrix.
  * Parameters:
- *        pbm Pointer to a bit-matrix you want to operate with.
- *         ln Number of line in the bit-matrix. Line number starts from 0.
- *        col Number of column in the bit-matrix. Column number starts from 0.
+ *        pbm Pointer to a bit matrix you want to operate with.
+ *         ln Number of line in the bit matrix. Line number starts from 0.
+ *        col Number of column in the bit matrix. Column number starts from 0.
  * Return value:  Either true or false at the specific line and column.
  *                If function returned value -1, it would indicate parameter ln or col is out of range.
  * Caution:       Address of pbm Must Be Allocated first.
@@ -608,11 +608,11 @@ bool strGetBitBMap(P_BITMAT pbm, size_t ln, size_t col)
 }
 
 /* Function name: strSetBitBMap
- * Description:   Set value for a bit-matrix onto the specific position.
+ * Description:   Set value for a bit matrix onto the specific position.
  * Parameters:
- *        pbm Pointer to a bit-matrix you want to operate.
- *         ln Number of line in the bit-matrix. Line number starts from 0.
- *        col Number of column in the bit-matrix. Column number starts from 0.
+ *        pbm Pointer to a bit matrix you want to operate.
+ *         ln Number of line in the bit matrix. Line number starts from 0.
+ *        col Number of column in the bit matrix. Column number starts from 0.
  * Return value:  true indicates operation succeeded.
  *                If function returned false, it would indicate parameter ln or col is out of range.
  * Caution:       Address of pbm Must Be Allocated first.
@@ -701,9 +701,9 @@ bool strInitSparseMatrix(P_SPAMAT pmtx, size_t ln, size_t col)
 }
 
 /* Function name: strFreeSparseMatrix
- * Description:   Deallocate a sparse matrix that is allocated by function strInitSparseMatrix.
+ * Description:   Retract a sparse matrix that is allocated by function strInitSparseMatrix.
  * Parameter:
- *      pmtx Pointer to a sparse matrix you want to deallocate.
+ *      pmtx Pointer to a sparse matrix you want to retract.
  * Return value:  N/A.
  * Caution:       Address of pmtx Must Be Allocated first.
  */

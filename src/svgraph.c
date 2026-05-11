@@ -81,8 +81,8 @@ typedef enum _en_FFMFLParamID {
 	_EGID_5_VIDS,
 	_EGID_6_VIDE,
 	_EGID_7_VIDT,
-	_EGID_8_BOOL_VIDE,     /* true:  Found end vertex. */
-	_EGID_9_BOOL_NVTX,     /* true:  Found new vertex. */
+	_EGID_8_BOOL_VIDE,     /* true: Found end vertex.  */
+	_EGID_9_BOOL_NVTX,     /* true: Found new vertex.  */
 	_EGID_10_BOOL_ERR,     /* true: An error occurred. */
 	_EGID_11_MAX
 } _FFMFLParamID;
@@ -246,7 +246,7 @@ int _grpCBFEdgesCountPuppet(void * pitem, size_t param)
 
 /* Attention:     This Is An Internal Function. No Interface for Library Users.
  * Function name: _grpCBFFreePuppet
- * Description:   This function is used to free linked-list.
+ * Description:   This function is used to free linked list.
  * Parameters:
  *      pitem Pointer to each P_NODE_S in a list.
  *      param N/A.
@@ -326,7 +326,7 @@ int _grpCBFRemoveEdge(void * pitem, size_t param)
 	size_t a[2];
 	a[0] = param;
 	a[1] = (size_t)pitem;
-	/* An inverse traversal for linked-list is required here. */
+	/* An inverse traversal for linked list is required here. */
 	strTraverseLinkedListSC_R(((P_VERTEX_L)pitem)->adjlist, NULL, _grpCBFRemoveEdgePuppet, (size_t)a);
 	return CBF_CONTINUE;
 }
@@ -404,9 +404,9 @@ void grpInitL_O(P_GRAPH_L pgrp)
 }
 
 /* Function name: grpFreeL
- * Description:   Deallocate a graph of which is allocated by function grpInitL.
+ * Description:   Retract a graph of which is allocated by function grpInitL.
  * Parameter:
- *      pgrp Pointer to the graph you want to deallocate.
+ *      pgrp Pointer to the graph you want to retract.
  * Return value:  N/A.
  * Caution:       Address of pgrp Must Be Allocated first.
  */
@@ -431,7 +431,7 @@ P_GRAPH_L grpCreateL_O(void)
 /* Function name: grpDeleteL
  * Description:   Delete a graph of which is allocated by function grpCreateL.
  * Parameter:
- *      pgrp Pointer to the graph you want to deallocate.
+ *      pgrp Pointer to the graph you want to retract.
  * Return value:  N/A.
  * Caution:       Address of pgrp Must Be Allocated first.
  * Tip:           A macro version of this function named treDeleteBY_M is available.
@@ -1028,7 +1028,7 @@ int _grpCBFSPLTraverseVertexEdgesPuppet(void * pitem, size_t param)
  *                Each element of the returned sized array is a VTXREC structure.
  *                If function returned NULL, it should indicate searching failure.
  * Caution:       Address of pgrp Must Be Allocated first.
- * Tip:           Users may use function strDeleteArrayZ to deallocate grpShortestPathL returned arrays.
+ * Tip:           Users may use function strDeleteArrayZ to retract grpShortestPathL returned arrays.
  */
 P_ARRAY_Z grpShortestPathFastL(P_GRAPH_L pgrp, size_t vidx)
 {
@@ -2230,9 +2230,9 @@ void * grpInitM(P_GRAPH_M pgrp, size_t vtxc)
 }
 
 /* Function name: grpFreeM_O
- * Description:   Deallocate a graph of which is allocated by function grpInitM.
+ * Description:   Retract a graph of which is allocated by function grpInitM.
  * Parameter:
- *      pgrp Pointer to the graph you want to deallocate.
+ *      pgrp Pointer to the graph you want to retract.
  * Return value:  N/A.
  * Caution:       Address of pgrp Must Be Allocated first.
  * Tip:           A macro version of this function called grpFreeM_M is available.

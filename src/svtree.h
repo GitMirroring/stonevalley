@@ -81,9 +81,9 @@ typedef P_NODE_D * P_BPT;
 
 /* An enumeration for tree traversal methods. */
 typedef enum en_TvsMtd {
-	ETM_PREORDER        = 001, /* Pre-order. */
-	ETM_INORDER         = 002, /* In-order. */
-	ETM_POSTORDER       = 004, /* Post-order. */
+	ETM_PREORDER        = 001, /* Pre order. */
+	ETM_INORDER         = 002, /* In order. */
+	ETM_POSTORDER       = 004, /* Post order. */
 	/* ETM_DEPTHFIRST = ETM_PREORDER + ETM_INORDER + ETM_POSTORDER, */
 	ETM_LEVELORDER      = 010, /* Breadth first. */
 	/* ETM_BREADTHFIRST = ETM_LEVELORDER */

@@ -33,7 +33,7 @@ typedef struct st_VERTEX_L {
 	LIST_S adjlist; /* Adjacency list. */
 } VERTEX_L, * P_VERTEX_L;
 
-/* Edge data in adjacency-lists. */
+/* Edge data in adjacency lists. */
 typedef struct st_EDGE {
 	size_t vid;    /* Index of the adjacent vertex. */
 	size_t weight; /* Edge weight. */
@@ -51,7 +51,7 @@ typedef SET_T GRAPH_L, * P_GRAPH_L;
 /* Adjacent matrix representation of graphs. */
 typedef MATRIX GRAPH_M, * P_GRAPH_M;
 
-/* Functions for linked-list graphs. */
+/* Functions for linked list graphs. */
 P_VERTEX_L grpGetVertexByID         (P_GRAPH_L pgrp,    size_t       vid);
 bool       grpVertexExistsL         (P_GRAPH_L pgrp,    size_t       vid);
 int        grpTraverseVerticesL     (P_GRAPH_L pgrp,    CBF_TRAVERSE cbftvs,  size_t       param);

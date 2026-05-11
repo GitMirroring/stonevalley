@@ -49,7 +49,7 @@ P_TNODE_BY _treG2BYConvertPuppet(P_BYTREE ppnil, P_TNODE_G pnode, size_t size, P
  * Description:   This function enqueues child nodes for a generic tree.
  * Parameters:
  *      pitem Pointer to each node in the parent.
- *      param Pointer to a linked-list queue.
+ *      param Pointer to a linked list queue.
  * Return value:  CBF_CONTINUE only.
  */
 int _treCBFGNodeEnqueue(void * pitem, size_t param)
@@ -168,7 +168,7 @@ Lbl_Allocation_Failure:
 }
 
 /* Function name: treTraverseGLevel
- * Description:   Traverse a generic tree by level-order.
+ * Description:   Traverse a generic tree by level order.
  * Parameters:
  *      pnode Pointer to the node you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -258,9 +258,9 @@ void * treInitTNodeG(P_TNODE_G pnode, const void * pitem, size_t size)
 }
 
 /* Function name: treFreeTNodeG
- * Description:   Deallocate a node of which is allocated by function treInitTNodeG.
+ * Description:   Retract a node of which is allocated by function treInitTNodeG.
  * Parameter:
- *     ptreb Pointer to the node you want to deallocate.
+ *     ptreb Pointer to the node you want to retract.
  * Return value:  N/A.
  * Caution:       Address of pnode Must Be Allocated first.
  */
@@ -317,9 +317,9 @@ void treInitG_O(P_GTREE ptreg)
 }
 
 /* Function name: treFreeG
- * Description:   Deallocate a generic tree of which is allocated by function treInitG_O.
+ * Description:   Retract a generic tree of which is allocated by function treInitG_O.
  * Parameter:
- *     ptreb Pointer to the generic tree you want to deallocate.
+ *     ptreb Pointer to the generic tree you want to retract.
  * Return value:  N/A.
  * Caution:       Address of ptreb Must Be Allocated first.
  */
@@ -390,7 +390,7 @@ P_TNODE_G treInsertG(P_TNODE_G pnode, const void * pitem, size_t size)
  *     bclear Withdraw child pointer array from parent node.
  * Return value:  Pointer to the child node.
  *                If function returned a NULL, it should mean that pchild you input is not a child node of parent.
- * Caution:       The whole sub tree that the child node holds will be deallocated! Do not panic. It is a feature.
+ * Caution:       The whole sub tree that the child node holds will be retracted! Do not panic. It is a feature.
  */
 P_TNODE_G treRemoveSubtreeG(P_TNODE_G parent, P_TNODE_G pchild, bool bclear)
 {
@@ -454,7 +454,7 @@ P_TNODE_G treSearchDataG(P_TNODE_G proot, const void * pitem, size_t size)
  * Return value:  If swapping succeeded, function would return pnodey,
  *                otherwise function would return a NULL.
  * Caution:       prootx may equal to pnodey.
- *                Both pnodex and pnodey shall not in the same sub-tree.
+ *                Both pnodex and pnodey shall not in the same sub tree.
  */
 P_TNODE_G treSwapNodesG(P_TNODE_G prootx, P_TNODE_G pnodex, P_TNODE_G prooty, P_TNODE_G pnodey)
 {

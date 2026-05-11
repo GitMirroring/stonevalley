@@ -78,7 +78,7 @@ int _treCBFNodeLocator(void * pitem, size_t param)
 }
 
 /* Function name: treTraverseBYPre
- * Description:   Traverse a binary tree by pre-order.
+ * Description:   Traverse a binary tree by pre order.
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -98,7 +98,7 @@ int treTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 }
 
 /* Function name: treTraverseBYIn
- * Description:   Traverse a binary tree by in-order.
+ * Description:   Traverse a binary tree by in order.
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -118,7 +118,7 @@ int treTraverseBYIn(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 }
 
 /* Function name: treTraverseBYPost
- * Description:   Traverse a binary tree by post-order.
+ * Description:   Traverse a binary tree by post order.
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -138,7 +138,7 @@ int treTraverseBYPost(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 }
 
 /* Function name: treTraverseBYLevel
- * Description:   Traverse a binary tree by level-order.
+ * Description:   Traverse a binary tree by level order.
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -211,7 +211,7 @@ int treTraverseBYArray(char order[3], P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, siz
 }
 
 /* Function name: treMorrisTraverseBYPre
- * Description:   Traverse a binary tree by pre-order using Morris traversal algorithm.
+ * Description:   Traverse a binary tree by pre order using Morris traversal algorithm.
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -264,7 +264,7 @@ int treMorrisTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 }
 
 /* Function name: treMorrisTraverseBYIn
- * Description:   Traverse a binary tree by in-order using Morris traversal algorithm.
+ * Description:   Traverse a binary tree by in order using Morris traversal algorithm.
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
@@ -323,15 +323,15 @@ void treInitBY_O(P_BYTREE ptreb)
 }
 
 /* Function name: treFreeBY
- * Description:   Deallocate a binary tree of which is allocated by function treInitBY_O.
+ * Description:   Retract a binary tree of which is allocated by function treInitBY_O.
  * Parameter:
- *     ptreb Pointer to the binary tree that you want to deallocate.
+ *     ptreb Pointer to the binary tree that you want to retract.
  * Return value:  N/A.
  * Caution:       Address of ptreb Must Be Allocated first.
  */
 void treFreeBY(P_BYTREE ptreb)
 {
-	/* A post-order traversal is needed here.
+	/* A post order traversal is needed here.
 	 * Because we have to free nodes from the crown to the root.
 	 */
 	treTraverseBYPost(*ptreb, _strCBFDeleteNode, ENT_DOUBLE);
@@ -409,7 +409,7 @@ P_TNODE_BY treInsertRightBY(P_TNODE_BY pnode, const void * pitem, size_t size)
  * Parameter:
  *     pnode Pointer to the parent node which contains the left child node that you want to remove.
  * Return value:  N/A.
- * Caution:       The whole sub tree that left child node of pnode holds will be deallocated!
+ * Caution:       The whole sub tree that left child node of pnode holds will be retracted!
  */
 void treRemoveLeftBY(P_TNODE_BY pnode)
 {
@@ -422,7 +422,7 @@ void treRemoveLeftBY(P_TNODE_BY pnode)
  * Parameter:
  *     pnode Pointer to the parent node which contains the right child node that you want to remove.
  * Return value:  N/A.
- * Caution:       The whole sub tree that right child node of pnode holds will be deallocated!
+ * Caution:       The whole sub tree that right child node of pnode holds will be retracted!
  */
 void treRemoveRightBY(P_TNODE_BY pnode)
 {
@@ -474,7 +474,7 @@ size_t treHeightBY(P_TNODE_BY pnode)
  */
 P_TNODE_BY treGetParentNodeBY(P_TNODE_BY proot, P_TNODE_BY pchild)
 {
-	/* A pre-order traversal is needed here.
+	/* A pre order traversal is needed here.
 	 * Because a parent node is near by the root side.
 	 */
 	if (proot == pchild)
@@ -541,7 +541,7 @@ bool treDescendantBY(P_TNODE_BY proot, P_TNODE_BY pnode)
  *     pright Pointer to the right sub node.
  * Return value:  proot will return.
  *                NULL would return if function could not create a new node.
- * Caution:       Both pleft and pright shall not appear in the same sub-tree.
+ * Caution:       Both pleft and pright shall not appear in the same sub tree.
  *                pleft shall not equal to pright.
  */
 P_TNODE_BY treMergeNodesBY(P_TNODE_BY proot, const void * pitem, size_t size, P_TNODE_BY pleft, P_TNODE_BY pright)
@@ -567,7 +567,7 @@ P_TNODE_BY treMergeNodesBY(P_TNODE_BY proot, const void * pitem, size_t size, P_
  * Return value:  If swapping succeeded, function would return pnode2,
  *                otherwise function would return a NULL.
  * Caution:       proot1 may equal to pnode2.
- *                Both pnode1 and pnode2 shall not appear in the same sub-tree.
+ *                Both pnode1 and pnode2 shall not appear in the same sub tree.
  */
 P_TNODE_BY treSwapNodesBY(P_TNODE_BY proot1, P_TNODE_BY pnode1, P_TNODE_BY proot2, P_TNODE_BY pnode2)
 {

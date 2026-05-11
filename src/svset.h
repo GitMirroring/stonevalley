@@ -36,7 +36,7 @@ typedef BST SET_T, * P_SET_T;
 #define _setInsertBST treBSTInsertAA /* treBSTInsertAVL */
 #define _setRemoveBST treBSTRemoveAA /* treBSTRemoveAVL */
 
-/* Functions for hash-table style sets. */
+/* Functions for hash table style sets. */
 bool     setInitH_O             (P_SET_H pset,   size_t       buckets);
 void     setFreeH_O             (P_SET_H pset);
 P_SET_H  setCreateH_O           (size_t  buckets);
