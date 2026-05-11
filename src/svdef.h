@@ -2,7 +2,7 @@
  * Name:        svdef.c
  * Description: Common definitions.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0306171808Z0511260725L00100
+ * File ID:     0306171808Z0512260000L00100
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
