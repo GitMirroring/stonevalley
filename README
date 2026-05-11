@@ -88,7 +88,7 @@ v  The naming of library functions and types
 	+__Category__________________________Type_________Location___+ [Figure 2]
 	|strING______________________________|___________<svstring.h>|
 	|    + fixed size array              :ARRAY_Z:    svarray.c  |
-	|    + Singly linked list            :LIST_S:     svlist.c   |
+	|    + Single linked list          :LIST_S:     svlist.c   |
 	|    + Doubly linked list            :LIST_D:      ditto.    |
 	|    + Bit stream                    :BITSTREAM:  svmisc.c   |
 	|    + Common matrix                 :MATRIX:     svmatrix.c |

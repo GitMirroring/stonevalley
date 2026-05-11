@@ -2016,9 +2016,9 @@ int _grpCBFFFMFLFindInEdges(void * pitem, size_t param)
 
 /* Attention:     This Is An Internal Function. No Interface for Library Users.
  * Function name: _grpCBFFFMFLFindMinimalTheta
- * Description:   This function is used to find the minimal theta value of a singular linked list of a queue.
+ * Description:   This function is used to find the minimal theta value of a single linked list of a queue.
  * Parameters:
- *      pitem Pointer to each P_NODE_S in the singular linked list of a queue.
+ *      pitem Pointer to each P_NODE_S in the single linked list of a queue.
  *      param Pointer to a size_t[2] array of which.
  *            ap[0] Stores the minimal value.
  *            ap[1] Stores a pointer to a GRAPH_L of flows.
@@ -2038,7 +2038,7 @@ int _grpCBFFFMFLFindMinimalTheta(void * pitem, size_t param)
  * Function name: _grpCBFFFMFLReduceFlowValue
  * Description:   This function is used to reduce flow value of a graph by the order of an augmenting path.
  * Parameters:
- *      pitem Pointer to each P_NODE_S in the singular linked list of a queue.
+ *      pitem Pointer to each P_NODE_S in the single linked list of a queue.
  *      param Pointer to a size_t[2] array of which.
  *            ap[0] Stores the minimal value.
  *            ap[1] Stores a pointer to a GRAPH_L of flows.

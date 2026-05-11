@@ -144,7 +144,7 @@ bool        strCombineNextArrayZ           (P_ARRAY_Z    parrzr,   P_ARRAY_Z    
 void        strShuffleArrayZ               (P_ARRAY_Z    parrz,    void *       ptemp,     size_t       size,    size_t     (*nxtrnd)(void));
 int         strKMPSearchArrayZ             (P_ARRAY_Z    parrtxt,  P_ARRAY_Z    parrptn,   size_t       size,    CBF_TRAVERSE cbftvs, size_t      param);
 int         strZSearchArrayZ               (P_ARRAY_Z    parrtxt,  P_ARRAY_Z    parrptn,   size_t       size,    CBF_TRAVERSE cbftvs, size_t      param);
-/* Functions for single pointer linked lists. */
+/* Functions for singlar pointer linked lists. */
 int         strTraverseLinkedListSC_R      (LIST_S       list,     P_NODE_S     pnil,      CBF_TRAVERSE cbftvs,  size_t       param);
 int         strTraverseLinkedListSC_A      (LIST_S       list,     P_NODE_S     pnil,      CBF_TRAVERSE cbftvs,  size_t       param);
 int         strTraverseLinkedListSC_N      (LIST_S       list,     P_NODE_S     pnil,      CBF_TRAVERSE cbftvs,  size_t       param);
@@ -182,7 +182,7 @@ P_NODE_D    strLocateItemDC_N              (P_NODE_D     pnode,    ptrdiff_t    
 P_NODE_D    strInsertItemLinkedListDC      (P_NODE_D     pdest,    P_NODE_D     pnode,     bool         bafter);
 P_NODE_D    strRemoveItemLinkedListDC      (P_NODE_D     pnode);
 void        strSwapItemLinkedListD         (P_NODE_D     pnodex,   P_NODE_D     pnodey);
-/* Functions for both singular linked lists and doubly linked lists. */
+/* Functions for both single linked lists and doubly linked lists. */
 void        strSwapContentLinkedListSD     (void *       pnodex,   size_t       sizex,     void *       pnodey,  size_t       sizey,  NodeType    bnodes);
 void *      strIsCircularLinkedListSD      (void *       pfirst,   NodeType     ntp,       bool         brev);
 void *      strMergeSortLinkedListSDC      (void *       list,     bool         bCircular, NodeType     ntp,     CBF_COMPARE  cbfcmp);
@@ -214,7 +214,7 @@ bool        strProjectMatrix               (P_MATRIX     pdest,    size_t       
 int         strM1Matrix                    (P_MATRIX     pmtx,     const void * pval,    size_t       size,    CBF_ALGEBRA  cbfagb);
 int         strM2Matrix                    (P_MATRIX     pmtxa,    P_MATRIX     pmtxb,   size_t       size,    CBF_ALGEBRA  cbfagb);
 int         strM3Matrix                    (P_MATRIX     ppmtx[3], void *       ptemp,   size_t       size,    CBF_ALGEBRA  pcbfagb[2]);
-/* Functions for bit-matrices. */
+/* Functions for bit matrices. */
 void *      strInitBMap                    (P_BITMAT     pbm,      size_t       ln,      size_t       col,     bool         bval);
 void        strFreeBMap_O                  (P_BITMAT     pbm);
 P_BITMAT    strCreateBMap                  (size_t       ln,       size_t       col,     bool         val);
