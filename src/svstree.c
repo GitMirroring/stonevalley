@@ -1841,7 +1841,7 @@ bool _treMakeKeyChainBPT(P_QUEUE_L pquel, P_BPTNODE * pprev, PUCHAR * ppkeys[], 
  * Return value:  true  Loading succeeded.
  *                false Loading failed.
  * Caution:       (*) The address of pbpt pointed must be allocated first and (*pbpt) shall equal to value NULL.
- *                (*) Users need to sort pointers in the array that pkeys pointed and let the 1st pointer points to the smallest value,
+ *                (*) Users need to sort pointers in the array that pkeys pointed and let the first pointer points to the smallest value,
  *                and the last pointer in this array shall point to the biggest value.
  * Tip:           Please use bulk loading function like this way:
  *                int a[5] = { 2,1,3,4,5 }; PUCHAR keys[5]; P_BPT pbpt = treCreateBPT();
@@ -1919,7 +1919,7 @@ bool treBulkLoadBPT(P_BPT pbpt, const size_t degree, PUCHAR pkeys[], size_t num)
 				pki->pkey = ((_P_BPT_KEY_INFO)((_P_BPT_INFO)pnode->pdata)->keyarr.pdata)->pkey;
 				pnode->ppnode[PARENTPTR] = pnew;
 			}
-			/* Insert new created node into the 2nd. queue. */
+			/* Insert new created node into the second one. queue. */
 			queInsertL(pqb, &pnew, sizeof(P_BPTNODE));
 			if (queIsEmptyL(pqa))
 				svSwap(&pqa, &pqb, &pqt, sizeof(P_BPTNODE));
@@ -1929,7 +1929,7 @@ bool treBulkLoadBPT(P_BPT pbpt, const size_t degree, PUCHAR pkeys[], size_t num)
 		return true;
 Lbl_Allocation_Failure:
 		treDeleteBPT(pbpt);
-		/* Move contents of the 2nd. queue to the 1st. queue. */
+		/* Move contents of the second queue to the first queue. */
 		while (!queIsEmptyL(pqb))
 		{
 			queRemoveL(&pnode, sizeof(P_BPTNODE), pqb);
@@ -2009,7 +2009,7 @@ void _treRedistributeNodesBPT(P_BPTNODE pnode, P_BPTNODE psib, bool bright)
 	P_ARRAY_Z parrz0 = &((_P_BPT_INFO)parent->pdata)->keyarr;
 	P_ARRAY_Z parrz1 = &((_P_BPT_INFO)pnode->pdata)->keyarr;
 	P_ARRAY_Z parrz2 = &((_P_BPT_INFO)psib->pdata)->keyarr;
-	/* Reallocate mem-space for array in pnode. */
+	/* Reallocate memory spaces for array in pnode. */
 	strResizeArrayZ(parrz1, 1, sizeof(_BPT_KEY_INFO));
 	/* Locate entry in parent. */
 	for (i = 0; i < strLevelArrayZ(parrz0); ++i)

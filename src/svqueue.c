@@ -92,7 +92,7 @@ void queDeleteAC(P_QUEUE_A pqueac)
 }
 
 /* Function name: queIsInitialAC
- * Description:   Determin whether a queue is initial.
+ * Description:   Determine whether a queue is initial.
  * Parameter:
  *    pqueac Pointer to the circular queue you want to test.
  * Return value:  If the queue were initial, function would return a true,

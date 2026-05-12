@@ -350,7 +350,7 @@ bool strProjectMatrix(P_MATRIX pdest, size_t dln, size_t dcol, P_MATRIX psrc, si
  *       pval Pointer to the value that you want to operate onto the matrix.
  *       size Size of each element in the matrix.
  *     cbfagb Pointer to a callback function that uses to handle calculations on elements.
- *            The left pointer of cbfagb pointes to any element in the matrix,
+ *            The left pointer of cbfagb points to any element in the matrix,
  *            and the right pointer of cbfagb always holds a same value as pval.
  *            Please refer to the definition of type CBF_ALGEBRA.
  * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will return depended on function cbfagb.
@@ -376,8 +376,8 @@ int strM1Matrix(P_MATRIX pmtx, const void * pval, size_t size, CBF_ALGEBRA cbfag
  *      pmtxb Pointer to another matrix.
  *       size Size of each element in the matrix.
  *     cbfagb Pointer to a callback function that uses to handle calculations on elements.
- *            The left pointer of cbfagb pointes to any element in pmtxa,
- *            and the right pointer of cbfagb pointes to the corresponding value in pmtxb.
+ *            The left pointer of cbfagb points to any element in pmtxa,
+ *            and the right pointer of cbfagb points to the corresponding value in pmtxb.
  *            Please refer to the definition of type CBF_ALGEBRA.
  * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will return depended on function cbfagb.
  * Caution:       Address of pmtxa and pmtxb Have to Be Allocated first.
@@ -888,7 +888,7 @@ void * strSetValueSparseMatrix(P_SPAMAT pmtx, size_t ln, size_t col, void * pval
 						pmtx->datlst = pnode->pnode;
 					else
 						strDeleteNodeS(strRemoveItemLinkedListSC(pmtx->datlst, pnode));
-					/* Update Fenwick tree. */
+					/* Update the Fenwick tree. */
 					_strBITAdd(l + 1, -1, &pmtx->bita);
 					/* Clear bit mask. */
 					pmtx->bmask.arrz.pdata[l] = (UCHART)(pmtx->bmask.arrz.pdata[l] & ~t);
@@ -913,7 +913,7 @@ void * strSetValueSparseMatrix(P_SPAMAT pmtx, size_t ln, size_t col, void * pval
 				}
 				/* Sign a bit on bit mask. */
 				pmtx->bmask.arrz.pdata[l] = (UCHART)(pmtx->bmask.arrz.pdata[l] | t);
-				/* Update Fenwick tree. */
+				/* Update the Fenwick tree. */
 				_strBITAdd(l + 1, +1, &pmtx->bita);
 				return pnew->pdata;
 			}

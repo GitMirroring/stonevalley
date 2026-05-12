@@ -2019,7 +2019,7 @@ int _grpCBFFFMFLFindInEdges(void * pitem, size_t param)
  * Description:   This function is used to find the minimal theta value of a single linked list of a queue.
  * Parameters:
  *      pitem Pointer to each P_NODE_S in the single linked list of a queue.
- *      param Pointer to a size_t[2] array of which.
+ *      param Pointer to a size_t[2] array of which
  *            ap[0] Stores the minimal value.
  *            ap[1] Stores a pointer to a GRAPH_L of flows.
  * Return value:  Only CBF_CONTINUE will be returned.
@@ -2039,7 +2039,7 @@ int _grpCBFFFMFLFindMinimalTheta(void * pitem, size_t param)
  * Description:   This function is used to reduce flow value of a graph by the order of an augmenting path.
  * Parameters:
  *      pitem Pointer to each P_NODE_S in the single linked list of a queue.
- *      param Pointer to a size_t[2] array of which.
+ *      param Pointer to a size_t[2] array of which
  *            ap[0] Stores the minimal value.
  *            ap[1] Stores a pointer to a GRAPH_L of flows.
  * Return value:  Only CBF_CONTINUE will be returned.
@@ -2290,7 +2290,7 @@ bool grpCopyM_O(P_GRAPH_M pdest, P_GRAPH_M psrc)
  * Parameter:
  *      pgrp Pointer to a matrix graph.
  * Return value:  If function returned 0, it would indicate an error.
- *                Otherwise, this function would return the number of vertice in the matrix graph.
+ *                Otherwise, this function would return the number of vertices in the matrix graph.
  * Caution:       Address of pgrp Must Be Allocated first.
  * Tip:           A macro version of this function called grpGetDimensionM_M is available.
  */

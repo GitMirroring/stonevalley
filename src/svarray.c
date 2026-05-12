@@ -94,7 +94,7 @@ size_t strLevelArrayZ_O(P_ARRAY_Z parrz)
  *       size Element size of an array.
  *     cbftvs Pointer to a callback function.
  *      param Parameter which can be transferred into callback function.
- *       brev Input true to traverse array in-order.
+ *       brev Input true to traverse array from the first item to the last item.
  *            Input false to traverse array in reverse.
  * Return value:  The same value as callback function returns.
  * Caution:       Address of parrz Must Be Allocated first.
@@ -180,7 +180,7 @@ void * strLocateItemArrayZ_O(P_ARRAY_Z parrz, size_t size, size_t index)
  *      pitem Pointer to an element as the searching target.
  *       size Size of an element.
  *       brev Input true  to search array in reverse.
- *            Input false to search array in-order. That means to search the element from index 0 to the end of array.
+ *            Input false to search array in order. That means to search the element from index 0 to the end of array.
  * Return value:  (*) Index of element + 1. If function returned 0, it should mean pitem could not found.
  * Caution:       Address of parrz Must Be Allocated first.
  */

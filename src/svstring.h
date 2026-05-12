@@ -84,7 +84,7 @@ typedef struct st_MATRIX {
  * This function should return either CBF_CONTINUE or CBF_TERMINATE.
  * If callback algebraic function returned CBF_TERMINATE,
  *   caller would be interrupted,
- *     unless callee should return CBF_CONTINUE to calculate continually.
+ *     unless the callee should return CBF_CONTINUE to calculate continually.
  */
 typedef CBF_COMPARE CBF_ALGEBRA;
 

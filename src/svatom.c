@@ -92,7 +92,7 @@ void strSetArrayZ(P_ARRAY_Z parrz, const void * pval, size_t size)
  *      parrz Pointer to the sized array you want to allocate.
  *        num Number of elements.
  *       size Size of each element.
- *            If size equaled to 0, function would return a NULL after deallocating the array.
+ *            If size equaled to 0, function would return a NULL after retracting the array.
  * Return value:  Pointer to new allocated buffer.
  * Caution:       Address of parrz Must Be Allocated first.
  */

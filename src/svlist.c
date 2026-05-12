@@ -433,7 +433,7 @@ P_NODE_S strLocatePreviousItemSC(LIST_S list, P_NODE_S pnode)
 }
 
 /* Function name: strLocateLastItemSC
- * Description:   Locate the last item in linked-list.
+ * Description:   Locate the last item in a linked list.
  * Parameter:
  *      list Pointer to the first NODE_S element of a linked list.
  * Return value:  Pointer to the last node.
@@ -670,8 +670,8 @@ LIST_S strQuickSortLinkedListS(LIST_S phead, CBF_COMPARE cbfcmp)
  *     cbftvs Pointer to a callback function.
  *      param Additional information for each node.
  *       brev If brev equaled true, doubly linked list would be traversed reversely.
- *             That is the order of deallocation which were from the current one to the previous one.
- *             If brev equaled false, the order of deallocation would run from the current one to the next one.
+ *             That is the order of retracting which were from the current one to the previous one.
+ *             If brev equaled false, the order of retracting would run from the current one to the next one.
  * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will be returned.
  * Tip:           No dead cycles for circular linked lists.
  */
@@ -710,8 +710,8 @@ int strTraverseLinkedListDC_R(LIST_D list, P_NODE_D pnil, CBF_TRAVERSE cbftvs, s
  *     cbftvs Pointer to a callback function.
  *      param Additional information for each node.
  *       brev If brev equaled true, a doubly linked list would be traversed reversely.
- *            That is the order of deallocation which were from the current one to the previous one.
- *            If brev equaled false, the order of deallocation would run from the current one to the next one.
+ *            That is the order of retracting which were from the current one to the previous one.
+ *            If brev equaled false, the order of retracting would run from the current one to the next one.
  * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will be returned.
  * Tip:           No dead cycles for circular linked lists.
  */
@@ -749,8 +749,8 @@ int strTraverseLinkedListDC_A(LIST_D list, P_NODE_D pnil, CBF_TRAVERSE cbftvs, s
  *     cbftvs Pointer to a callback function.
  *      param Additional information for each node.
  *       brev If brev equaled true, doubly linked list would be traversed reversely.
- *            That is the order of deallocation which were from the current one to the previous one.
- *            If brev equaled false, the order of deallocation would run from the current one to the next one.
+ *            That is the order of retracting which were from the current one to the previous one.
+ *            If brev equaled false, the order of retracting would run from the current one to the next one.
  * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will be returned.
  * Tip:           No dead cycles for circular linked lists.
  */
@@ -792,8 +792,8 @@ void strInitLinkedListDC_O(P_LIST_D plist)
  * Parameter:
  *     plist Pointer to the plist you want to free.
  *      brev If brev equaled true, doubly linked list would be traversed reversely.
- *            That is the order of deallocation which were from the current one to the previous one.
- *            If brev equaled false, the order of deallocation would run from the current one to the next one.
+ *            That is the order of retracting which were from the current one to the previous one.
+ *            If brev equaled false, the order of retracting would run from the current one to the next one.
  * Return value:  N/A.
  * Caution:       Address of plist Must Be Allocated first.
  */
@@ -836,8 +836,8 @@ void strDeleteLinkedListDC_O(P_LIST_D plist, bool brev)
  * Parameters:
  *       list Pointer to the first NODE_D element while traversal.
  *       brev If brev equaled true, doubly linked list would be traversed reversely.
- *            That is the order of deallocation which were from the current one to the previous one.
- *            If brev equaled false, the order of deallocation would go from the current one to the next one.
+ *            That is the order of retracting which were from the current one to the previous one.
+ *            If brev equaled false, the order of retracting would go from the current one to the next one.
  * Return value:  The number of nodes in a doubly linked list.
  * Tip:           No dead cycles to circular linked lists.
  */
@@ -857,7 +857,7 @@ size_t strLevelLinkedListDC(LIST_D list, bool brev)
  *            Otherwise copying procedure will start at the current node and search for the PREVIOUS node.
  *            If the doubly linked list had only one direction in clockwise or counterclockwise,
  *            to adjust this parameter could be useful to redirect copying.
- * Return value:  The first element of new linked-list.
+ * Return value:  The first element of new linked list.
  * Caution:       Data in each node of a linked list must be in the same size.
  * Tip:           No dead cycles for circular linked lists.
  */
@@ -927,13 +927,13 @@ P_NODE_D strCopyLinkedListDC(LIST_D psrc, size_t size, bool brev)
 }
 
 /* Function name: strCompareLinkedListDC
- * Description:   Compare linked list list X to linked-list list Y.
+ * Description:   Compare linked list X to linked list Y.
  * Parameters:
- *     listx The first linked-list to be compared.
+ *     listx The first linked list to be compared.
  *     listy The second linked list to be compared.
  *     cbfcmp Pointer to a function that compares two elements in a NODE_D.
  *            Comparison takes two pointers as arguments, the first one is always the pdata of listx
- *            and the second one points to pdata of listy. Both of them are type-cast to const void pointer.
+ *            and the second one points to pdata of listy. Both of them are type-cast to (const void *) pointer.
  *       brev If brev equaled true, function would do comparison from current node to the next node.
  *            If brev equaled false, function would perform comparison reversely.
  * Return value:   1: listx is greater than listy.
@@ -1070,13 +1070,13 @@ P_NODE_D strLocateItemDC_N(P_NODE_D pnode, ptrdiff_t incmtl)
 }
 
 /* Function name: strInsertItemLinkedListDC
- * Description:   Insert an item into linked-list.
+ * Description:   Insert an item into a linked list.
  * Parameters:
  *      pdest Pointer to the first NODE_D element of a linked list.
  *      pnode Pointer to a double link node you want to insert.
  *     bafter Input true to insert pnode after pdest.
  *            Input false to insert pnode in front of pdest.
- * Return value:  The new header of the current linked-list.
+ * Return value:  The new header of the current linked list.
  * Caution:       If the following situation occurred, dead cycle would happen:
  *                (A<-B->A).
  *                (A<-B->A) means B.ppnode[PREV] == &A && B.ppnode[NEXT] == &A;
@@ -1213,7 +1213,7 @@ void strSwapContentLinkedListSD(void * pnodex, size_t sizex, void * pnodey, size
  *            Input ENT_DOUBLE for doubly linked list nodes. Cast P_NODE_D to (void *) as parameters.
  *            Input ENT_SINGLE for single linked list nodes. Cast P_NODE_S to (void *) as parameters.
  *       brev Input true to search a linked list reversely.
- *            Input false to search a linked list in-order.
+ *            Input false to search a linked list orderly.
  * Return value:  Pointer of the last item of the linked list will be cast into (void *) and returned.
  */
 void * strIsCircularLinkedListSD(void * pfirst, NodeType ntp, bool brev)
