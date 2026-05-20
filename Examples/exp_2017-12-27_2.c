@@ -91,7 +91,6 @@ int main(void)
 			default:
 				printf("Bad command: \'%c\'. Type \'h\' or \'?\' for help.\n\n", m);
 		}
-		fflush(stdin);
 	}
 Lbl_Exit:
 	queDeleteAC(pque);
