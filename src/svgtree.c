@@ -111,7 +111,8 @@ int _treCBFCompareTNodeDataG(void * pitem, size_t param)
 {
 	/* The type of param is P_FindingInfo. */
 	if 
-	(0 == memcmp
+	(
+		0 == memcmp
 		(
 			((P_TNODE_G)    pitem)->pdata,
 			((P_FindingInfo)param)->pitem,
