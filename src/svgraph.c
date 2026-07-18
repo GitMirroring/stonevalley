@@ -2,7 +2,7 @@
  * Name:        svgraph.c
  * Description: Graphs.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0905171125M0718260250L02771
+ * File ID:     0905171125M0718260912L02788
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -31,16 +31,16 @@
 typedef struct _st_FIEDG {
 	EDGE         vertex;
 	P_NODE_S     pnode;
-	bool         bweight; /* true for weighted graph; false for unweighted graph. */
 	CBF_TRAVERSE cbftvs;
 	size_t       param;
+	bool         bweight; /* true for weighted graph; false for unweighted graph. */
 } _FIEDG, * _P_FIEDG;
 
 /* Second level info for traversal. */
 typedef struct _st_DATINF {
 	CBF_TRAVERSE cbftvs;
 	size_t       param;
-	size_t       bedge; /* true for edges; false for vertices. */
+	bool         bedge; /* true for edges; false for vertices. */
 } _DATINF, * _P_DATINF;
 
 /* Shortest path trajectory record. */
@@ -53,16 +53,16 @@ typedef struct _st_SPTREC {
 /* Edge record for generating minimal spanning tree. */
 typedef struct _st_EDGEREC {
 	size_t weight;  /* Weight of this edge. */
-	size_t vids[2]; /* This edge connects vids[0] and vids[1]. */
-	size_t flag;    /* Values flag true or false to determine whether this edge is valid or not. */
+	size_t vids[2]; /* This edge connects vids[0] to vids[1]. */
+	bool   flag;    /* Values flag true or false to determine whether this edge is valid or not. */
 } _EDGEREC, * _P_EDGEREC;
 
 /* Label structure for max flow algorithm. */
 typedef struct _st_MaxFlowLabel {
 	size_t vidc; /* Current vertex ID. */
 	size_t vidp; /* Previous vertex ID. */
-	bool   bdir; /* false: Out flow; true: In flow. */
 	size_t theta;
+	bool   bdir; /* false: Out flow; true: In flow. */
 } _MXFLWLBL, * _P_MXFLWLBL;
 
 /* An enumeration of label direction. */
@@ -342,7 +342,7 @@ int _grpCBFRemoveEdge(void * pitem, size_t param)
  */
 bool grpVertexExistsL(P_GRAPH_L pgrp, size_t vid)
 {
-	return NULL == grpGetVertexByID(pgrp, vid) ? false : true;
+	return NULL != grpGetVertexByID(pgrp, vid);
 }
 
 /* Function name: grpTraverseVerticesL
@@ -949,7 +949,7 @@ int _grpCBFSPLInitVtxrecArray(void * pitem, size_t param)
  *       pgrp Pointer to a graph.
  *      parrz Pointer to an array to be initialized.
  *       vidx Vertex ID to start.
- *      barrd true to indicated initialize the distance array. false to initialized queue array.
+ *      barrd Input true to indicate initializing the distance array, false to initialize queue array.
  * Return value:  If initializing succeeded, function would return true,
  *                false would return if initializing failed.
  */
@@ -961,10 +961,10 @@ bool _grpSPLInitArray(P_GRAPH_L pgrp, P_ARRAY_Z parrz, size_t vidx, bool barrd)
 	/* Fill distance into array. Pick the specific value off the array and sign it.
 	 * Initialize the distance from source to other vertex as INT_MAX(infinite).
 	 */
-	strTraverseArrayZ(parrz, sizeof(VTXREC), _grpCBFSPLInitVtxrecArray, barrd ? ~0U : false, false);
+	strTraverseArrayZ(parrz, sizeof(VTXREC), _grpCBFSPLInitVtxrecArray, (size_t)((bool)barrd ? ~(size_t)0 : (size_t)false), false);
 	prec = (P_VTXREC)strBinarySearchArrayZ(parrz, &vidx, sizeof(VTXREC), _grpCBFCompareInteger);
 	if (NULL != prec)
-		prec->dist = barrd ? 0 : true;
+		prec->dist = (bool)barrd ? (size_t)0 : (size_t)true;
 	else
 		return false;
 	return true;
@@ -972,7 +972,7 @@ bool _grpSPLInitArray(P_GRAPH_L pgrp, P_ARRAY_Z parrz, size_t vidx, bool barrd)
 
 /* Attention:     This Is An Internal Function. No Interface for Library Users.
  * Function name: _grpCBFSPLTraverseVertexEdgesPuppet
- * Description:   This function is used to cooperate with function grpShortestPathL to relax.
+ * Description:   This function is used to cooperate with function grpShortestPathFastL to relax adjacent edges of a vertex.
  * Parameters:
  *      pitem Pointer to a EDGE structure of a vertex.
  *      param Pointer to a size_t[4] array of which
@@ -1028,7 +1028,7 @@ int _grpCBFSPLTraverseVertexEdgesPuppet(void * pitem, size_t param)
  *                Each element of the returned sized array is a VTXREC structure.
  *                If function returned NULL, it should indicate searching failure.
  * Caution:       Address of pgrp Must Be Allocated first.
- * Tip:           Users may use function strDeleteArrayZ to release grpShortestPathL returned arrays.
+ * Tip:           Users may use function strDeleteArrayZ to release grpShortestPathFastL returned arrays.
  */
 P_ARRAY_Z grpShortestPathFastL(P_GRAPH_L pgrp, size_t vidx)
 {
@@ -1058,11 +1058,11 @@ P_ARRAY_Z grpShortestPathFastL(P_GRAPH_L pgrp, size_t vidx)
 		REGISTER P_VTXREC prec;
 		size_t a[4];
 
-		/* Take the front vertex from queue. */
+		/* Take the front most vertex from queue. */
 		queRemoveL(&vidx, sizeof(size_t), &q);
 		prec = (P_VTXREC)strBinarySearchArrayZ(parrq, &vidx, sizeof(VTXREC), _grpCBFCompareInteger);
 		if (NULL != prec)
-			prec->dist = false; /* Out of the queue. */
+			prec->dist = (size_t)false; /* Out of the queue. */
 		else
 			goto Lbl_Bad_Result;
 
@@ -1106,11 +1106,12 @@ int _grpCBFDijkstraFillVb(void * pitem, size_t param)
 {
 	if (((P_VERTEX_L)pitem)->vid != 0[(size_t *)param])
 	{
+		REGISTER P_BSTNODE pnode;
 		if
 		(
 			NULL == 
 			(
-				*(P_SET_T)1[(size_t *)param] = _setInsertBST
+				pnode = _setInsertBST
 				(
 					*(P_SET_T)1[(size_t *)param],
 					&((P_VERTEX_L)pitem)->vid,
@@ -1120,6 +1121,8 @@ int _grpCBFDijkstraFillVb(void * pitem, size_t param)
 			)
 		)
 			return CBF_TERMINATE;
+		else
+			*(P_SET_T)1[(size_t *)param] = pnode;
 	}
 	return CBF_CONTINUE;
 }
@@ -1164,10 +1167,12 @@ int _grpCBFDijkstraFindEdgesToVbPuppet(void * pitem, size_t param)
 		_SPTREC rec, t;
 		
 		rec.vid  = pedg->vid;
+		
 		if (NULL != pnode)
 			rec.dist = pedg->weight + ((_P_SPTREC)pnode->knot.pdata)->dist;
 		else
 			return CBF_TERMINATE;
+		
 		rec.pvid = 4[(size_t *)param];
 		
 		treInsertHeapA((P_HEAP_A)2[(size_t *)param], &rec, &t, sizeof(_SPTREC), _grpCBFCompareRecordDistance, false);
@@ -1251,12 +1256,7 @@ P_LIST_D grpDijkstraShortestPathL(P_GRAPH_L pgrp, size_t vids, size_t vide)
 	a[0] = vids;
 	a[1] = (size_t)&vb;
 	if (CBF_CONTINUE != grpTraverseVerticesL(pgrp, _grpCBFDijkstraFillVb, (size_t)a, ETM_INORDER_MORRIS))
-	{
-		/* Allocation failure. Cleanup.*/
-		strDeleteLinkedListDC(prl, false);
-		prl = NULL;
-		goto Lbl_Cleanup;
-	}
+		goto Lbl_Cleanup; /* Allocation failure. Cleanup.*/
 
 	rec.vid  = vids;
 	rec.dist = 0;
@@ -1276,23 +1276,13 @@ P_LIST_D grpDijkstraShortestPathL(P_GRAPH_L pgrp, size_t vids, size_t vide)
 		
 		/* Find edges between set Va and Vb and insert them as a _SPTREC structure into a heap. */
 		if (CBF_CONTINUE != setTraverseTDispatch(&va, _grpCBFDijkstraFindEdgesToVb, (size_t)a, treMorrisTraverseBYIn))
-		{
-			/* Set Va corrupted. */
-			strDeleteLinkedListDC(prl, false);
-			prl = NULL;
-			goto Lbl_Cleanup;
-		}
+			goto Lbl_Cleanup; /* Set Va corrupted. */
 		
 		/* Pop the minimum item from the heap. */
 		if (! treIsEmptyHeapA(&h))
 			treRemoveHeapA(&rec, &t, sizeof(_SPTREC), &h, _grpCBFCompareRecordDistance, false);
 		else
-		{
-			/* Isolated graph. */
-			strDeleteLinkedListDC(prl, false);
-			prl = NULL;
-			goto Lbl_Cleanup;
-		}
+			goto Lbl_Cleanup; /* Isolated graph. */
 		
 		/* Found ending vertex. */
 		if (rec.vid == vide)
@@ -1336,15 +1326,15 @@ P_LIST_D grpDijkstraShortestPathL(P_GRAPH_L pgrp, size_t vids, size_t vide)
 	else
 	{
 		if (0 != grpOutdegreeVertexL(pgrp, vids))
-		{
-			/* Can not reach at end vertex. */
-			strDeleteLinkedListDC(prl, false);
-			prl = NULL;
-			goto Lbl_Cleanup;
-		}
+			goto Lbl_Cleanup; /* Can not reach at end vertex. */
 	}
 	
+	goto Lbl_Finish;
+	
 Lbl_Cleanup:
+	strDeleteLinkedListDC(prl, false);
+	prl = NULL;
+Lbl_Finish:
 	setFreeT(&va);
 	setFreeT(&vb);
 	treFreeHeapA(&h);
@@ -1615,8 +1605,7 @@ int _grpCBFTSFillVertexArray(void * pitem, size_t param)
 {
 	REGISTER P_VTXREC * pprec = (P_VTXREC *)0[(size_t *)param];
 	REGISTER P_GRAPH_L  pgrp  = (P_GRAPH_L) 1[(size_t *)param];
-	(*pprec)->vid      = ((P_VERTEX_L)pitem)->vid;
-	(*pprec)->indegree = grpIndegreeVertexL(pgrp, (*pprec)->vid);
+	(*pprec)->indegree = grpIndegreeVertexL(pgrp, (*pprec)->vid = ((P_VERTEX_L)pitem)->vid);
 	++(*pprec);
 	return CBF_CONTINUE;
 }
@@ -1826,11 +1815,12 @@ int _grpCBFFFMFLFillVb(void * pitem, size_t param)
 	/* Fill set Vb. */
 	if (pvtx->vid != _FFMFL_PARAM_ARRAY(_EGID_5_VIDS))
 	{
+		REGISTER P_BSTNODE pnode;
 		if
 		(
 			NULL == 
 			(
-				*(P_SET_T)_FFMFL_PARAM_ARRAY(_EGID_3_P_SET_T_VB) = _setInsertBST
+				pnode = _setInsertBST
 				(
 					*(P_SET_T)_FFMFL_PARAM_ARRAY(_EGID_3_P_SET_T_VB),
 					&((P_VERTEX_L)pitem)->vid,
@@ -1840,6 +1830,8 @@ int _grpCBFFFMFLFillVb(void * pitem, size_t param)
 			)
 		)
 			return CBF_TERMINATE;
+		else
+			*(P_SET_T)_FFMFL_PARAM_ARRAY(_EGID_3_P_SET_T_VB) = pnode;
 	}
 	return CBF_CONTINUE;
 }
@@ -2059,17 +2051,23 @@ int _grpCBFFFMFLReduceFlowValue(void * pitem, size_t param)
  * Parameters:
  *      pitem Pointer to each BSTNODE in set Va of the caller function.
  *      param Pointer to the SET_T to be filled.
- * Return value:  Only CBF_CONTINUE will be returned.
+ * Return value:  If function succeeded, CBF_CONTINUE will be returned.
+ *                Otherwise, function would return CBF_TERMINATE.
  */
 int _grpCBFFFMFLFillMinCutSet(void * pitem, size_t param)
 {
-	*(P_SET_T)param = _setInsertBST
+	REGISTER P_BSTNODE pnode = _setInsertBST
 	(
 		*(P_SET_T)param,
 		&((_P_MXFLWLBL)P2P_BSTNODE(pitem)->knot.pdata)->vidc,
 		sizeof(size_t),
 		_grpCBFCompareInteger
 	);
+	
+	if (NULL == pnode)
+		return CBF_TERMINATE;
+	
+	*(P_SET_T)param = pnode; /* Assign new tree root. */
 	return CBF_CONTINUE;
 }
 
@@ -2092,6 +2090,7 @@ int _grpCBFFFMFLFillMinCutSet(void * pitem, size_t param)
  */
 bool grpFordFulkersonMaxFlowL(P_SET_T * ppsmcut, P_GRAPH_L pgrpc, P_GRAPH_L pgrpf, size_t vids, size_t vide)
 {
+	REGISTER P_BSTNODE pnode;
 	SET_T     va, vb; /* Va: labeled vertices set. Vb: unlabeled vertices set. */
 	_MXFLWLBL label;
 	QUEUE_L   qlbl;   /* The queue contains augmenting path after looping. */
@@ -2124,7 +2123,11 @@ bool grpFordFulkersonMaxFlowL(P_SET_T * ppsmcut, P_GRAPH_L pgrpc, P_GRAPH_L pgrp
 		/* Enqueue. */
 		queInsertL(&qlbl, &label, sizeof(_MXFLWLBL));
 		
-		va = _setInsertBST(va, &label, sizeof(_MXFLWLBL), _grpCBFCompareInteger);
+		pnode = _setInsertBST(va, &label, sizeof(_MXFLWLBL), _grpCBFCompareInteger);
+		if (NULL != pnode)
+			va = pnode;
+		else
+			goto Lbl_FFMFL_Failed;
 		
 		if (CBF_TERMINATE == grpTraverseVerticesL(pgrpc, _grpCBFFFMFLFillVb, (size_t)a, ETM_INORDER_MORRIS))
 			goto Lbl_FFMFL_Failed;
@@ -2150,7 +2153,13 @@ bool grpFordFulkersonMaxFlowL(P_SET_T * ppsmcut, P_GRAPH_L pgrpc, P_GRAPH_L pgrp
 
 			/* Remove vidc from Vb. */
 			if (setRemoveT(&vb, &label.vidc, sizeof(size_t), _grpCBFCompareInteger))
-				va = _setInsertBST(va, &label, sizeof(_MXFLWLBL), _grpCBFCompareInteger); /* Insert label into Va. */
+			{
+				pnode = _setInsertBST(va, &label, sizeof(_MXFLWLBL), _grpCBFCompareInteger); /* Insert label into Va. */
+				if (NULL != pnode)
+					va = pnode;
+				else
+					goto Lbl_FFMFL_Failed;
+			}
 		
 		/* Phase 4. */
 			if (a[_EGID_8_BOOL_VIDE])
@@ -2186,8 +2195,16 @@ Lbl_FFMFL_Solve:
 	{
 		REGISTER P_SET_T psmc = setCreateT();
 		if (NULL != psmc)
-			setTraverseTDispatch(&va, _grpCBFFFMFLFillMinCutSet, (size_t)psmc, treMorrisTraverseBYIn);
-		*ppsmcut = psmc; /* Output the pointer of minimal cut set. */
+		{
+			if (CBF_CONTINUE == setTraverseTDispatch(&va, _grpCBFFFMFLFillMinCutSet, (size_t)psmc, treMorrisTraverseBYIn))
+				*ppsmcut = psmc; /* Output the pointer of minimal cut set. */
+			else
+			{
+				setDeleteT(psmc); /* Allocation failure to create a new tree node. */
+				*ppsmcut = NULL;
+				goto Lbl_FFMFL_Failed;
+			}
+		}
 	}
 	
 	setFreeT(&va);

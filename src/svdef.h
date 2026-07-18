@@ -2,7 +2,7 @@
  * Name:        svdef.c
  * Description: Common definitions.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0306171808Z0717262326L00102
+ * File ID:     0306171808Z0718261116L00095
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -28,7 +28,7 @@
 #include <stdbool.h> /* Boolean type and constants. */
 
 /* Library version. */
-#define SV_LIB_VER "1.3.2.3"
+#define SV_LIB_VER "1.3.2.5"
 /* This following macro turns library version string into a size_t integer to be calculated by users. */
 #define SV_LIB_VER_VAL ((size_t)((SV_LIB_VER[0] - '0') * 1000UL + (SV_LIB_VER[2] - '0') * 100UL + (SV_LIB_VER[4] - '0') * 10UL + (SV_LIB_VER[6] - '0')))
 
@@ -54,13 +54,6 @@ typedef int (* CBF_COMPARE)  (const void *, const void *);
  *     return 0;
  * }
  */
-
-/* A structure describes finding information. */
-typedef struct st_FindingInfo {
-	void *       result; /* Finding result. */
-	const void * pitem;  /* Finding target. */
-	size_t       size;   /* Size of target. */
-} FindingInfo, * P_FindingInfo;
 
 /* Result of unsigned integer division. */
 typedef struct st_stdiv_t {
