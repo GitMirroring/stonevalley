@@ -2,7 +2,7 @@
  * Name:        svgraph.c
  * Description: Graphs.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0905171125M0717261325L02783
+ * File ID:     0905171125M0718260250L02771
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -659,7 +659,7 @@ bool grpRemoveVertexL(P_GRAPH_L pgrp, size_t vid)
 		return false; /* Can not find vertex vid. */
 	else
 	{	/* Remove every edge that contains vertex vid. */
-		grpTraverseVerticesL(pgrp, _grpCBFRemoveEdge, vid, ETM_INORDER_MORRIS);
+		grpTraverseVerticesL(pgrp, _grpCBFRemoveEdge, vid, ETM_INORDER);
 		/* Remove the vertex. */
 		strFreeLinkedListSC(&pvtx->adjlist);
 		setRemoveT(pgrp, &vid, sizeof(VERTEX_L), _grpCBFCompareInteger);
@@ -1070,7 +1070,7 @@ P_ARRAY_Z grpShortestPathFastL(P_GRAPH_L pgrp, size_t vidx)
 		a[1] = (size_t)parrd;
 		a[2] = (size_t)parrq;
 		a[3] = (size_t)&q;
-		/* Relaxing all the adjacent edges of vertex taken from the queue. */
+		/* Relax all adjacent edges of vertex taken from the queue. */
 		if (CBF_CONTINUE != grpTraverseVertexEdgesL(pgrp, vidx, _grpCBFSPLTraverseVertexEdgesPuppet, (size_t)a))
 			goto Lbl_Bad_Result;
 	}
@@ -1363,33 +1363,14 @@ Lbl_Cleanup:
  */
 int _grpCBFMSTInsertEdges(void * pitem, size_t param)
 {
-	REGISTER P_ARRAY_Z parrz = (P_ARRAY_Z)0[(size_t *)param];
-	_EDGEREC rec;
-	rec.flag = false;
-	rec.vids[0] = 1[(size_t *)param];
-	rec.vids[1] = ((P_EDGE)((P_NODE_S)pitem)->pdata)->vid;
-	rec.weight  = ((P_EDGE)((P_NODE_S)pitem)->pdata)->weight;
-	strResizeArrayZ(parrz, strLevelArrayZ(parrz) + 1, sizeof(_EDGEREC));
-	strInsertItemArrayZ
-	(
-		parrz,
-		&rec,
-		sizeof(_EDGEREC),
-		(size_t)svIndexOf
-		(
-			parrz->pdata,
-			svBinarySearchDispatch
-			(
-				&rec.weight,
-				parrz->pdata,
-				strLevelArrayZ(parrz),
-				sizeof(_EDGEREC),
-				_grpCBFCompareInteger,
-				EBS_LAST_LESS_THAN_OR_EQUAL_TO_KEY
-			),
-			sizeof(_EDGEREC)
-		) + 1
-	);
+	REGISTER _P_EDGEREC * pprec = (_P_EDGEREC *)0[(size_t *)param];
+	
+	(*pprec)->flag = false;
+	(*pprec)->vids[0] = 1[(size_t *)param];
+	(*pprec)->vids[1] = ((P_EDGE)((P_NODE_S)pitem)->pdata)->vid;
+	(*pprec)->weight  = ((P_EDGE)((P_NODE_S)pitem)->pdata)->weight;
+	
+	++(*pprec);
 	return CBF_CONTINUE;
 }
 
@@ -1454,9 +1435,10 @@ bool _grpDisjointSetSearch(P_ARRAY_Z parrz, size_t x, size_t y)
 {
 	REGISTER size_t i;
 	REGISTER bool bfx;
-	for (i = 0; (bfx = false), (i < strLevelArrayZ(parrz)); ++i)
+	for (i = 0; i < strLevelArrayZ(parrz); ++i)
 	{
 		P_ARRAY_Z pslot = *(P_ARRAY_Z *)strLocateItemArrayZ(parrz, sizeof(P_ARRAY_Z), i);
+		bfx = false;
 		if (NULL != strBinarySearchArrayZ(pslot, &x, sizeof(size_t), _grpCBFCompareInteger))
 			bfx = true;
 		if (NULL != strBinarySearchArrayZ(pslot, &y, sizeof(size_t), _grpCBFCompareInteger))
@@ -1572,18 +1554,27 @@ bool grpMinimalSpanningTreeL(P_GRAPH_L pgrp)
 	REGISTER size_t i;
 	bool rtn = true;
 	size_t a[2];
-	ARRAY_Z vtxarr;
-	ARRAY_Z setarr;
 	_P_EDGEREC prec;
-	vtxarr.num   = 0;
-	vtxarr.pdata = NULL;
-	setarr.num   = 0;
-	setarr.pdata = NULL;
-	a[0] = (size_t)&vtxarr;
+	ARRAY_Z vtxarr;
+	ARRAY_Z setarr; /* This is a disjoint set. */
+	
+	strInitArrayZ(&setarr, 0, sizeof(P_ARRAY_Z));
+	
+	i = grpEdgesCountL(pgrp);
+	if (0 == i)
+		return false; /* No edges in graph pgrp at all. */
+	if (NULL == strInitArrayZ(&vtxarr, i, sizeof(_EDGEREC)))
+		return false; /* Cannot initialize vertex array. */
+	
+	prec = (_P_EDGEREC)vtxarr.pdata;
+	a[0] = (size_t)&prec;
+	
 	/* Traverse each vertex in the graph and insert edges into an array. */
 	grpTraverseVerticesL(pgrp, _grpCBFMSTScanVertices, (size_t)a, ETM_INORDER_MORRIS);
+	strSortArrayZ(&vtxarr, sizeof(_EDGEREC), _grpCBFCompareInteger, true);
+	
 	/* Pick edges from array. */
-	for (i = 0; i < vtxarr.num; ++i)
+	for (i = 0; i < strLevelArrayZ(&vtxarr); ++i)
 	{
 		prec = &i[(_P_EDGEREC)vtxarr.pdata];
 		if (_grpDisjointSetSearch(&setarr, prec->vids[0], prec->vids[1]))
@@ -1597,9 +1588,13 @@ bool grpMinimalSpanningTreeL(P_GRAPH_L pgrp)
 			}
 		}
 	}
-	for (i = 0; (prec = &i[(_P_EDGEREC)vtxarr.pdata]), (i < vtxarr.num); ++i)
-		if (true != prec->flag) /* Pick edges from graph. */
+	for (i = 0; i < strLevelArrayZ(&vtxarr); ++i)
+	{
+		prec = &i[(_P_EDGEREC)vtxarr.pdata];
+		if (true != prec->flag) /* Pick an edge away from graph. */
 			grpRemoveEdgeL(pgrp, prec->vids[0], prec->vids[1], prec->weight);
+	}
+	
 Lbl_Cleanup:
 	strFreeArrayZ(&vtxarr);
 	_grpDisjointSetFree(&setarr);
@@ -1618,14 +1613,12 @@ Lbl_Cleanup:
  */
 int _grpCBFTSFillVertexArray(void * pitem, size_t param)
 {
-#define indegree dist
 	REGISTER P_VTXREC * pprec = (P_VTXREC *)0[(size_t *)param];
-	REGISTER P_GRAPH_L pgrp = (P_GRAPH_L)1[(size_t *)param];
-	(*pprec)->vid = ((P_VERTEX_L)pitem)->vid;
+	REGISTER P_GRAPH_L  pgrp  = (P_GRAPH_L) 1[(size_t *)param];
+	(*pprec)->vid      = ((P_VERTEX_L)pitem)->vid;
 	(*pprec)->indegree = grpIndegreeVertexL(pgrp, (*pprec)->vid);
 	++(*pprec);
 	return CBF_CONTINUE;
-#undef indegree
 }
 
 /* Attention:     This Is An Internal Function. No Interface for Library Users.
@@ -1635,13 +1628,12 @@ int _grpCBFTSFillVertexArray(void * pitem, size_t param)
  *      pitem Pointer to a VTXREC structure.
  *      param Pointer to a size_t[3] array.
  *            a[0] Stores a pointer to a size_t variable counter.
- *            a[1] Stores a pointer to the queue.
+ *            a[1] Stores a pointer to a queue.
  *            a[2] Stores a pointer to the return value array.
  * Return value:  CBF_CONTINUE only.
  */
 int _grpCBFTSInitQ(void * pitem, size_t param)
 {
-#define indegree dist
 	if (0 == ((P_VTXREC)pitem)->indegree)
 	{
 		REGISTER P_QUEUE_L pq   = (P_QUEUE_L)1[(size_t *)param];
@@ -1652,7 +1644,6 @@ int _grpCBFTSInitQ(void * pitem, size_t param)
 		((*(size_t *)0[(size_t *)param])++)[(size_t *)prtn->pdata] = ((P_VTXREC)pitem)->vid;
 	}
 	return CBF_CONTINUE;
-#undef indegree
 }
 
 /* Attention:     This Is An Internal Function. No Interface for Library Users.
@@ -1661,19 +1652,18 @@ int _grpCBFTSInitQ(void * pitem, size_t param)
  * Parameters:
  *      pitem Pointer to an EDGE structure.
  *      param Pointer to a size_t[4] array.
- *            a[0] Stores a pointer to the vertex array.
- *            a[1] Stores a pointer to the queue.
- *            a[2] Stores a pointer to a size_t variable counter.
- *            a[3] Stores a pointer to the return value array.
+ *            a[0] Stores a pointer to a size_t variable counter.
+ *            a[1] Stores a pointer to a queue.
+ *            a[2] Stores a pointer to the return value array.
+ *            a[3] Stores a pointer to the vertex array.
  * Return value:  CBF_CONTINUE only.
  */
 int _grpCBFTSReduceIndegree(void * pitem, size_t param)
 {
-#define indegree dist
-	REGISTER P_QUEUE_L pq  = (P_QUEUE_L)1[(size_t *)param];
-	REGISTER P_VTXREC prec = (P_VTXREC)strBinarySearchArrayZ
+	REGISTER P_QUEUE_L pq   = (P_QUEUE_L)1[(size_t *)param];
+	REGISTER P_VTXREC  prec = (P_VTXREC)strBinarySearchArrayZ
 	(
-		(P_ARRAY_Z)0[(size_t *)param],
+		(P_ARRAY_Z)3[(size_t *)param],
 		&(((P_EDGE)pitem)->vid),
 		sizeof(VTXREC),
 		_grpCBFCompareInteger
@@ -1682,13 +1672,12 @@ int _grpCBFTSReduceIndegree(void * pitem, size_t param)
 	{
 		if (0 == --prec->indegree)
 		{
-			REGISTER P_ARRAY_Z prtn = (P_ARRAY_Z)3[(size_t *)param];
+			REGISTER P_ARRAY_Z prtn = (P_ARRAY_Z)2[(size_t *)param];
 			queInsertL(pq, &(((P_EDGE)pitem)->vid), sizeof(size_t));
-			((*(size_t *)2[(size_t *)param])++)[(size_t *)prtn->pdata] = ((P_EDGE)pitem)->vid;
+			((*(size_t *)0[(size_t *)param])++)[(size_t *)prtn->pdata] = ((P_EDGE)pitem)->vid;
 		}
 	}
 	return CBF_CONTINUE;
-#undef indegree
 }
 
 /* Function name: grpTopologicalSortL
@@ -1699,6 +1688,7 @@ int _grpCBFTSReduceIndegree(void * pitem, size_t param)
  *                Each element in this array is a size_t integer that indicates the ID of a vertex.
  *                If this function returned NULL, it would indicate topological sorting failed.
  * Caution:       Address of pgrp Must Be Allocated and Initialized first.
+ *                Usually topological sort runs on directed acyclic graphics(DAGs).
  * Tip:           P_ARRAY_Z prtn = grpTopologicalSortL(pgrp);
  *                // Users may use these following codes to detect whether a graph has a cycle.
  *                if (NULL != prtn && grpVerticesCountL(pgrp) > strLevelArrayZ(prtn))
@@ -1708,7 +1698,7 @@ P_ARRAY_Z grpTopologicalSortL(P_GRAPH_L pgrp)
 {
 	size_t n = grpVerticesCountL(pgrp);
 	ARRAY_Z arrvtx; /* An array stores vertices and indegrees. */
-	P_VTXREC prec; /* Pointer to each element in arrvtx. */
+	P_VTXREC prec;  /* Pointer to each element in arrvtx. */
 	size_t i, j;
 	size_t a[4];
 	P_ARRAY_Z prtn; /* Return value array. */
@@ -1726,20 +1716,18 @@ P_ARRAY_Z grpTopologicalSortL(P_GRAPH_L pgrp)
 	a[0] = (size_t)&prec;
 	a[1] = (size_t)pgrp;
 	/* Fill vertex array. */
-	grpTraverseVerticesL(pgrp, _grpCBFTSFillVertexArray, (size_t)a, ETM_INORDER_MORRIS);
+	grpTraverseVerticesL(pgrp, _grpCBFTSFillVertexArray, (size_t)a, ETM_INORDER);
 	/* Sort vertex array. */
 	strSortArrayZ(&arrvtx, sizeof(VTXREC), _grpCBFCompareInteger, false);
+	
 	/* Initialize the queue. */
 	i = 0;
 	a[0] = (size_t)&i;
 	a[1] = (size_t)&q;
 	a[2] = (size_t)prtn;
 	strTraverseArrayZ(&arrvtx, sizeof(VTXREC), _grpCBFTSInitQ, (size_t)a, false);
-
-	a[0] = (size_t)&arrvtx;
-	a[1] = (size_t)&q;
-	a[2] = (size_t)&i;
-	a[3] = (size_t)prtn;
+	
+	a[3] = (size_t)&arrvtx;
 	while (!queIsEmptyL(&q))
 	{
 		queRemoveL(&j, sizeof(size_t), &q);
@@ -2217,9 +2205,9 @@ Lbl_FFMFL_Failed:
 /* Code section for adjacent matrix representation of graphs. */
 
 /* Sectional function declarations go here. */
-int _grpCBFFillVertexMappingTable     (void * pitem, size_t param);
-int _grpCBFTraverseEdgesAndFillMPuppet(void * pitem, size_t param);
-int _grpCBFTraverseEdgesAndFillM      (void * pitem, size_t param);
+int _grpCBFFillVertexMappingTable      (void * pitem, size_t param);
+int _grpCBFTraverseEdgesAndFillMPuppet (void * pitem, size_t param);
+int _grpCBFTraverseEdgesAndFillM       (void * pitem, size_t param);
 
 /* Function name: grpInitM
  * Description:   Initialize an adjacent matrix graph.
