@@ -2,7 +2,7 @@
  * Name:        svarray.c
  * Description: Sized array.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0306170948B0718260935L00890
+ * File ID:     0306170948B0719261430L00891
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -60,8 +60,8 @@ char * strInitCharacterStringArrayZ(P_ARRAY_Z parrz, const char * pstr)
 
 /* Function name: strCreateCharacterStringArrayZ
  * Description:   Create a sized array from a string.
- * Parameters:
- *       pstr Pointer to the string you want to copy.
+ * Parameter:
+ *      pstr Pointer to the string you want to copy in to a new sized array.
  * Return value:  Pointer to new allocated structure.
  *                If function returned NULL, it would indicate an allocation failure.
  * Caution:       N/A.
@@ -223,7 +223,7 @@ size_t strLinearSearchArrayZ(P_ARRAY_Z parrz, const void * pitem, size_t size, b
 		{
 			for (i = 0, p = parrz->pdata; i < strLevelArrayZ(parrz); ++i, p += size)
 				if (0 == memcmp(p, pitem, size))
-					return i;
+					return i + 1;
 		}
 	}
 	return 0;
@@ -441,7 +441,7 @@ void * strBinarySearchArrayZ_O(P_ARRAY_Z parrz, const void * pkey, size_t size, 
  * Return value:  N/A.
  * Caution:       Address of parrz Must Be Allocated first.
  *                Users shall manage the buffer that ptemp points at.
- *                The size of the buffer of ptemp shall equal to parameter size.
+ *                The size of the buffer of ptemp shall equal to each parameter size of the array.
  */
 void strReverseArrayZ(P_ARRAY_Z parrz, void * ptemp, size_t size)
 {
@@ -475,6 +475,7 @@ void strReverseArrayZ(P_ARRAY_Z parrz, void * ptemp, size_t size)
  * Tip:           To get the index of maximum value in fixed-size array arr, use the following sentences:
  *                size_t index = 0; PUCHAR ptr = (PUCHAR)strGetLimitationArrayZ(&arr, size, cbfcmp, true);
  *                if (NULL != ptr) index = (ptr - arr.pdata) / size;
+ *                Or simply use: i = strIndexOfArrayZ(&arr, ptr, size);
  */
 void * strGetLimitationArrayZ(P_ARRAY_Z parrz, size_t size, CBF_COMPARE cbfcmp, bool bmax, bool brev)
 {

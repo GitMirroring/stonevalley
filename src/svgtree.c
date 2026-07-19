@@ -559,7 +559,7 @@ P_TNODE_BY treG2BYConvert(P_TNODE_G pnode, size_t size)
 {
 	QUEUE_L q;
 	/* This queue is used to maintain new bnodes.
-	 * When allocation failed, dequeue and free each element in the queue.
+	 * When allocation fails, dequeue and free each element in the queue.
 	 */
 	P_TNODE_BY pb = NULL;
 	queInitL(&q);

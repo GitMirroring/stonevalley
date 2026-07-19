@@ -2,7 +2,7 @@
  * Name:        svtree.h
  * Description: Trees interface.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0809171737V0719260111L00523
+ * File ID:     0809171737V0719261501L00523
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -164,8 +164,8 @@ void            treDeleteHeapA         (P_HEAP_A        pheap);
 bool            treIsEmptyHeapA_O      (P_HEAP_A        pheap);
 bool            treIsFullHeapA_O       (P_HEAP_A        pheap);
 void            treMakeEmptyHeapA_O    (P_HEAP_A        pheap);
-void            treInsertHeapA         (P_HEAP_A        pheap,    const void * pitem,  void *       ptemp,   size_t       size,  CBF_COMPARE cbfcmp, bool        bmax);
-void            treRemoveHeapA         (void *          pitem,    void *       ptemp,  size_t       size,    P_HEAP_A     pheap, CBF_COMPARE cbfcmp, bool        bmax);
+bool            treInsertHeapA         (P_HEAP_A        pheap,    const void * pitem,  void *       ptemp,   size_t       size,  CBF_COMPARE cbfcmp, bool        bmax);
+bool            treRemoveHeapA         (void *          pitem,    void *       ptemp,  size_t       size,    P_HEAP_A     pheap, CBF_COMPARE cbfcmp, bool        bmax);
 bool            trePeepHeapA           (void *          pitem,    size_t       size,   P_HEAP_A     pheap);
 /* Functions for binary search trees(BSTs). */
 void *          treInitBSTNode         (P_BSTNODE       pnode,    const void * pitem,  size_t       size,    size_t       param);
