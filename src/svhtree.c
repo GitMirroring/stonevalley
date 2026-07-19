@@ -198,7 +198,7 @@ bool treRemoveHeapA(void * pitem, void * ptemp, size_t size, P_HEAP_A pheap, CBF
 	{
 		REGISTER size_t t, l, m, n;
 		REGISTER int r;
-		--i;
+		pheap->irear = --i;
 		/* Remove the biggest one. */
 		if (NULL != pitem)
 			memcpy(pitem, pheap->hdarr.pdata, size);
