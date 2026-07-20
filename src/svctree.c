@@ -243,7 +243,7 @@ int _treCBFHFMCompareSymbolFreq(const void * x, const void * y)
  *          n Number of symbols in the buffer. The unit of n is sizeof(unsigned char).
  * Return value:  Pointer to a new created sized array.
  *                Each element in the sized array that this function returned is a HFM_SYMBOL structure.
- *                If any error occurred during encoding, function would be interrupted and return a NULL.
+ *                If any error occurred during encoding, function would be interrupted and return NULL.
  * Tip:           Symbol table is important for decoding. You may need to store the symbol table onto an external disk.
  */
 P_ARRAY_Z treCreateHuffmanTable(const PUCHAR s, const size_t n)
@@ -421,7 +421,7 @@ Lbl_Building_Failed:
  *            Each element in the array that ptable pointed is a HFM_SYMBOL structure.
  *          s The encoded bit stream you want to decode.
  * Return value:  Pointer to a new created bit stream. This bit stream stores the decoded string.
- *                If any error occurred during decoding, function would be interrupted and return a NULL.
+ *                If any error occurred during decoding, function would be interrupted and return NULL.
  * Caution:       ptable must be allocated first.
  * Tip:           You could get a symbol table from invoking function treCreateHuffmanTable by the same string you want to encode as a parameter.
  *                You may either get a bit stream as the parameter of function treHuffmanDecoding to decode from the return value of function treHuffmanEncoding.

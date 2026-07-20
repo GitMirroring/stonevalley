@@ -2,7 +2,7 @@
  * Name:        svhtree.c
  * Description: Heap tree.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0809171737E0719261500L00267
+ * File ID:     0809171737E0719261500L00268
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -160,7 +160,7 @@ bool treInsertHeapA(P_HEAP_A pheap, const void * pitem, void * ptemp, size_t siz
 			r = cbfcmp(py, px);
 			if (bmax ? r > 0 : r < 0)
 			{	/* Swap when j > i in a max heap. */
-				svSwap(px, py, ptemp, size);
+				svSwap(px, ptemp, py, size);
 				j = i;
 			}
 			else /* j <= i in a max heap. */
@@ -198,6 +198,7 @@ bool treRemoveHeapA(void * pitem, void * ptemp, size_t size, P_HEAP_A pheap, CBF
 	{
 		REGISTER size_t t, l, m, n;
 		REGISTER int r;
+		/* Alter the rear index of pheap. */
 		pheap->irear = --i;
 		/* Remove the biggest one. */
 		if (NULL != pitem)
@@ -232,7 +233,7 @@ bool treRemoveHeapA(void * pitem, void * ptemp, size_t size, P_HEAP_A pheap, CBF
 				break;
 			else
 			{
-				svSwap(pheap->hdarr.pdata + i * size, pheap->hdarr.pdata + m * size, ptemp, size);
+				svSwap(pheap->hdarr.pdata + i * size, ptemp, pheap->hdarr.pdata + m * size, size);
 				i = m;
 			}
 		}

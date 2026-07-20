@@ -2,7 +2,7 @@
  * Name:        svset.c
  * Description: Sets.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0901171620L0718260740L00999
+ * File ID:     0901171620L0718260740L01002
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -943,8 +943,9 @@ Lbl_Empty_Set:
  *     cbftvs Pointer to a callback function.
  *      param Parameter which can be transferred into the callback function.
  *         tm Method of traversal. This parameter can be any value in enumeration TvsMtd.
- *            (*) Especially, if tm does not equaled to any value in enumeration TvsMtd, function would return value CBF_TERMINATE.
  * Return value:  The same value as callback function cbftvs returns.
+ *                (*) Especially, if function encountered any error, it would still return CBF_CONTINUE
+ *                unless the callback function returns CBF_TERMINATE to break traversal intentionally.
  * Caution:       Address of pset Must Be Allocated first.
  */
 int setTraverseT(P_SET_T pset, CBF_TRAVERSE cbftvs, size_t param, TvsMtd tm)
@@ -953,7 +954,7 @@ int setTraverseT(P_SET_T pset, CBF_TRAVERSE cbftvs, size_t param, TvsMtd tm)
 		return CBF_CONTINUE;
 	else
 	{
-		int r = CBF_TERMINATE;
+		int r = CBF_CONTINUE;
 		switch (tm)
 		{
 		case ETM_PREORDER:        r = treTraverseBYPre      (P2P_TNODE_BY(*pset), cbftvs, param); break;
@@ -985,6 +986,8 @@ int setTraverseT(P_SET_T pset, CBF_TRAVERSE cbftvs, size_t param, TvsMtd tm)
  *            (treMorrisTraverseBYPre)
  *            (treMorrisTraverseBYIn)
  * Return value:  The same value as callback function cbftvs returns or CBF_CONTINUE.
+ *                (*) Especially, if function encountered any error, it would still return CBF_CONTINUE
+ *                unless the callback function returns CBF_TERMINATE to break traversal intentionally.
  * Tip:           Example of usage:
  *                setTraverseTDispatch(pset, cbftvs, param, treTraverseBYPre);
  * Caution:       Address of pset Must Be Allocated first.

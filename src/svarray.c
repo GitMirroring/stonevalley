@@ -2,7 +2,7 @@
  * Name:        svarray.c
  * Description: Sized array.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0306170948B0719261430L00891
+ * File ID:     0306170948B0720260013L00910
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -180,6 +180,25 @@ void * strMoveArrayZ_O(P_ARRAY_Z pdest, P_ARRAY_Z psrc, size_t size)
 	return memmove(pdest->pdata, psrc->pdata, strLevelArrayZ(pdest) * size);
 }
 
+/* Function name: strCreateCopyArrayZ
+ * Description:   Create a replica of a sized array.
+ * Parameters:
+ *       psrc Pointer to the source of array to be replicate.
+ *       size Size of each element for the source array.
+ * Return value:  A pointer to the new sized array which is exactly the replica of the source array.
+ * Caution:       Size of each element in the replica has the same value as source array's.
+ *                Item number of two arrays shall equal to each other.
+ *                Address of psrc shall be Allocated first to ensure a valid buffer address.
+ *                Destination and source will not overlap.
+ */
+P_ARRAY_Z strCreateCopyArrayZ(P_ARRAY_Z psrc, size_t size)
+{
+	REGISTER P_ARRAY_Z parrz = strCreateArrayZ(strLevelArrayZ(psrc), size);
+	if (NULL != parrz)
+		strCopyArrayZ(parrz, psrc, size);
+	return parrz;
+}
+
 /* Function name: strLocateItemArrayZ_O
  * Description:   Locate an item in a sized array.
  * Parameters:
@@ -203,7 +222,7 @@ void * strLocateItemArrayZ_O(P_ARRAY_Z parrz, size_t size, size_t index)
  *      pitem Pointer to an element as the searching target.
  *       size Size of an element.
  *       brev Input true  to search array in reverse.
- *            Input false to search array in order. That means to search the element from index 0 to the end of array.
+ *            Input false to search array in order. That means to search the element from index 0 to the last index of array.
  * Return value:  (*) Index of element + 1. If function returned 0, it should mean pitem could not be found.
  * Caution:       Address of parrz Must Be Allocated first.
  */
@@ -451,7 +470,7 @@ void strReverseArrayZ(P_ARRAY_Z parrz, void * ptemp, size_t size)
 		REGISTER PUCHAR ptail = parrz->pdata + (strLevelArrayZ(parrz) - 1) * size;
 		while (phead < ptail)
 		{	/* Swap two elements. */
-			svSwap(phead, ptail, ptemp, size);
+			svSwap(phead, ptemp, ptail, size);
 			/* Alter two pointers. */
 			phead += size;
 			ptail -= size;
@@ -575,7 +594,7 @@ bool strPermuteArrayZ(P_ARRAY_Z parrz, void * ptemp, size_t size, CBF_COMPARE cb
 					ptrk -= size
 				);
 				/* Swap (*i) and (*k). */
-				svSwap(ptri, ptrk, ptemp, size);
+				svSwap(ptri, ptemp, ptrk, size);
 				{	/* Reverse array from j to last. */
 					ARRAY_Z arrt; /* Auxiliary array header for reversing. */
 					arrt.num   = (size_t)((ptrl - ptrj) / size + 1);
@@ -664,7 +683,7 @@ void strShuffleArrayZ(P_ARRAY_Z parrz, void * ptemp, size_t size, size_t (*nxtrn
 		for (i = strLevelArrayZ(parrz) - 1; i >= 1; --i)
 		{
 			j = nxtrnd() % (i + 1);
-			svSwap(parrz->pdata + size * i, parrz->pdata + size * j, ptemp, size);
+			svSwap(parrz->pdata + size * i, ptemp, parrz->pdata + size * j, size);
 		}
 	}
 }

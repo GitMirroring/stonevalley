@@ -2,7 +2,7 @@
  * Name:        svgraph.c
  * Description: Graphs.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0905171125M0719261023L02786
+ * File ID:     0905171125M0719261023L02776
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -1469,7 +1469,7 @@ bool _grpDisjointSetInsert(P_ARRAY_Z parrz, size_t x, size_t y)
 		if (NULL == (pnarr = (strLevelArrayZ(parrz) - 1)[(P_ARRAY_Z *)parrz->pdata] = strCreateArrayZ(2, sizeof(size_t))))
 			return false; /* Allocation failure. */
 		if (x > y)
-			svSwap(&x, &y, &t, sizeof(size_t));
+			svSwap(&x, &t, &y, sizeof(size_t));
 		/* Arrange x and y in the array by increasing order. */
 		0[(size_t *)pnarr->pdata] = x;
 		1[(size_t *)pnarr->pdata] = y;
@@ -2504,52 +2504,47 @@ int grpDFSM(P_GRAPH_M pgrp, size_t vid, CBF_TRAVERSE cbftvs, size_t param)
 {
 	if (0 != pgrp->arrz.num && pgrp->ln == pgrp->col)
 	{
-		P_BITMAT pbmvist = strCreateBMap(1, pgrp->ln, false);
-		P_STACK_A pstk = stkCreateA(pgrp->ln, sizeof(size_t));
-		REGISTER size_t i;
 		size_t j;
-
-		if (NULL == pbmvist)
+		STACK_A stk;
+		BITMAT bmvist;
+		REGISTER size_t i;
+		
+		if (NULL == stkInitA(&stk, pgrp->ln, sizeof(size_t)))
+			return CBF_CONTINUE;
+		
+		if (NULL == strInitBMap(&bmvist, 1, pgrp->ln, true, false))
 		{
-			if (NULL != pstk)
-				stkDeleteA(pstk);
+			stkFreeA(&stk);
 			return CBF_CONTINUE;
 		}
 
-		if (NULL == pstk)
+		stkPushA(&stk, &vid, sizeof(size_t));
+
+		while (! stkIsEmptyA(&stk))
 		{
-			strDeleteBMap(pbmvist);
-			return CBF_CONTINUE;
-		}
+			stkPopA(&vid, sizeof(size_t), &stk);
 
-		stkPushA(pstk, &vid, sizeof(size_t));
-
-		while (! stkIsEmptyA(pstk))
-		{
-			stkPopA(&vid, sizeof(size_t), pstk);
-
-			if (! strGetBitBMap(pbmvist, 0, vid))
+			if (! strGetBitBMap(&bmvist, 0, vid))
 			{
 				if (CBF_CONTINUE != cbftvs((void *)vid, param))
 				{
-					strDeleteBMap(pbmvist);
-					stkDeleteA(pstk);
+					stkFreeA(&stk);
+					strFreeBMap(&bmvist);
 					return CBF_TERMINATE;
 				}
 				
-				strSetBitBMap(pbmvist, 0, vid, true);
+				strSetBitBMap(&bmvist, 0, vid, true);
 				
 				for (i = pgrp->ln; i > 0; --i)
 				{
 					j = i - 1;
 					if (0 != *(size_t *)strGetValueMatrix(NULL, pgrp, vid, j, sizeof(size_t)))
-						stkPushA(pstk, &j, sizeof(size_t));
+						stkPushA(&stk, &j, sizeof(size_t));
 				}
 			}
 		}
-
-		strDeleteBMap(pbmvist);
-		stkDeleteA(pstk);
+		stkFreeA(&stk);
+		strFreeBMap(&bmvist);
 	}
 	return CBF_CONTINUE;
 }
@@ -2567,51 +2562,46 @@ int grpDFSM(P_GRAPH_M pgrp, size_t vid, CBF_TRAVERSE cbftvs, size_t param)
  */
 int grpBFSM(P_GRAPH_M pgrp, size_t vid, CBF_TRAVERSE cbftvs, size_t param)
 {
-	if (0 != pgrp->arrz.num && pgrp->ln == pgrp->col)
+	if (0 != pgrp->arrz.num && pgrp->ln == pgrp->col) /* The adjacent matrix is valid. */
 	{
-		P_BITMAT pbmvist = strCreateBMap(1, pgrp->ln, false);
-		P_QUEUE_A pq = queCreateAC(pgrp->ln, sizeof(size_t));
 		size_t i;
+		QUEUE_A q;
+		BITMAT bmvist;
+		
+		if (NULL == queInitAC(&q, pgrp->ln, sizeof(size_t)))
+			return CBF_CONTINUE;
 
-		if (NULL == pbmvist)
+		if (NULL == strInitBMap(&bmvist, 1, pgrp->ln, true, false))
 		{
-			if (NULL != pq)
-				queDeleteAC(pq);
+			queFreeAC(&q);
 			return CBF_CONTINUE;
 		}
 
-		if (NULL == pq)
-		{
-			strDeleteBMap(pbmvist);
-			return CBF_CONTINUE;
-		}
+		queInsertAC(&q, &vid, sizeof(size_t));
+		strSetBitBMap(&bmvist, 0, vid, true);
 
-		queInsertAC(pq, &vid, sizeof(size_t));
-		strSetBitBMap(pbmvist, 0, vid, true);
-
-		while (! queIsInitialAC(pq))
+		while (! queIsInitialAC(&q))
 		{
-			queRemoveAC(&vid, sizeof(size_t), pq);
+			queRemoveAC(&vid, sizeof(size_t), &q);
 
 			if (CBF_TERMINATE == cbftvs((void *)vid, param))
 			{
-				strDeleteBMap(pbmvist);
-				queDeleteAC(pq);
+				queFreeAC(&q);
+				strFreeBMap(&bmvist);
 				return CBF_TERMINATE;
 			}			
 			
 			for (i = 0; i < pgrp->ln; ++i)
 			{
-				if (0 != *(size_t *)strGetValueMatrix(NULL, pgrp, vid, i, sizeof(size_t)) && ! strGetBitBMap(pbmvist, 0, i))
+				if (0 != *(size_t *)strGetValueMatrix(NULL, pgrp, vid, i, sizeof(size_t)) && ! strGetBitBMap(&bmvist, 0, i))
 				{
-					queInsertAC(pq, &i, sizeof(size_t));
-					strSetBitBMap(pbmvist, 0, i, true);
+					queInsertAC(&q, &i, sizeof(size_t));
+					strSetBitBMap(&bmvist, 0, i, true);
 				}
 			}
 		}
-
-		strDeleteBMap(pbmvist);
-		queDeleteAC(pq);
+		queFreeAC(&q);
+		strFreeBMap(&bmvist);
 	}
 	return CBF_CONTINUE;
 }

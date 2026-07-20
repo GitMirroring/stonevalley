@@ -2,7 +2,7 @@
  * Name:        svbytree.c
  * Description: Binary trees.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0809171737G0718261206L00637
+ * File ID:     0809171737G0719262322L00642
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -34,12 +34,12 @@ int        _treCBFNodeLocator       (void * pitem, size_t param);
 
 /* Attention:     This Is An Internal Function. No Interface for Library Users.
  * Function name: _treCBFParentRetriever
- * Description:   This function is used to find parent in binary tree.
+ * Description:   This function is used to find the parent for a node in a binary tree.
  * Parameters:
  *      pitem Pointer to each node in the tree.
  *      param Pointer to a child node whose parent is about to search.
  * Return value:  If parent node had been found, function would return a CBF_TERMINATE.
- *                If parent node could not find in a tree, function would return a CBF_CONTINUE.
+ *                If parent node could not be found in a tree, function would return a CBF_CONTINUE.
  */
 int _treCBFParentRetriever(void * pitem, size_t param)
 {
@@ -64,7 +64,7 @@ int _treCBFParentRetriever(void * pitem, size_t param)
  *      pitem Pointer to each node in a tree.
  *      param Pointer to a FindingInfo structure.
  * Return value:  If the specific node had been found, function would return a CBF_TERMINATE.
- *                If the specific node could not find in a tree, function would return a CBF_CONTINUE.
+ *                If the specific node could not be found in a tree, function would return a CBF_CONTINUE.
  */
 int _treCBFNodeLocator(void * pitem, size_t param)
 {
@@ -144,29 +144,39 @@ int treTraverseBYPost(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
  *     cbftvs Pointer to a callback function.
  *      param Parameter which can be transferred into the callback function.
  * Return value:  The same value as callback function returns.
+ *                (*) Especially, if function encountered any error, it would still return CBF_CONTINUE
+ *                unless the callback function returns CBF_TERMINATE to break traversal intentionally.
+ * Tip:       Return CBF_TERMINATE in callback function to immediately break traversal.
  */
 int treTraverseBYLevel(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 {
-	REGISTER int r1 = CBF_CONTINUE, r2 = CBF_CONTINUE;
 	QUEUE_L q;
 	queInitL(&q);
-	queInsertL(&q, &pnode, sizeof(P_TNODE_BY));
+	if (! queInsertL(&q, &pnode, sizeof(P_TNODE_BY)))
+		return CBF_CONTINUE; /* Queue insertion failed. */
 	while (! queIsEmptyL(&q))
 	{
-		queRemoveL(&pnode, sizeof(P_TNODE_BY), &q);
-		if (CBF_CONTINUE != cbftvs(pnode, param))
-		{	/* Do NOT forget to clean the queue. */
-			queFreeL(&q);
-			return CBF_TERMINATE;
+		if (queRemoveL(&pnode, sizeof(P_TNODE_BY), &q))
+		{
+			if (CBF_CONTINUE != cbftvs(pnode, param))
+			{	/* Never forget to clean the queue before quit. */
+				queFreeL(&q);
+				return CBF_TERMINATE;
+			}
+			if (NULL != pnode->ppnode[LEFT] && ! queInsertL(&q, &(pnode->ppnode[LEFT]), sizeof(P_TNODE_BY)))
+				return CBF_CONTINUE; /* Queue insertion failed. */
+			if (NULL != pnode->ppnode[RIGHT] && ! queInsertL(&q, &(pnode->ppnode[RIGHT]), sizeof(P_TNODE_BY)))
+				return CBF_CONTINUE; /* Queue insertion failed. */
 		}
-		if (NULL != pnode->ppnode[LEFT])
-			r1 = queInsertL(&q, &(pnode->ppnode[LEFT]),  sizeof(P_TNODE_BY));
-		if (NULL != pnode->ppnode[RIGHT])
-			r2 = queInsertL(&q, &(pnode->ppnode[RIGHT]), sizeof(P_TNODE_BY));
+		else
+		{	/* Never forget to clean the queue before quit. */
+			queFreeL(&q);
+			return CBF_CONTINUE; /* Queue removal failed. */
+		}
 	}
 	/* Do NOT forget to clean the queue. */
 	queFreeL(&q);
-	return CBF_CONTINUE == r1 ? r2 : r1;
+	return CBF_CONTINUE;
 }
 
 /* Function name: treTraverseBYArray
@@ -217,7 +227,8 @@ int treTraverseBYArray(char order[3], P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, siz
  *     cbftvs Pointer to a callback function.
  *      param Parameter which can be transferred into the callback function.
  * Return value:  The same value as callback function returns.
- * Tip:           You can not break traversal when you return CBF_TERMINATE in callback function.
+ * Caution:       You can NOT break the traversal procedure until it works through a whole tree
+ *                when you return CBF_TERMINATE in callback function.
  */
 int treMorrisTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 {
@@ -270,7 +281,8 @@ int treMorrisTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
  *     cbftvs Pointer to a callback function.
  *      param Parameter which can be transferred into the callback function.
  * Return value:  The same value as callback function returns.
- * Tip:           You can not break traversal when you return CBF_TERMINATE in callback function.
+ * Caution:       You can NOT break the traversal procedure until it works through a whole tree
+ *                when you return CBF_TERMINATE in callback function.
  */
 int treMorrisTraverseBYIn(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 {
@@ -330,10 +342,7 @@ void treInitBY_O(P_BYTREE ptreb)
  * Caution:       Address of ptreb Must Be Allocated first.
  */
 void treFreeBY(P_BYTREE ptreb)
-{
-	/* A post-order traversal is needed here.
-	 * Because we have to free nodes from the crown to the root.
-	 */
+{	/* A post-order traversal is needed here. Because we have to free nodes from the crown to the root. */
 	treTraverseBYPost(*ptreb, _strCBFDeleteNode, ENT_DOUBLE);
 	*ptreb = NULL;
 }
@@ -372,9 +381,8 @@ void treDeleteBY_O(P_BYTREE ptreb)
  *      pnode Pointer to the parent node.
  *      pitem Pointer to the data you want to insert into a tree.
  *       size Size of data.
- * Return value:  If insertion succeeded, function would return a pointer of the new inserted node,
- *                otherwise function would return a NULL.
- * Caution:       If pnode equaled NULL, function would create a new node and return its pointer.
+ * Return value:  If insertion succeeded, function would return a pointer of the new inserted node, otherwise function would return NULL.
+ * Caution:       If parameter pnode equaled NULL, function would create a new node and return its pointer.
  */
 P_TNODE_BY treInsertLeftBY(P_TNODE_BY pnode, const void * pitem, size_t size)
 {
@@ -391,9 +399,8 @@ P_TNODE_BY treInsertLeftBY(P_TNODE_BY pnode, const void * pitem, size_t size)
  *      pnode Pointer to the parent node.
  *      pitem Pointer to the data you want to insert into the tree.
  *       size Size of data.
- * Return value:  If insertion succeeded, function would return a pointer of the new inserted node,
- *                otherwise function would return a NULL.
- * Caution:       If pnode equaled NULL, function would create a new node and return a pointer to the address of element.
+ * Return value:  If insertion succeeded, function would return a pointer of the new inserted node, otherwise function would return NULL.
+ * Caution:       If parameter pnode equaled NULL, function would create a new node and return a pointer to the address of element.
  */
 P_TNODE_BY treInsertRightBY(P_TNODE_BY pnode, const void * pitem, size_t size)
 {
@@ -488,10 +495,10 @@ P_TNODE_BY treGetParentNodeBY(P_TNODE_BY proot, P_TNODE_BY pchild)
  * Parameters:
  *      pnode Pointer to the first node that you want to start your searching procedure in a binary tree.
  *      pitem Pointer to the data you want to search.
- *       size Size of that data.
+ *       size Size of each data the tree.
  *         tm Method of traversal. This parameter can be any value in enumeration TvsMtd.
  * Return value:  Pointer to a node in the binary tree that contains the same data as pitem referred.
- *                If the specific data could not find in the tree, function would return a NULL.
+ *                If the specific data could not be found in the tree, function would return NULL.
  */
 P_TNODE_BY treSearchDataBY(P_TNODE_BY pnode, const void * pitem, size_t size, TvsMtd tm)
 {
@@ -514,13 +521,12 @@ P_TNODE_BY treSearchDataBY(P_TNODE_BY pnode, const void * pitem, size_t size, Tv
 }
 
 /* Function name: treDescendantBY
- * Description:   Test whether pnode is a descendant of a tree.
- *                And the root node of this tree is proot.
+ * Description:   Test whether pnode is a descendant of a binary tree from proot.
  * Parameters:
  *      proot Pointer to a root node of the tree you want to test.
  *      pnode Pointer to a node.
- * Return value:  If pnode were a descendant of a tree, function would return a true,
- *                otherwise function would return a false.
+ * Return value:  If pnode were a descendant of a tree, function would return true,
+ *                otherwise function would return false.
  */
 bool treDescendantBY(P_TNODE_BY proot, P_TNODE_BY pnode)
 {
@@ -542,8 +548,8 @@ bool treDescendantBY(P_TNODE_BY proot, P_TNODE_BY pnode)
  *       size Size of the data in proot.
  *      pleft Pointer to the left sub node.
  *     pright Pointer to the right sub node.
- * Return value:  proot will return.
- *                NULL would return if function could not create a new node.
+ * Return value:  proot will be returned.
+ *                NULL would be returned if function could not create a new node.
  * Caution:       Both pleft and pright shall not appear in the same sub tree.
  *                pleft shall not equal to pright.
  */
@@ -568,9 +574,9 @@ P_TNODE_BY treMergeNodesBY(P_TNODE_BY proot, const void * pitem, size_t size, P_
  *     proot2 Pointer to the root node that has a certain path to pnode2.
  *     pnode2 Pointer to another node.
  * Return value:  If swapping succeeded, function would return pnode2,
- *                otherwise function would return a NULL.
- * Caution:       proot1 may equal to pnode2.
- *                Both pnode1 and pnode2 shall not appear in the same sub tree.
+ *                otherwise function would return NULL.
+ * Caution:       proot1 may equal to pnode2, unless
+ *                both pnode1 and pnode2 shall not appear in the same sub tree.
  */
 P_TNODE_BY treSwapNodesBY(P_TNODE_BY proot1, P_TNODE_BY pnode1, P_TNODE_BY proot2, P_TNODE_BY pnode2)
 {

@@ -251,7 +251,7 @@ void strDeleteLinkedListSC_O(P_LIST_S plist)
 size_t strLevelLinkedListSC(LIST_S list)
 {
 	size_t l = 0;
-	strTraverseLinkedListSC_X(list, NULL, _strCBFNodesCounter, (size_t)&l);
+	strTraverseLinkedListSC_N(list, NULL, _strCBFNodesCounter, (size_t)&l);
 	return l;
 }
 
@@ -580,8 +580,8 @@ void strSwapNodeItemLinkedListSC(P_NODE_S pnodex, P_NODE_S pnodey)
 {
 	if (pnodex->pdata != pnodey->pdata)
 	{	/* Worth swapping. */
-		PUCHAR pbuf;
-		svSwap(&pnodex->pdata, &pnodey->pdata, &pbuf, sizeof(PUCHAR));
+		PUCHAR tmp;
+		svSwap(&pnodex->pdata, &tmp, &pnodey->pdata, sizeof(PUCHAR));
 	}
 }
 
@@ -1137,8 +1137,8 @@ void strSwapNodeItemLinkedListDC(P_NODE_D pnodex, P_NODE_D pnodey)
 {
 	if (pnodex->pdata != pnodey->pdata)
 	{	/* Worth swapping. */
-		PUCHAR pbuf;
-		svSwap(&pnodex->pdata, &pnodey->pdata, &pbuf, sizeof(PUCHAR));
+		PUCHAR tmp;
+		svSwap(&pnodex->pdata, &tmp, &pnodey->pdata, sizeof(PUCHAR));
 	}
 }
 

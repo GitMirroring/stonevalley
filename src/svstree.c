@@ -2,7 +2,7 @@
  * Name:        svstree.c
  * Description: Search trees.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0809171737I0717261402L02565
+ * File ID:     0809171737I0717261402L02566
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -47,7 +47,7 @@ int _treCBFFreeNodeBST(void * pitem, size_t param);
  *       size Size of the element.
  *      param Additional information of the current node.
  * Return value:  pdata pointer of NODE_D structure in the node.
- *                If function could not initialize a node, it would return a NULL.
+ *                If function could not initialize a node, it would return NULL.
  * Caution:       Address of pnode Must Be Allocated first.
  */
 void * treInitBSTNode(P_BSTNODE pnode, const void * pitem, size_t size, size_t param)
@@ -79,7 +79,7 @@ void treFreeBSTNode_O(P_BSTNODE pnode)
  *       size Size of the element.
  *      param Additional information of the current node.
  * Return value:  Pointer to the new allocated node.
- *                If function could not create a node, it would return a NULL.
+ *                If function could not create a node, it would return NULL.
  */
 P_BSTNODE treCreateBSTNode(const void * pitem, size_t size, size_t param)
 {
@@ -157,7 +157,7 @@ void treFreeBST(P_BST pbst)
  * Description:   Dynamically allocate a binary search tree.
  * Parameter:     N/A.
  * Return value:  Pointer to the new allocated tree.
- *                If function could not create a pointer, it would return a NULL.
+ *                If function could not create a pointer, it would return NULL.
  */
 P_BST treCreateBST(void)
 {
@@ -715,7 +715,7 @@ void      _treRBDeleteFixup       (P_RBT     prbt,  P_RBTNODE x);
  *      color Color of the current node.
  *     parent Pointer to parent node of the current node.
  * Return value:  pdata pointer of NODE_D structure in the node.
- *                If function could not initialize a node, it would return a NULL.
+ *                If function could not initialize a node, it would return NULL.
  * Caution:       Address of pnode Must Be Allocated first.
  */
 void * treInitRBTNode(P_RBTNODE pnode, const void * pitem, size_t size, RBTColor color, P_RBTNODE parent)
@@ -743,7 +743,7 @@ void treFreeRBTNode(P_RBTNODE pnode)
  *      color Color of the current node.
  *     parent Pointer to parent node of the current node.
  * Return value:  Pointer to the new allocated node.
- *                If function could not create a node, it would return a NULL.
+ *                If function could not create a node, it would return NULL.
  */
 P_RBTNODE treCreateRBTNode(const void * pitem, size_t size, RBTColor color, P_RBTNODE parent)
 {
@@ -821,7 +821,7 @@ void treFreeRBT(P_RBT prbt)
  * Description:   Dynamically allocate a red black tree.
  * Parameter:     N/A.
  * Return value:  Pointer to the new allocated tree.
- *                If function could not create a pointer, it would return a NULL.
+ *                If function could not create a pointer, it would return NULL.
  */
 P_RBT treCreateRBT(void)
 {
@@ -1256,7 +1256,7 @@ void _treFreeBPTInfo(_P_BPT_INFO pbi)
  * Description:   Dynamically allocate a _BPT_INFO structure.
  * Parameter:     N/A.
  * Return value:  Pointer to the new allocated structure.
- *                If function could not create a structure, it would return a NULL.
+ *                If function could not create a structure, it would return NULL.
  */
 _P_BPT_INFO _treCreateBPTInfo(void)
 {
@@ -1288,7 +1288,7 @@ void _treDeleteBPTInfo_O(_P_BPT_INFO pbi)
  *     parent Pointer to parent node.
  *      pnext Pointer to the next node in key chain.
  * Return value:  pdata pointer in the node.
- *                If function could not initialize a node, it would return a NULL.
+ *                If function could not initialize a node, it would return NULL.
  * Caution:       Address of pnode Must Be Allocated first.
  */
 void * treInitBPTNode(P_BPTNODE pnode, P_TNODE_BY parent, P_TNODE_BY pnext)
@@ -1317,7 +1317,7 @@ void treFreeBPTNode(P_BPTNODE pnode)
  *     parent Pointer to parent node.
  *      pnext Pointer to the next node in key chain.
  * Return value:  Pointer to the new allocated node.
- *                If function could not create a node, it would return a NULL.
+ *                If function could not create a node, it would return NULL.
  */
 P_BPTNODE treCreateBPTNode(P_BPTNODE parent, P_BPTNODE pnext)
 {
@@ -1470,7 +1470,7 @@ void treFreeBPT(P_BPT pbpt)
  * Description:   Dynamically allocate a B-plus indexing tree.
  * Parameter:     N/A.
  * Return value:  Pointer to the new allocated tree.
- *                If function could not create a structure, it would return a NULL.
+ *                If function could not create a structure, it would return NULL.
  */
 P_BPT treCreateBPT(void)
 {
@@ -1866,10 +1866,10 @@ bool treBulkLoadBPT(P_BPT pbpt, const size_t degree, PUCHAR pkeys[], size_t num)
 	if (num > 0 && degree > 2)
 	{
 		QUEUE_L q1, q2;
-		P_BPTNODE pnew, pnode;
-		P_QUEUE_L pqa = &q1, pqb = &q2, pqt = NULL;
 		REGISTER size_t i;
 		P_BPTNODE prev = NULL;
+		P_BPTNODE pnew, pnode;
+		P_QUEUE_L pqa = &q1, pqb = &q2;
 		stdiv_t dr = stdiv(num, degree - 1);
 		/* Initialize queues. */
 		queInitL(&q1);
@@ -1886,8 +1886,9 @@ bool treBulkLoadBPT(P_BPT pbpt, const size_t degree, PUCHAR pkeys[], size_t num)
 		 */
 		while (! queIsEmptyL(pqa))
 		{
-			_P_BPT_INFO     pti;
-			_P_BPT_KEY_INFO pki;
+			P_QUEUE_L tmp;
+			REGISTER _P_BPT_INFO     pti;
+			REGISTER _P_BPT_KEY_INFO pki;
 			/* Get the number of nodes in the queue. */
 			i = strLevelLinkedListSC(pqa->pfront);
 			if (1 == i)
@@ -1934,7 +1935,7 @@ bool treBulkLoadBPT(P_BPT pbpt, const size_t degree, PUCHAR pkeys[], size_t num)
 			/* Insert new created node into the second one. queue. */
 			queInsertL(pqb, &pnew, sizeof(P_BPTNODE));
 			if (queIsEmptyL(pqa))
-				svSwap(&pqa, &pqb, &pqt, sizeof(P_BPTNODE));
+				svSwap(&pqa, &tmp, &pqb, sizeof(P_BPTNODE));
 		}
 		queFreeL(&q1);
 		queFreeL(&q2);

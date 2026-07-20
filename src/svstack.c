@@ -2,7 +2,7 @@
  * Name:        svstack.c
  * Description: Stacks.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0318171803E0604231336L00315
+ * File ID:     0318171803E0720260744L00312
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -57,7 +57,7 @@ void stkFreeA(P_STACK_A pstka)
  * Description:   Create a new array style stack dynamically.
  * Parameters:
  *        num Number of elements.
- *       size Size of each elements.
+ *       size Size of each element.
  * Return value:  Pointer to the new stack.
  */
 P_STACK_A stkCreateA(size_t num, size_t size)
@@ -91,9 +91,8 @@ void stkDeleteA(P_STACK_A pstka)
  * Description:   Make a judgment whether a stack is empty or not.
  * Parameter:
  *     pstka Pointer to the stack you want to check.
- * Return value:
- *         true Stack is empty.
- *        false Stack is NOT empty.
+ * Return value:  true  Stack is empty.
+ *                false Stack is NOT empty.
  * Tip:           A macro version of this function named stkIsEmptyA_M is available.
  */
 bool stkIsEmptyA_O(P_STACK_A pstka)
@@ -105,9 +104,8 @@ bool stkIsEmptyA_O(P_STACK_A pstka)
  * Description:   Make a judgment whether a stack is full or not.
  * Parameter:
  *     pstka Pointer to the stack you want to check.
- * Return value:
- *         true Stack is full.
- *        false Stack is NOT full.
+ * Return value:  true  Stack is full.
+ *                false Stack is NOT full.
  * Tip:           A macro version of this function named stkIsFullA_M is available
  */
 bool stkIsFullA_O(P_STACK_A pstka)
@@ -119,8 +117,9 @@ bool stkIsFullA_O(P_STACK_A pstka)
  * Description:   Push an element onto a stack.
  * Parameters:
  *      pstka Pointer to the stack you want to operate with.
- *      pitem Pointer to the address of an element.
- * Return value:  Address of the new inserted element.
+ *      pitem Pointer to an element you want to copy to the stack.
+ *       size Size of each element in the stack array and the data that pitem pointed.
+ * Return value:  Address of the new inserted element in the stack array.
  * Caution:       You should check whether the target stack is full or not before invoking.
  * Tip:           A macro version of this function named stkPushA_M is available.
  */
@@ -130,9 +129,10 @@ void * stkPushA_O(P_STACK_A pstka, const void * pitem, size_t size)
 }
 
 /* Function name: stkPopA_O
- * Description:   Pop an element out of a stack.
+ * Description:   Pop an element from a stack.
  * Parameters:
- *      pitem Pointer to the address of an element.
+ *      pitem Pointer to an element to receive popped data.
+ *       size Size of each element in the stack array and the data that pitem pointed.
  *      pstka Pointer to the stack you want to operate with.
  * Return value:  N/A.
  * Caution:       You should check whether the target stack is empty or not before invoking.
@@ -146,7 +146,7 @@ void stkPopA_O(void * pitem, size_t size, P_STACK_A pstka)
 /* Function name: stkPeepA_O
  * Description:   Have a peek at the top of the stack.
  * Parameters:
- *      pitem Pointer to the address of an element.
+ *      pitem Pointer to an element to receive top data in the stack.
  *       size Size of element in the stack.
  *      pstka Pointer to the stack you want to operate with.
  * Return value:  N/A.
@@ -163,7 +163,7 @@ void stkPeepA_O(void * pitem, size_t size, P_STACK_A pstka)
  * Parameter:
  *     pstka Pointer to the stack you want to check.
  * Return value:  Number of tiers of stack.
- * Tip:           You should better inline this function while linking.
+ * Tip:           You should better inline this function during linkage.
  *                A macro version of this function named stkLevelA_M is available.
  */
 size_t stkLevelA_O(P_STACK_A pstka)
@@ -173,9 +173,8 @@ size_t stkLevelA_O(P_STACK_A pstka)
 
 /* Function name: stkInitL_O
  * Description:   Initialize a linked list stack.
- * Parameters:
- *      pstkl Pointer to the stack you want to create.
- *       size Size of each element in the stack.
+ * Parameter:
+ *     pstkl Pointer to the stack you want to initialize.
  * Return value:  N/A.
  * Caution:       Address of pstkl Must Be Allocated first.
  * Tip:           This function can be inline for better performance.
@@ -187,7 +186,7 @@ void stkInitL_O(P_STACK_L pstkl)
 }
 
 /* Function name: stkFreeL_O
- * Description:   Retract a linked list stack of which is allocated by function stkInitL.
+ * Description:   Retract a linked list stack that is allocated by function stkInitL.
  * Parameter:
  *     pstkl Pointer to the stack you want to release.
  * Return value:  N/A.
@@ -201,7 +200,7 @@ void stkFreeL_O(P_STACK_L pstkl)
 }
 
 /* Function name: stkCreateL_O
- * Description:   Create a new pointer with a new allocated linked list stack.
+ * Description:   Create a new pointer to a new allocated linked list stack.
  * Parameter:     N/A.
  * Return value:  A pointer to a new allocated linked list stack.
  * Tip:           This function can be inline for better performance.
@@ -229,9 +228,8 @@ void stkDeleteL_O(P_STACK_L pstkl)
  * Description:   Make a judgment whether a stack is empty or not.
  * Parameter:
  *     pstkl Pointer to the stack you want to check.
- * Return value:
- *         true Stack is empty.
- *        false Stack is not empty.
+ * Return value:  true  Stack is empty.
+ *                false Stack is not empty.
  * Caution:       Address of pstkl Must Be Allocated first.
  * Tip:           A macro version of this function named stkIsEmptyL_M is available.
  */
@@ -244,9 +242,9 @@ bool stkIsEmptyL_O(P_STACK_L pstkl)
  * Description:   Push an element onto stack.
  * Parameters:
  *      pstkl Pointer to the stack you want to operate.
- *      pitem Pointer to the address of an element.
+ *      pitem Pointer to an element to be pushed onto stack.
  *       size Size of that element.
- * Return value:   NULL if pushing failed or a valid pointer of the top element for the current stack.
+ * Return value:   NULL if pushing failed or a valid pointer of the top element from the current stack.
  * Caution:        Address of pstkl Must Be Allocated first.
  */
 P_NODE_S stkPushL(P_STACK_L pstkl, const void * pitem, size_t size)
@@ -263,11 +261,11 @@ P_NODE_S stkPushL(P_STACK_L pstkl, const void * pitem, size_t size)
 /* Function name: stkPopL
  * Description:   Pop an element from a stack.
  * Parameters:
- *      pitem Pointer to the address of an element.
- *       size Size of each elements.
+ *      pitem Pointer to an element to receive popped data from stack.
+ *       size Size of element that pitem pointed.
  *      pstkl Pointer to the stack you want to operate.
- * Return value: Address of current element.
- *               If function returned a NULL, it should mean there were no element settled in the stack anymore.
+ * Return value: Address of the top node of a linked list stack.
+ *               If function returned NULL, it should mean there were no element in the stack anymore.
  * Caution:      You should check whether the target stack is empty or not before invoking.
  *               Address of pstkl Must Be Allocated first.
  */
@@ -286,17 +284,17 @@ P_NODE_S stkPopL(void * pitem, size_t size, P_STACK_L pstkl)
 /* Function name: stkPeepL_O
  * Description:   Have a peek at the top of the stack.
  * Parameters:
- *      pitem Pointer to the address of an element.
- *       size Size of that element.
+ *      pitem Pointer to an element to receive the top item data of stack.
+ *       size Size of that element and the data of the top item of stack.
  *      pstkl Pointer to the stack you want to operate.
- * Return value:  N/A.
- * Caution:       You should check whether the target stack is empty or not before invoking.
- *                Address of pstkl Must Be Allocated first.
+ * Return value:  Peek successfully.
+ *                Peek failed.
+ * Caution:       Address of pstkl Must Be Allocated first.
  * Tip:           A macro version of this function named stkPeepL_M is available.
  */
-void stkPeepL_O(void * pitem, size_t size, P_STACK_L pstkl)
+bool stkPeepL_O(void * pitem, size_t size, P_STACK_L pstkl)
 {
-	memcpy(pitem, (*pstkl)->pdata, size);
+	return stkIsEmptyL(pstkl) ? false : (memcpy(pitem, (*pstkl)->pdata, size), true);
 }
 
 /* Function name: stkLevelL_O
@@ -304,8 +302,7 @@ void stkPeepL_O(void * pitem, size_t size, P_STACK_L pstkl)
  * Parameter:
  *     pstkl Pointer to the stack you want to operate.
  * Return value:  Number of tiers.
- * Caution:       You should check whether the target stack is empty or not before invoking.
- *                Address of pstkl Must Be Allocated first.
+ * Caution:       Address of pstkl Must Be Allocated first.
  * Tip:           A macro version of this function named stkLevelL_M is available.
  */
 size_t stkLevelL_O(P_STACK_L pstkl)

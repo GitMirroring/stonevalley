@@ -2,7 +2,7 @@
  * Name:        svtree.h
  * Description: Trees interface.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0809171737V0719261501L00523
+ * File ID:     0809171737V0720260617L00521
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -42,10 +42,8 @@ typedef P_NODE_D   P_TNODE_BY; /* Pointer of tree nodes. */
 typedef P_NODE_D   BYTREE;     /* Binary tree. */
 typedef P_NODE_D * P_BYTREE;   /* Pointer to a binary tree. */
 
-/* It says a binary tree node is actually identical to a double pointer node.
- * Use this anonymous enumeration to identify node types for a FindingInfo structure.
- */
-enum { ENT_TNODE_BY = ENT_DOUBLE };
+/* It says a binary tree node is actually identical to a double pointer node. */
+#define ENT_TNODE_BY ENT_DOUBLE
 
 /* Align a NODE_D structure to the head of BSTNODE structure,
  * then put the rest of node's information such as parameter and parent pointer after the NODE_D structure,

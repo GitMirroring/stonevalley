@@ -2,7 +2,7 @@
  * Name:        svatom.c
  * Description: Atomic structures.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0306170948A0515260941L00325
+ * File ID:     0306170948A0720260319L00360
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -31,7 +31,7 @@
  *      parrz Pointer to the sized array you want to allocate.
  *        num Number of elements.
  *       size Size of each element.
- *            If size equaled to 0, function would return a NULL.
+ *            If size equaled to 0, function would return NULL.
  * Return value:  Pointer to new allocated buffer.
  * Caution:       Address of parrz Must Be Allocated first.
  */
@@ -98,7 +98,7 @@ void strSetArrayZ(P_ARRAY_Z parrz, const void * pval, size_t size)
  *      parrz Pointer to the sized array you want to allocate.
  *        num Number of elements.
  *       size Size of each element.
- *            If size equaled to 0, function would return a NULL after retracting the array.
+ *            If size equaled to 0, function would return NULL after retracting the array.
  * Return value:  Pointer to new allocated buffer.
  * Caution:       Address of parrz Must Be Allocated first.
  */
@@ -142,8 +142,8 @@ void * strResizeArrayZ(P_ARRAY_Z parrz, size_t num, size_t size)
  *            Input a negative number to decrease size.
  * Return value:  The address of the buffer of array.
  * Caution:       Address of parrz Must Be Allocated first.
- * Tip:           // strResizeBufferedArrayZ(parr, sizeof(int), +BUFSIZ);
- *                // strResizeBufferedArrayZ(parr, sizeof(int), -BUFSIZ);
+ * Tip:           //strResizeBufferedArrayZ(parr, sizeof(int), +BUFSIZ);
+ *                //strResizeBufferedArrayZ(parr, sizeof(int), -BUFSIZ);
  */
 void * strResizeBufferedArrayZ(P_ARRAY_Z parrz, size_t size, ptrdiff_t incl)
 {
@@ -170,8 +170,11 @@ void * strResizeBufferedArrayZ(P_ARRAY_Z parrz, size_t size, ptrdiff_t incl)
  */
 void strFreeArrayZ_O(P_ARRAY_Z parrz)
 {
-	free(parrz->pdata);
-	parrz->pdata = NULL;
+	if (NULL != parrz->pdata) /* Circumvent freeing a NULL pointer. */
+	{
+		free(parrz->pdata);
+		parrz->pdata = NULL;
+	}
 	parrz->num = 0;
 }
 
@@ -194,17 +197,24 @@ void strDeleteArrayZ_O(P_ARRAY_Z parrz)
  * Parameters:
  *      pnode Pointer to the node you want to initiate.
  *       pval Pointer to the value you want to set into a new node.
- *       size Size of that element.
+ *            Set pval into NULL to allot a blank buffer for data pointer pdata.
+ *       size Size of data of pval.
+ *            Notice that 0 size results a NULL data pointer.
  * Return value:  Pointer to new allocated buffer.
  * Caution:       Address of parrz Must Be Allocated first.
  */
 void * strInitNodeS(P_NODE_S pnode, const void * pval, size_t size)
 {
-	if (NULL == (pnode->pdata = (PUCHAR) malloc(size)))
-		return NULL; /* Buffer creation failed. */
-	if (NULL != pval)
-		memcpy(pnode->pdata, pval, size);
 	pnode->pnode = NULL;
+	if (0 == size)
+		pnode->pdata = NULL;
+	else
+	{
+		if (NULL == (pnode->pdata = (PUCHAR) malloc(size)))
+			return NULL; /* Buffer creation failed. */
+		if (NULL != pval)
+			memcpy(pnode->pdata, pval, size);
+	}
 	return pnode->pdata;
 }
 
@@ -212,8 +222,9 @@ void * strInitNodeS(P_NODE_S pnode, const void * pval, size_t size)
  * Description:   Dynamically allocate a node which is with a single pointer.
  * Parameters:
  *       pval Address of the initial value.
- *            If size equaled to 0, function would return a NULL.
+ *            Set pval into NULL to create a blank buffer for data pointer.
  *       size Size of the data of a node.
+ *            Notice that 0 size results a NULL data pointer.
  * Return value:  Pointer to the new allocated node.
  */
 P_NODE_S strCreateNodeS(const void * pval, size_t size)
@@ -221,10 +232,14 @@ P_NODE_S strCreateNodeS(const void * pval, size_t size)
 	REGISTER P_NODE_S pnode = (P_NODE_S) malloc(sizeof(NODE_S));
 	if (NULL == pnode)
 		return NULL;
-	if (NULL == strInitNodeS(pnode, pval, size)) /* Buffer creation failed. */
+	else
 	{
-		free(pnode);
-		return NULL;
+		REGISTER void * p = strInitNodeS(pnode, pval, size);
+		if (0 != size && NULL == p)
+		{
+			free(pnode); /* Allocation failure. */
+			return NULL;
+		}
 	}
 	return pnode;
 }
@@ -239,7 +254,11 @@ P_NODE_S strCreateNodeS(const void * pval, size_t size)
  */
 void strFreeNodeS_O(P_NODE_S pnode)
 {
-	free(pnode->pdata);
+	if (NULL != pnode->pdata) /* Circumvent freeing a NULL pointer. */
+	{
+		free(pnode->pdata);
+		pnode->pdata = NULL;
+	}
 }
 
 /* Function name: strDeleteNodeS_O
@@ -261,37 +280,49 @@ void strDeleteNodeS_O(P_NODE_S pnode)
  * Parameters:
  *      pnode Pointer to the node you want to initiate.
  *       pval Pointer to the value you want to set into the new node.
- *       size Size of that element.
+ *            Set pval into NULL to allot a blank buffer for data pointer pdata.
+ *       size Size of data of pval.
+ *            Notice that 0 size results a NULL data pointer.
  * Return value:  Pointer to new allocated buffer.
  * Caution:       Address of parrz Must Be Allocated first.
  */
 void * strInitNodeD(P_NODE_D pnode, const void * pval, size_t size)
 {
-	if (NULL == (pnode->pdata = (PUCHAR) malloc(size)))
-		return NULL; /* Buffer creation failed. */
-	if (NULL != pval)
-		memcpy(pnode->pdata, pval, size);
 	pnode->ppnode[PREV] = pnode->ppnode[NEXT] = NULL;
+	if (0 == size)
+		pnode->pdata = NULL;
+	else
+	{
+		if (NULL == (pnode->pdata = (PUCHAR) malloc(size)))
+			return NULL; /* Buffer creation failed. */
+		if (NULL != pval)
+			memcpy(pnode->pdata, pval, size);
+	}
 	return pnode->pdata;
 }
 
 /* Function name: strCreateNodeD
  * Description:   Dynamically allocate a node which has two directive pointers.
  * Parameters:
- *       pval Pointer to the value you want to set into the new node.
- *       size Size of the data of that node.
- *            If size equaled to 0, function would return a NULL.
- * Return value:  Pointer to the new allocated node.
+ *       pval Pointer to the value you want to copy into the new node.
+ *            Set pval into NULL to create a blank buffer for data pointer.
+ *       size Size of the data of a node.
+ *            Notice that 0 size results a NULL data pointer.
+ * Return value:  Pointer to the new allocated double pointer node.
  */
 P_NODE_D strCreateNodeD(const void * pval, size_t size)
 {
-	REGISTER P_NODE_D pnode  = (P_NODE_D) malloc(sizeof(NODE_D));
+	REGISTER P_NODE_D pnode = (P_NODE_D) malloc(sizeof(NODE_D));
 	if (NULL == pnode)
 		return NULL;
-	if (NULL == strInitNodeD(pnode, pval, size))
+	else
 	{
-		free(pnode);
-		return NULL;
+		REGISTER void * p = strInitNodeD(pnode, pval, size);
+		if (0 != size && NULL == p)
+		{
+			free(pnode); /* Allocation failure. */
+			return NULL;
+		}
 	}
 	return pnode;
 }
@@ -306,7 +337,11 @@ P_NODE_D strCreateNodeD(const void * pval, size_t size)
  */
 void strFreeNodeD_O(P_NODE_D pnode)
 {
-	free(pnode->pdata);
+	if (NULL != pnode->pdata) /* Circumvent freeing a NULL pointer. */
+	{
+		free(pnode->pdata);
+		pnode->pdata = NULL;
+	}
 }
 
 /* Function name: strDeleteNodeD_O
