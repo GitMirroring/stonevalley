@@ -2,7 +2,7 @@
  * Name:        svatom.c
  * Description: Atomic structures.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0306170948A0720260319L00360
+ * File ID:     0306170948A0720261242L00386
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -87,9 +87,35 @@ P_ARRAY_Z strCreateArrayZ(size_t num, size_t size)
  */
 void strSetArrayZ(P_ARRAY_Z parrz, const void * pval, size_t size)
 {
-	REGISTER size_t i, j;
-	for (i = strLevelArrayZ(parrz), j = 0; i >= 1; --i, j += size)
-		memcpy(parrz->pdata + j, pval, size);
+	if (strLevelArrayZ(parrz) > 0)
+	{
+		if (sizeof(UCHART) != size)
+		{
+			REGISTER size_t i;
+			
+			if (sizeof(size_t) == size) /* Optimized loop for size_t. */
+			{
+				REGISTER size_t * ps = (size_t *)parrz->pdata;
+				
+				*ps = *(size_t *)pval;
+				
+				for (i = strLevelArrayZ(parrz); (++ps, i > 1); --i) *ps = *(ps - 1);
+			}
+			else
+			{
+				REGISTER size_t j;
+				
+				/* Set the first element in the array from pval. */
+				memcpy(parrz->pdata, pval, size);
+				
+				/* Repeat the previous item in the array but not the item which pval pointed to fit the memory locality principle. */
+				for (i = strLevelArrayZ(parrz), j = size; i > 1; --i, j += size)
+					memcpy(parrz->pdata + j, parrz->pdata + j - size, size);
+			}
+		}
+		else /* size is one of byte, call memset directly. */
+			memset(parrz->pdata, (int)*(PUCHAR)pval, size * sizeof(UCHART) * strLevelArrayZ(parrz));
+	}
 }
 
 /* Function name: strResizeArrayZ
