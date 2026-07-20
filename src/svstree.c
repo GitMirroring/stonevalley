@@ -59,7 +59,7 @@ void * treInitBSTNode(P_BSTNODE pnode, const void * pitem, size_t size, size_t p
 }
 
 /* Function name: treFreeBSTNode_O
- * Description:   Retract a node of which is allocated by function treInitBSTNode.
+ * Description:   Retract a node which is allocated by function treInitBSTNode.
  * Parameter:
  *     pnode Pointer to the node you want to release.
  * Return value:  N/A.
@@ -96,7 +96,7 @@ P_BSTNODE treCreateBSTNode(const void * pitem, size_t size, size_t param)
 }
 
 /* Function name: treDeleteBSTNode_O
- * Description:   Retract a node of which is allocated by function treCreateBSTNode.
+ * Description:   Retract a node which is allocated by function treCreateBSTNode.
  * Parameter:
  *     pnode Pointer to the node you want to release.
  * Return value:  N/A.
@@ -138,7 +138,7 @@ void treInitBST_O(P_BST pbst)
 }
 
 /* Function name: treFreeBST
- * Description:   Retract a binary search tree of which is allocated by function treInitBST_O.
+ * Description:   Retract a binary search tree which is allocated by function treInitBST_O.
  * Parameter:
  *      pbst Pointer to the binary search tree you want to release.
  * Return value:  N/A.
@@ -169,7 +169,7 @@ P_BST treCreateBST(void)
 }
 
 /* Function name: treDeleteBST_O
- * Description:   Retract a binary search tree of which is allocated by function treCreateBST.
+ * Description:   Retract a binary search tree which is allocated by function treCreateBST.
  * Parameter:
  *      pbst Pointer to the tree you want to release.
  * Return value:  N/A.
@@ -725,7 +725,7 @@ void * treInitRBTNode(P_RBTNODE pnode, const void * pitem, size_t size, RBTColor
 }
 
 /* Function name: treFreeRBTNode
- * Description:   Retract a node of which is allocated by function treInitRBTNode.
+ * Description:   Retract a node which is allocated by function treInitRBTNode.
  * Parameter:
  *     pnode Pointer to the node you want to release.
  * Return value:  N/A.
@@ -760,7 +760,7 @@ P_RBTNODE treCreateRBTNode(const void * pitem, size_t size, RBTColor color, P_RB
 }
 
 /* Function name: treDeleteRBTNode_O
- * Description:   Retract a node of which is allocated by function treCreateRBTNode.
+ * Description:   Retract a node which is allocated by function treCreateRBTNode.
  * Parameter:
  *     pnode Pointer to the node you want to release.
  * Return value:  N/A.
@@ -802,7 +802,7 @@ void treInitRBT_O(P_RBT prbt)
 }
 
 /* Function name: treFreeRBT
- * Description:   Retract a red black tree of which is allocated by function treInitRBT_O.
+ * Description:   Retract a red black tree which is allocated by function treInitRBT_O.
  * Parameter:
  *      prbt Pointer to the red black tree you want to release.
  * Return value:  N/A.
@@ -833,7 +833,7 @@ P_RBT treCreateRBT(void)
 }
 
 /* Function name: treDeleteRBT_O
- * Description:   Retract a red black tree of which is allocated by function treCreateRBT.
+ * Description:   Retract a red black tree which is allocated by function treCreateRBT.
  * Parameter:
  *      prbt Pointer to the tree you want to release.
  * Return value:  N/A.
@@ -1239,7 +1239,7 @@ void _treInitBPTInfo_O(_P_BPT_INFO pbi)
 
 /* Attention:     This Is An Internal Function. No Interface for Library Users.
  * Function name: _treFreeBPTInfo
- * Description:   Retract a _BPT_INFO structure of which is allocated by function _treInitBPTInfo_O.
+ * Description:   Retract a _BPT_INFO structure which is allocated by function _treInitBPTInfo_O.
  * Parameter:
  *       pbi Pointer to the _BPT_INFO structure you want to release.
  * Return value:  N/A.
@@ -1268,7 +1268,7 @@ _P_BPT_INFO _treCreateBPTInfo(void)
 
 /* Attention:     This Is An Internal Function. No Interface for Library Users.
  * Function name: _treDeleteBPTInfo_O
- * Description:   Retract a _BPT_INFO structure of which is allocated by function _treCreateBPTInfo.
+ * Description:   Retract a _BPT_INFO structure which is allocated by function _treCreateBPTInfo.
  * Parameter:
  *       pbi Pointer to the _BPT_INFO structure you want to release.
  * Return value:  N/A.
@@ -1299,7 +1299,7 @@ void * treInitBPTNode(P_BPTNODE pnode, P_TNODE_BY parent, P_TNODE_BY pnext)
 }
 
 /* Function name: treFreeBPTNode
- * Description:   Retract a node of which is allocated by function treInitBPTNode.
+ * Description:   Retract a node which is allocated by function treInitBPTNode.
  * Parameter:
  *     pnode Pointer to the node you want to release.
  * Return value:  N/A.
@@ -1336,7 +1336,7 @@ P_BPTNODE treCreateBPTNode(P_BPTNODE parent, P_BPTNODE pnext)
 }
 
 /* Function name: treDeleteBPTNode
- * Description:   Retract a node of which is allocated by function treCreateBPTNode.
+ * Description:   Retract a node which is allocated by function treCreateBPTNode.
  * Parameter:
  *     pnode Pointer to the node you want to release.
  * Return value:  N/A.
@@ -1443,7 +1443,7 @@ void _treFreeBPTPuppet(P_QUEUE_L pquelx, P_QUEUE_L pquely)
 }
 
 /* Function name: treFreeBPT
- * Description:   Retract a B-plus indexing tree of which is allocated by function treInitBPT_O.
+ * Description:   Retract a B-plus indexing tree which is allocated by function treInitBPT_O.
  * Parameter:
  *      pbpt Pointer to the binary search tree you want to release.
  * Return value:  N/A.
@@ -1481,7 +1481,7 @@ P_BPT treCreateBPT(void)
 }
 
 /* Function name: treDeleteBPT
- * Description:   Retract a B-plus indexing tree of which is allocated by function treCreateBPT.
+ * Description:   Retract a B-plus indexing tree which is allocated by function treCreateBPT.
  * Parameter:
  *      pbpt Pointer to the tree you want to release.
  * Return value:  N/A.
@@ -2334,7 +2334,7 @@ P_TRIE_A treCreateTrieA(void)
 }
 
 /* Function name: treDeleteTrieA_O
- * Description:   Delete a trie of which is allocated by function treCreateTrieA.
+ * Description:   Delete a trie which is allocated by function treCreateTrieA.
  * Parameters:
  *      ptrie Pointer to a trie you want to allocate.
  *       size Size of an element in the string which had been inserted into trie before.
@@ -2352,7 +2352,7 @@ void treDeleteTrieA_O(P_TRIE_A ptrie, size_t size)
 /* Function name: treSearchTrieA
  * Description:   Search a string in a trie.
  * Parameters:
- *      ptrie Pointer to a trie that you wanna operate on.
+ *      ptrie Pointer to a trie that you want to operate on.
  *       pstr Pointer to the first element to a string and cast the pointer into (const void *).
  *        num Number of elements in the string.
  *       size Size of each element in the string.
@@ -2391,7 +2391,7 @@ size_t * treSearchTrieA(P_TRIE_A ptrie, const void * pstr, size_t num, size_t si
 /* Function name: treInsertTrieA
  * Description:   Insert a string into a trie.
  * Parameters:
- *      ptrie Pointer to a trie that you wanna operate on.
+ *      ptrie Pointer to a trie that you want to operate on.
  *       pstr Pointer to the first element to a string and cast the pointer into (const void *).
  *        num Number of elements in the string.
  *       size Size of each element in the string.
@@ -2477,7 +2477,7 @@ bool treInsertTrieA(P_TRIE_A ptrie, const void * pstr, size_t num, size_t size, 
 /* Function name: treRemoveTrieA
  * Description:   Remove a string from a trie.
  * Parameters:
- *      ptrie Pointer to a trie that you wanna operate on.
+ *      ptrie Pointer to a trie that you want to operate on.
  *       pstr Pointer to the first element to a string and cast the pointer into (const void *).
  *        num Number of elements in the string.
  *       size Size of each element in the string.

@@ -161,7 +161,7 @@ void * strResizeBufferedArrayZ(P_ARRAY_Z parrz, size_t size, ptrdiff_t incl)
 }
 
 /* Function name: strFreeArrayZ_O
- * Description:   Retract an array of which is allocated by function strInitArrayZ.
+ * Description:   Retract an array which is allocated by function strInitArrayZ.
  * Parameter:
  *     parrz Pointer to the sized array you want to delete.
  * Return value:  N/A.
@@ -179,7 +179,7 @@ void strFreeArrayZ_O(P_ARRAY_Z parrz)
 }
 
 /* Function name: strDeleteArrayZ_O
- * Description:   Delete an array of which is allocated by function strCreateArrayZ.
+ * Description:   Delete an array which is allocated by function strCreateArrayZ.
  * Parameter:
  *     parrz Pointer to the sized array you want to delete.
  * Return value:  N/A.
@@ -245,7 +245,7 @@ P_NODE_S strCreateNodeS(const void * pval, size_t size)
 }
 
 /* Function name: strFreeNodeS_O
- * Description:   Retract a NODE_S of which is allocated by function strInitNodeS.
+ * Description:   Retract a NODE_S which is allocated by function strInitNodeS.
  * Parameter:
  *     pnode Pointer to that node you want to release.
  * Return value:  N/A.
@@ -262,7 +262,7 @@ void strFreeNodeS_O(P_NODE_S pnode)
 }
 
 /* Function name: strDeleteNodeS_O
- * Description:   Delete a NODE_S of which is allocated by function strCreateNodeS.
+ * Description:   Delete a NODE_S which is allocated by function strCreateNodeS.
  * Parameter:
  *     pnode Pointer to that node you want to release.
  * Return value:  N/A.
@@ -328,7 +328,7 @@ P_NODE_D strCreateNodeD(const void * pval, size_t size)
 }
 
 /* Function name: strFreeNodeD_O
- * Description:   Retract a NODE_D of which is allocated by function strCreateNodeD.
+ * Description:   Retract a NODE_D which is allocated by function strCreateNodeD.
  * Parameter:
  *     pnode Pointer to the node you want to release.
  * Return value:  N/A.
@@ -345,7 +345,7 @@ void strFreeNodeD_O(P_NODE_D pnode)
 }
 
 /* Function name: strDeleteNodeD_O
- * Description:   Delete a NODE_D of which is allocated by function strCreateNodeD.
+ * Description:   Delete a NODE_D which is allocated by function strCreateNodeD.
  * Parameter:
  *     pnode Pointer to that node you want to release.
  * Return value:  N/A.

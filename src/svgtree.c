@@ -262,7 +262,7 @@ void * treInitTNodeG(P_TNODE_G pnode, const void * pitem, size_t size)
 }
 
 /* Function name: treFreeTNodeG
- * Description:   Retract a node of which is allocated by function treInitTNodeG.
+ * Description:   Retract a node which is allocated by function treInitTNodeG.
  * Parameter:
  *     ptreb Pointer to the node you want to release.
  * Return value:  N/A.
@@ -295,7 +295,7 @@ P_TNODE_G treCreateTNodeG(const void * pitem, size_t size)
 }
 
 /* Function name: treDeleteTNodeG
- * Description:   Delete a node of which is allocated by function treCreateTNodeG.
+ * Description:   Delete a node which is allocated by function treCreateTNodeG.
  * Parameter:
  *     pnode Pointer to the node you want to allocate.
  * Return value:  N/A.
@@ -321,7 +321,7 @@ void treInitG_O(P_GTREE ptreg)
 }
 
 /* Function name: treFreeG
- * Description:   Retract a generic tree of which is allocated by function treInitG_O.
+ * Description:   Retract a generic tree which is allocated by function treInitG_O.
  * Parameter:
  *     ptreb Pointer to the generic tree you want to release.
  * Return value:  N/A.
@@ -348,7 +348,7 @@ P_GTREE treCreateG(void)
 }
 
 /* Function name: treDeleteG
- * Description:   Delete a generic tree of which is allocated by function treCreateG.
+ * Description:   Delete a generic tree which is allocated by function treCreateG.
  * Parameter:
  *     ptreb Pointer to a generic tree you want to allocate.
  * Return value:  N/A.

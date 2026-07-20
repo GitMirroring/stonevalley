@@ -978,7 +978,7 @@ void * strSetValueSparseMatrix(P_SPAMAT pmtx, size_t ln, size_t col, void * pval
 		for (i = l, j = 0; j < m; ++j)
 			if (pmtx->bmask.arrz.pdata[i] & (_CHAR_SIGN >> j))
 				++s;
-		if (false != (bool)(0x01 & u))
+		if (BOOLIZE(0x01 & u))
 		{	/* Item exists. */
 			if (NULL != (pnode = strLocateItemSC(pmtx->datlst, s)))
 			{

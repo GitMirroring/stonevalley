@@ -61,7 +61,7 @@ stdiv_t stdiv(size_t numerator, size_t denominator)
  * Description:   Swap contents of two memory blocks.
  * Parameters:
  *      pleft Pointer to the left block you want to swap with the block of pright pointed.
- *      ptemp Pointer to a temporary buffer of which has a size that equals to parameter size.
+ *      ptemp Pointer to a temporary buffer which has a size that equals to parameter size.
  *            (*) Users shall manage this temporary buffer manually in the caller function.
  *     pright Pointer to the right block you want to swap with the block of pleft pointed.
  *       size Size of memory that pleft, pright and ptemp pointed.
@@ -339,7 +339,7 @@ bool strBitStreamExtract(P_BITSTREAM pbstm)
 				pbstm->bilc = CHAR_BIT;
 		}
 	}
-	return false != (bool)r;
+	return BOOLIZE(r);
 }
 
 /* Function name: strBitStreamLocate

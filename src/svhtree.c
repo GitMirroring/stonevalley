@@ -41,7 +41,7 @@ void treInitHeapA(P_HEAP_A pheap, size_t num, size_t size)
 }
 
 /* Function name: treFreeHeapA
- * Description:   Retract a heap tree of which is allocated by function treInitHeapA.
+ * Description:   Retract a heap tree which is allocated by function treInitHeapA.
  * Parameter:
  *     pheap Pointer to a heap that you want to release.
  * Return value:  N/A.
@@ -71,7 +71,7 @@ P_HEAP_A treCreateHeapA(size_t num, size_t size)
 }
 
 /* Function name: treDeleteHeapA
- * Description:   Delete a heap tree of which is allocated by function treCreateHeapA.
+ * Description:   Delete a heap tree which is allocated by function treCreateHeapA.
  * Parameter:
  *     pheap Pointer to a heap you want to delete.
  * Return value:  N/A.

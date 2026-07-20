@@ -335,7 +335,7 @@ void treInitBY_O(P_BYTREE ptreb)
 }
 
 /* Function name: treFreeBY
- * Description:   Retract a binary tree of which is allocated by function treInitBY_O.
+ * Description:   Retract a binary tree which is allocated by function treInitBY_O.
  * Parameter:
  *     ptreb Pointer to the binary tree that you want to release.
  * Return value:  N/A.
@@ -362,7 +362,7 @@ P_BYTREE treCreateBY(void)
 }
 
 /* Function name: treDeleteBY_O
- * Description:   Delete a binary tree of which is allocated by function treCreateBY.
+ * Description:   Delete a binary tree which is allocated by function treCreateBY.
  * Parameter:
  *     ptreb Pointer to the binary tree that you want to allocate.
  * Return value:  N/A.

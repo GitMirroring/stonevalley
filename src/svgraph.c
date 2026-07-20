@@ -281,7 +281,7 @@ int _grpCBFIndegreeVertexPuppet(void * pitem, size_t param)
  * Description:   This function is used to calculate the in-degree of a vertex.
  * Parameters:
  *      pitem Pointer to each VERTEX_L in a single list node's data pointer.
- *      param Pointer to a size_t[2] array of which is declared in the caller.
+ *      param Pointer to a size_t[2] array which is declared in the caller.
  * Return value:  CBF_CONTINUE only.
  */
 int _grpCBFIndegreeVertex(void * pitem, size_t param)
@@ -411,7 +411,7 @@ void grpInitL_O(P_GRAPH_L pgrp)
 }
 
 /* Function name: grpFreeL
- * Description:   Retract a graph of which is allocated by function grpInitL.
+ * Description:   Retract a graph which is allocated by function grpInitL.
  * Parameter:
  *      pgrp Pointer to the graph you want to release.
  * Return value:  N/A.
@@ -436,7 +436,7 @@ P_GRAPH_L grpCreateL_O(void)
 }
 
 /* Function name: grpDeleteL
- * Description:   Delete a graph of which is allocated by function grpCreateL.
+ * Description:   Delete a graph which is allocated by function grpCreateL.
  * Parameter:
  *      pgrp Pointer to the graph you want to release.
  * Return value:  N/A.
@@ -958,10 +958,10 @@ bool _grpSPLInitArray(P_GRAPH_L pgrp, P_ARRAY_Z parrz, size_t vidx, bool barrd)
 	/* Fill distance into array. Pick the specific value off the array and sign it.
 	 * Initialize the distance from source to other vertex as INT_MAX(infinite).
 	 */
-	strTraverseArrayZ(parrz, sizeof(VTXREC), _grpCBFSPLInitVtxrecArray, (size_t)((bool)barrd ? ~(size_t)0 : (size_t)false), false);
+	strTraverseArrayZ(parrz, sizeof(VTXREC), _grpCBFSPLInitVtxrecArray, (size_t)(barrd ? ~(size_t)0 : (size_t)false), false);
 	prec = (P_VTXREC)strBinarySearchArrayZ(parrz, &vidx, sizeof(VTXREC), _grpCBFCompareInteger);
 	if (NULL != prec)
-		prec->dist = (bool)barrd ? (size_t)0 : (size_t)true;
+		prec->dist = barrd ? (size_t)0 : (size_t)true;
 	else
 		return false;
 	return true;
@@ -2241,7 +2241,7 @@ void * grpInitM(P_GRAPH_M pgrp, size_t vtxc)
 }
 
 /* Function name: grpFreeM_O
- * Description:   Retract a graph of which is allocated by function grpInitM.
+ * Description:   Retract a graph which is allocated by function grpInitM.
  * Parameter:
  *      pgrp Pointer to the graph you want to release.
  * Return value:  N/A.
@@ -2268,7 +2268,7 @@ P_GRAPH_M grpCreateM(size_t vtxc)
 }
 
 /* Function name: grpDeleteM_O
- * Description:   Delete a graph of which is allocated by function grpCreateM.
+ * Description:   Delete a graph which is allocated by function grpCreateM.
  * Parameter:
  *      pgrp Pointer to the graph you want to delete from main memory.
  * Return value:  N/A.

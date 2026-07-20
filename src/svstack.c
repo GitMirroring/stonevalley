@@ -41,7 +41,7 @@ void * stkInitA(P_STACK_A pstka, size_t num, size_t size)
 }
 
 /* Function name: stkFreeA
- * Description:   Retract a stack of which is allocated by function stkInitA.
+ * Description:   Retract a stack which is allocated by function stkInitA.
  * Parameter:
  *     pstka Pointer to the stack you want to release.
  * Return value:  N/A.
@@ -75,7 +75,7 @@ P_STACK_A stkCreateA(size_t num, size_t size)
 }
 
 /* Function name: stkDeleteA
- * Description:   Delete a stack of which is allocated by function stkCreateA.
+ * Description:   Delete a stack which is allocated by function stkCreateA.
  * Parameter:
  *     pstka Pointer to the stack you want to delete.
  * Return value:  N/A.
@@ -211,7 +211,7 @@ P_STACK_L stkCreateL_O(void)
 }
 
 /* Function name: stkDeleteL_O
- * Description:   Destroy a linked list stack of which is allocated by function stkCreateL.
+ * Description:   Destroy a linked list stack which is allocated by function stkCreateL.
  * Parameter:
  *     pstkl Pointer to the stack you want to delete from the main memory.
  * Return value:  N/A.

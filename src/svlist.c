@@ -201,7 +201,7 @@ void strInitLinkedListSC_O(P_LIST_S plist)
 }
 
 /* Function name: strFreeLinkedListSC
- * Description:   Retract a single-pointer-node linked list of which is allocated by function strInitLinkedListSC.
+ * Description:   Retract a single-pointer-node linked list which is allocated by function strInitLinkedListSC.
  * Parameter:
  *     plist Pointer to the plist you want to free.
  * Return value:  N/A.
