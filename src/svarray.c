@@ -701,20 +701,19 @@ void strShuffleArrayZ(P_ARRAY_Z parrz, void * ptemp, size_t size, size_t (*nxtrn
  *                    it would either indicate allocation failure or callback function cbftvs returned.
  * Caution:       Address of parrtxt and parrptn Must Be Allocated first.
  *                Parameter size shall not equal to zero.
- * Tip:           Users may reference to the following codes:
- *                // int cbftvs(void * pitem, size_t param) {
- *                //     DWC4100(param);
- *                //     wprintf(L"%ls\n", pitem);
- *                //     return CBF_CONTINUE;
- *                // }
- *                // wchar_t txt[] = L"ABABDABACDABABCABAB";
- *                // wchar_t ptn[] = L"ABABCABAB";
- *                // ARRAY_Z parrtxt, parrptn;
- *                // parrtxt.pdata = (PUCHAR)txt;
- *                // parrtxt.num   = wcslen(txt);
- *                // parrptn.pdata = (PUCHAR)ptn;
- *                // parrptn.num   = wcslen(ptn);
- *                // strKMPSearchArrayZ(&parrtxt, &parrptn, sizeof(wchar_t), cbftvs, 0);
+ * Usage:         int cbftvs(void * pitem, size_t param) {
+ *                    DWC4100(param);
+ *                    wprintf(L"%ls\n", pitem);
+ *                    return CBF_CONTINUE;
+ *                }
+ *                wchar_t txt[] = L"ABABDABACDABABCABAB";
+ *                wchar_t ptn[] = L"ABABCABAB";
+ *                ARRAY_Z parrtxt, parrptn;
+ *                parrtxt.pdata = (PUCHAR)txt;
+ *                parrtxt.num   = wcslen(txt);
+ *                parrptn.pdata = (PUCHAR)ptn;
+ *                parrptn.num   = wcslen(ptn);
+ *                strKMPSearchArrayZ(&parrtxt, &parrptn, sizeof(wchar_t), cbftvs, 0);
  */
 int strKMPSearchArrayZ(P_ARRAY_Z parrtxt, P_ARRAY_Z parrptn, size_t size, CBF_TRAVERSE cbftvs, size_t param)
 {
@@ -855,19 +854,18 @@ void _strGetZArray(size_t z[], P_ARRAY_Z parrz, size_t size)
  * Caution:       Address of parrtxt and parrptn Must Be Allocated first.
  *                Parameter size shall not equal to zero.
  * Tip:           Z algorithm references to geeksforgeeks.org.
- *                Users may reference to the following codes:
- *                // int cbftvs(void * pitem, size_t param) {
- *                //     size_t i;
- *                //     for (i = 0; i < param; ++i)
- *                //         putchar(i[(char *)pitem]);
- *                //     printf("\n");
- *                //     return CBF_CONTINUE;
- *                // }
- *                // P_ARRAY_Z pp = strCreateCharacterStringArrayZ("GEEK");
- *                // P_ARRAY_Z pt = strCreateCharacterStringArrayZ("GEEKS FOR GEEKS");
- *                // strZSearchArrayZ(pt, pp, sizeof(char), cbftvs, 0);
- *                // strDeleteArrayZ(pp); // Do not forget to delete array here.
- *                // strDeleteArrayZ(pt);
+ * Usage:         int cbftvs(void * pitem, size_t param) {
+ *                    size_t i;
+ *                    for (i = 0; i < param; ++i)
+ *                        putchar(i[(char *)pitem]);
+ *                    printf("\n");
+ *                    return CBF_CONTINUE;
+ *                }
+ *                P_ARRAY_Z pp = strCreateCharacterStringArrayZ("GEEK");
+ *                P_ARRAY_Z pt = strCreateCharacterStringArrayZ("GEEKS FOR GEEKS");
+ *                strZSearchArrayZ(pt, pp, sizeof(char), cbftvs, 0);
+ *                strDeleteArrayZ(pp); // Do not forget to delete array here.
+ *                strDeleteArrayZ(pt);
  */
 int strZSearchArrayZ(P_ARRAY_Z parrtxt, P_ARRAY_Z parrptn, size_t size, CBF_TRAVERSE cbftvs, size_t param)
 {

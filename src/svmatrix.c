@@ -340,11 +340,11 @@ void * strTransposeMatrix(P_MATRIX pmtx, size_t size, CBF_COMPARE cbfcmp)
  *                All line number dln, sln and column number dcol, scol start from 0.
  * Tip:           Assume that we have two matrices A and B, then a projection can be the following situation.
  *                strProjectMatrix(&A, 1, 1, &B, 1, 1);
- *                // Before projection:        : After projection:
- *                // A=| a b c d | B=| q r s | : A=| a b c d | B=| q r s |
- *                //   | e f g h |   | t u v | :   | e u.v.h |   | t u v |
- *                //   | i j k l |   | w x y | :   | i x.y.l |   | w x y |
- *                //   | m n o p |             :   | m n o p |
+ *                Before projection:        : After projection:
+ *                A=| a b c d | B=| q r s | : A=| a b c d | B=| q r s |
+ *                  | e f g h |   | t u v | :   | e u.v.h |   | t u v |
+ *                  | i j k l |   | w x y | :   | i x.y.l |   | w x y |
+ *                  | m n o p |             :   | m n o p |
  */
 bool strProjectMatrix(P_MATRIX pdest, size_t dln, size_t dcol, P_MATRIX psrc, size_t sln, size_t scol, size_t size)
 {
@@ -481,9 +481,9 @@ typedef enum _en_M3Algebra { _M3A_ADD, _M3A_MUL }     _M3Algebra;
  *                strFreeMatrix(&mc);
  *                strFreeMatrix(&ma);
  *                strFreeMatrix(&mb);
- *                // | 1 2 3 |   | 3 2 |   | 20 26 |
- *                // | 4 5 6 | * | 1 6 | = | 47 62 |
- *                //             | 5 4 |
+ *                | 1 2 3 |   | 3 2 |   | 20 26 |
+ *                | 4 5 6 | * | 1 6 | = | 47 62 |
+ *                            | 5 4 |
  *                  __      _n_
  *                 /  \     \  |
  *                |      ==  >   a  b

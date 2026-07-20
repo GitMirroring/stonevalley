@@ -272,9 +272,9 @@ bool queTailL_O(void * pitem, size_t size, P_QUEUE_L pquel)
  * Description:   Insert an element into linked-list queue.
  * Parameters:
  *      pquel Pointer to the linked list queue you want to operate with.
- *      pitem Pointer to the address of an element.
+ *      pitem Pointer to an element.
  *       size Size of each element in the queue.
- * Return value:  If function worked successfully, it would return true,
+ * Return value:  If function worked successfully it would return true,
  *                otherwise function would return false.
  */
 bool queInsertL(P_QUEUE_L pquel, const void * pitem, size_t size)
@@ -298,7 +298,7 @@ bool queInsertL(P_QUEUE_L pquel, const void * pitem, size_t size)
  *      pitem Pointer to an address of data to receive deleted one.
  *       size Size of the data that pitem pointed at and each element in the queue.
  *      pquel Pointer to the linked list queue you want to operate with.
- * Return value:  If function worked successfully, it would return true,
+ * Return value:  If function worked successfully it would return true,
  *                otherwise function would return false.
  * Caution:       To check whether queue is empty or not is NOT necessary before invoking this function.
  */

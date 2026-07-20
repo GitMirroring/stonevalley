@@ -2,7 +2,7 @@
  * Name:        svtree.h
  * Description: Trees interface.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0809171737V0720260617L00521
+ * File ID:     0809171737V0720260617L00520
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -242,7 +242,6 @@ P_BITSTREAM     treHuffmanDecoding     (P_ARRAY_Z       ptable,  P_BITSTREAM  s)
 /* Functions in svstree.c. */
 #define treFreeBSTNode_M(pnode_M) do { \
 	strFreeNodeD(&(pnode_M)->knot); \
-	(pnode_M)->knot.pdata = NULL; \
 } while (0)
 #define treDeleteBSTNode_M(pnode_M) do { \
 	treFreeBSTNode(pnode_M); \

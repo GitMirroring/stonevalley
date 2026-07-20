@@ -159,8 +159,8 @@ void * strResizeArrayZ(P_ARRAY_Z parrz, size_t num, size_t size)
  *            Input a negative number to decrease size.
  * Return value:  The address of the buffer of array.
  * Caution:       Address of parrz Must Be Allocated first.
- * Tip:           //strResizeBufferedArrayZ(parr, sizeof(int), +BUFSIZ);
- *                //strResizeBufferedArrayZ(parr, sizeof(int), -BUFSIZ);
+ * Usage:         strResizeBufferedArrayZ(parr, sizeof(int), +BUFSIZ);
+ *                strResizeBufferedArrayZ(parr, sizeof(int), -BUFSIZ);
  */
 void * strResizeBufferedArrayZ(P_ARRAY_Z parrz, size_t size, ptrdiff_t incl)
 {

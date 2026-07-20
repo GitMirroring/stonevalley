@@ -303,16 +303,16 @@ Lbl_Failed:
  *                You may get a symbol table after invoking function treCreateHuffmanTable by transferring
  *                the same buffer s of treHuffmanEncoding into function treCreateHuffmanTable.
  *                This function can encode sub string but uses the symbol table of a whole string.
- * Usage:         // #include <stdio.h> // Invoke function printf.
- *                // #define STR1 "This is a test, and that is another test."
- *                // #define STR2 "This" // Sub string.
- *                // P_ARRAY_Z par = treCreateHuffmanTable(STR1, strlen(STR1) + 1);
- *                // P_BITSTREAM pbi = treHuffmanEncoding(par, STR2, strlen(STR2) + 1);
- *                // P_BITSTREAM pbo = treHuffmanDecoding(par, pbi);
- *                // printf("%s\n", pbo->arrz.pdata);	
- *                // strDeleteBitStream(pbi);
- *                // strDeleteBitStream(pbo);
- *                // strDeleteArrayZ(par);
+ * Usage:         #include <stdio.h> // Invoke function printf.
+ *                #define STR1 "This is a test, and that is another test."
+ *                #define STR2 "This" // Sub string.
+ *                P_ARRAY_Z par = treCreateHuffmanTable(STR1, strlen(STR1) + 1);
+ *                P_BITSTREAM pbi = treHuffmanEncoding(par, STR2, strlen(STR2) + 1);
+ *                P_BITSTREAM pbo = treHuffmanDecoding(par, pbi);
+ *                printf("%s\n", pbo->arrz.pdata);	
+ *                strDeleteBitStream(pbi);
+ *                strDeleteBitStream(pbo);
+ *                strDeleteArrayZ(par);
  *                Result: This
  */
 P_BITSTREAM treHuffmanEncoding(P_ARRAY_Z ptable, const PUCHAR s, const size_t n)

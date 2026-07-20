@@ -1218,24 +1218,24 @@ int _grpCBFDijkstraFindEdgesToVb(void * pitem, size_t param)
  *                    l = grpDijkstraShortestPathL(p, 1, 1); // Returns NULL.
  * Caution:       Address of pgrp Must Be Allocated first.
  * Tip:           Tips of use:
- *                //#include <stdio.h>
- *                //#include "svgraph.h"
- *                //
- *                //int cbftvsprint(void * pitem, size_t param) {
- *                //	P_VTXREC p = (P_VTXREC)((P_NODE_D)pitem)->pdata;
- *                //	DWC4100(param);
- *                //	printf("vid = %zd, dist = %zd\n", p->vid, p->dist);
- *                //	return CBF_CONTINUE;
- *                //}
- *                //
- *                //P_GRAPH_L p = grpCreateL();
- *                //P_LIST_D pl;
- *                //pl = grpDijkstraShortestPathL(p, vids, vide);
- *                //if (pl) {
- *                //strTraverseLinkedListDC_N(*pl, NULL, cbftvsprint, 0, false);
- *                //strDeleteLinkedListDC(pl, false);
- *                //}
- *                //grpDeleteL(p);
+ *                #include <stdio.h>
+ *                #include "svgraph.h"
+ *                
+ *                int cbftvsprint(void * pitem, size_t param) {
+ *                	P_VTXREC p = (P_VTXREC)((P_NODE_D)pitem)->pdata;
+ *                	DWC4100(param);
+ *                	printf("vid = %zd, dist = %zd\n", p->vid, p->dist);
+ *                	return CBF_CONTINUE;
+ *                }
+ *                
+ *                P_GRAPH_L p = grpCreateL();
+ *                P_LIST_D pl;
+ *                pl = grpDijkstraShortestPathL(p, vids, vide);
+ *                if (pl) {
+ *                strTraverseLinkedListDC_N(*pl, NULL, cbftvsprint, 0, false);
+ *                strDeleteLinkedListDC(pl, false);
+ *                }
+ *                grpDeleteL(p);
  */
 P_LIST_D grpDijkstraShortestPathL(P_GRAPH_L pgrp, size_t vids, size_t vide)
 {
@@ -1677,7 +1677,7 @@ int _grpCBFTSReduceIndegree(void * pitem, size_t param)
  * Caution:       Address of pgrp Must Be Allocated and Initialized first.
  *                Usually topological sort runs for directed acyclic graphics(DAGs).
  * Tip:           P_ARRAY_Z prtn = grpTopologicalSortL(pgrp);
- *                // Users may use these following codes to detect whether a graph has a cycle.
+ *                Users may use these following codes to detect whether a graph has a cycle.
  *                if (NULL != prtn && grpVerticesCountL(pgrp) > strLevelArrayZ(prtn))
  *                    printf("The graph pgrp has a cycle.");
  */

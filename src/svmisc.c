@@ -709,27 +709,27 @@ void * svBinarySearch(const void * pkey, const void * pbase, size_t num, size_t 
  *                or function cannot find the key, function will return NULL.
  * Caution:       Binary search must be performed on an ordered array usually sorted increasingly.
  * Tip:           Here is a way to get index:
- *                //#include <stdio.h>
- *                //#include "svstring.h"
- *                //int cmp(const void * px, const void * py) { return *(int *)px - *(int *)py; }
- *                //int main() {
- *                //	void * p; int k = 5; int a[] = {1,2,3,5,5,5,8,9};
- *                //	p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_FIRST_GREATER_THAN_OR_EQUAL_TO_KEY);
- *                //	if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Prints 3.
- *                //	p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_LAST_LESS_THAN_KEY);
- *                //	if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Prints 2.
- *                //	p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_FIRST_GREATER_THAN_KEY);
- *                //	if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Prints 6.
- *                //	p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_LAST_LESS_THAN_OR_EQUAL_TO_KEY);
- *                //	if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Prints 5.
- *                //	k = 7; p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_LAST_LESS_THAN_OR_EQUAL_TO_KEY);
- *                //	if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Prints 5.
- *                //	k = 10; p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_LAST_LESS_THAN_OR_EQUAL_TO_KEY);
- *                //	if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Prints 7.
- *                //	k = 10; p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_FIRST_GREATER_THAN_KEY);
- *                //	if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Can not find 10.
- *                //	return 0;
- *                //}
+ *                #include <stdio.h>
+ *                #include "svstring.h"
+ *                int cmp(const void * px, const void * py) { return *(int *)px - *(int *)py; }
+ *                int main() {
+ *                void * p; int k = 5; int a[] = {1,2,3,5,5,5,8,9};
+ *                p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_FIRST_GREATER_THAN_OR_EQUAL_TO_KEY);
+ *                if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Prints 3.
+ *                p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_LAST_LESS_THAN_KEY);
+ *                if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Prints 2.
+ *                p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_FIRST_GREATER_THAN_KEY);
+ *                if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Prints 6.
+ *                p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_LAST_LESS_THAN_OR_EQUAL_TO_KEY);
+ *                if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Prints 5.
+ *                k = 7; p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_LAST_LESS_THAN_OR_EQUAL_TO_KEY);
+ *                if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Prints 5.
+ *                k = 10; p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_LAST_LESS_THAN_OR_EQUAL_TO_KEY);
+ *                if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Prints 7.
+ *                k = 10; p = svBinarySearchDispatch(&k, a, sizeof a / sizeof k, sizeof k, cmp, EBS_FIRST_GREATER_THAN_KEY);
+ *                if (NULL != p) printf("%zd\n", svIndexOf(a, p, sizeof k)); else printf("Can not find %d.\n", k); // Can not find 10.
+ *                return 0;
+ *                }
  */
 void * svBinarySearchDispatch(const void * pkey, const void * pbase, size_t num, size_t size, CBF_COMPARE cbfcmp, BSearch method)
 {
