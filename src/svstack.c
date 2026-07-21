@@ -2,7 +2,7 @@
  * Name:        svstack.c
  * Description: Stacks.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0318171803E0720260744L00312
+ * File ID:     0318171803E0721260255L00321
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -118,20 +118,24 @@ bool stkIsFullA_O(P_STACK_A pstka)
  * Parameters:
  *      pstka Pointer to the stack you want to operate with.
  *      pitem Pointer to an element you want to copy to the stack.
+ *            Set pitem to NULL to only pile one tier up to the stack.
  *       size Size of each element in the stack array and the data that pitem pointed.
- * Return value:  Address of the new inserted element in the stack array.
+ * Return value:  N/A.
  * Caution:       You should check whether the target stack is full or not before invoking.
  * Tip:           A macro version of this function named stkPushA_M is available.
  */
-void * stkPushA_O(P_STACK_A pstka, const void * pitem, size_t size)
+void stkPushA_O(P_STACK_A pstka, const void * pitem, size_t size)
 {
-	return memcpy(pstka->arr.pdata + (pstka->top++) * size, pitem, size);
+	if (NULL != pitem)
+		memcpy(pstka->arr.pdata + pstka->top * size, pitem, size);
+	++pstka->top;
 }
 
 /* Function name: stkPopA_O
  * Description:   Pop an element from a stack.
  * Parameters:
  *      pitem Pointer to an element to receive popped data.
+ *            Set pitem to NULL to omit popped item from stack.
  *       size Size of each element in the stack array and the data that pitem pointed.
  *      pstka Pointer to the stack you want to operate with.
  * Return value:  N/A.
@@ -140,7 +144,10 @@ void * stkPushA_O(P_STACK_A pstka, const void * pitem, size_t size)
  */
 void stkPopA_O(void * pitem, size_t size, P_STACK_A pstka)
 {
-	memcpy(pitem, pstka->arr.pdata + (--pstka->top) * size, size);
+	if (NULL != pitem)
+		memcpy(pitem, pstka->arr.pdata + (--pstka->top) * size, size);
+	else
+		--pstka->top;
 }
 
 /* Function name: stkPeepA_O
@@ -262,6 +269,7 @@ P_NODE_S stkPushL(P_STACK_L pstkl, const void * pitem, size_t size)
  * Description:   Pop an element from a stack.
  * Parameters:
  *      pitem Pointer to an element to receive popped data from stack.
+ *            Set pitem to NULL to omit popped item from stack.
  *       size Size of element that pitem pointed.
  *      pstkl Pointer to the stack you want to operate.
  * Return value: Address of the top node of a linked list stack.
@@ -275,7 +283,8 @@ P_NODE_S stkPopL(void * pitem, size_t size, P_STACK_L pstkl)
 	if (NULL != *pstkl)
 	{
 		ptmp = (*pstkl)->pnode;
-		memcpy(pitem, (*pstkl)->pdata, size);
+		if (NULL != pitem)
+			memcpy(pitem, (*pstkl)->pdata, size);
 		strDeleteNodeS(*pstkl);
 	}
 	return *pstkl = ptmp;

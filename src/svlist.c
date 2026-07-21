@@ -25,7 +25,7 @@
 #include <string.h> /* Using function memcmp, memcpy, memmove. */
 #include "svstring.h"
 
-/* File level function declarations here. */
+/* File level function declarations go here. */
 int _strCBFDeleteNode        (void * pitem, size_t param);
 int _strCBFNodesCounter      (void * pitem, size_t param);
 int _strCBFCompareNodeDataSD (void * pitem, size_t param);
@@ -34,10 +34,10 @@ int _strCBFCompareNodeDataSD (void * pitem, size_t param);
  * Function name: _strCBFDeleteNode
  * Description:   Node freeing dispatcher.
  * Parameters:
- *      pitem Pointer to each item in the array.
- *      param A value that is in NodeType enumeration.
- *            If size equaled to ENT_SINGLE, function would free a NODE_S.
- *            If size equaled to ENT_DOUBLE, function would free a NODE_D.
+ *      pitem Pointer to each node in the array.
+ *      param A value of NodeType enumeration.
+ *            If param equaled to ENT_SINGLE, function would free a NODE_S.
+ *            If param equaled to ENT_DOUBLE, function would free a NODE_D.
  * Return value:  CBF_CONTINUE only.
  */
 int _strCBFDeleteNode(void * pitem, size_t param)
@@ -74,10 +74,10 @@ int _strCBFNodesCounter(void * pitem, size_t param)
  * Function name: _strCBFCompareNodeDataSD
  * Description:   Used to compare data of single pointer nodes and double pointer nodes.
  * Parameters:
- *      pitem Pointer to a NODE_S or NODE_D.
- *      param Pointer to FindingInfo.
- * Return value:  If data matched, function would return value CBF_TERMINATE,
- *                otherwise function would return value CBF_CONTINUE.
+ *      pitem Pointer to a NODE_S or NODE_D structure.
+ *      param Pointer to a FindingInfo structure.
+ * Return value:  If data matched, function would return CBF_TERMINATE,
+ *                otherwise function would return CBF_CONTINUE.
  */
 int _strCBFCompareNodeDataSD(void * pitem, size_t param)
 {
@@ -103,13 +103,16 @@ int _strCBFCompareNodeDataSD(void * pitem, size_t param)
 
 /* Function name: strTraverseLinkedListSC_R
  * Description:   Recursively traverse a single-pointer-node linked list.
- *                The order of traversal of this function is reversely form list head.
+ *                The sequence of traversal is reversely to strTraverseLinkedListSC_A
+ *                that this function traversals a list form tail to head.
  * Parameters:
  *       list Pointer to the first NODE_S element while traversal.
- *       pnil Please Leave It As NULL.
+ *       pnil Please Leave It As NULL for internal use.
  *     cbftvs Pointer to a callback function.
  *      param Additional information for each node.
- * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will return.
+ * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will be returned.
+ * Caution:       Returning CBF_TERMINATE in callback function will not break traversal until it ends.
+ *                Returning in callback function only affects the return value of strTraverseLinkedListSC_R.
  * Tip:           An element of a circular linked list is suitable to be a parameter of this function.
  */
 int strTraverseLinkedListSC_R(LIST_S list, P_NODE_S pnil, CBF_TRAVERSE cbftvs, size_t param)
@@ -131,13 +134,16 @@ int strTraverseLinkedListSC_R(LIST_S list, P_NODE_S pnil, CBF_TRAVERSE cbftvs, s
 
 /* Function name: strTraverseLinkedListSC_A
  * Description:   Recursively traverse a single-pointer-node linked list.
- *                The order of traversal is opposite of strTraverseLinkedListSC_R.
+ *                The order of traversal is opposite of strTraverseLinkedListSC_R
+ *                that this function traversals a list from tail to head.
  * Parameters:
  *       list Pointer to the first NODE_S element while traversal.
- *       pnil Please Leave It As NULL.
+ *       pnil Please Leave It As NULL for internal use.
  *     cbftvs Pointer to a callback function.
  *      param Additional information for each node.
  * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will be returned.
+ * Caution:       Returning CBF_TERMINATE in callback function breaks traversal immediately
+ *                and cause function strTraverseLinkedListSC_A to return CBF_TERMINATE to its caller.
  * Tip:           An element of a circular linked list is suitable to be a parameter of this function.
  */
 int strTraverseLinkedListSC_A(LIST_S list, P_NODE_S pnil, CBF_TRAVERSE cbftvs, size_t param)
@@ -158,13 +164,16 @@ int strTraverseLinkedListSC_A(LIST_S list, P_NODE_S pnil, CBF_TRAVERSE cbftvs, s
 
 /* Function name: strTraverseLinkedListSC_N
  * Description:   Traverse a single-pointer-node linked list using a loop.
- *                The order of traversal is as the same as strTraverseLinkedListSC_A.
+ *                The order of traversal is as the same as strTraverseLinkedListSC_A
+ *                that this function traversals a list from head to tail.
  * Parameters:
  *       list Pointer to the first element while traversal.
- *       pnil Please Leave It As NULL.
+ *       pnil Please Leave It As NULL for internal use.
  *     cbftvs Pointer to a callback function.
  *      param Additional information for each node.
  * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will be returned.
+ * Caution:       Returning CBF_TERMINATE in callback function breaks traversal immediately
+ *                and cause function strTraverseLinkedListSC_N to return CBF_TERMINATE to its caller.
  * Tip:           An element of a circular linked list is suitable to be a parameter of this function.
  */
 int strTraverseLinkedListSC_N(LIST_S list, P_NODE_S pnil, CBF_TRAVERSE cbftvs, size_t param)
@@ -203,13 +212,30 @@ void strInitLinkedListSC_O(P_LIST_S plist)
 /* Function name: strFreeLinkedListSC
  * Description:   Retract a single-pointer-node linked list which is allocated by function strInitLinkedListSC.
  * Parameter:
- *     plist Pointer to the plist you want to free.
+ *     plist Pointer to the single linked list you want to free.
  * Return value:  N/A.
  * Caution:       Address of plist Must Be Allocated first.
  */
 void strFreeLinkedListSC(P_LIST_S plist)
-{
-	strTraverseLinkedListSC_R(*plist, NULL, _strCBFDeleteNode, ENT_SINGLE);
+{	/* Manually use a loop to free linked list rather than use
+	 * strTraverseLinkedListSC_R(*plist, NULL, _strCBFDeleteNode, ENT_SINGLE);
+	 * to free nodes from tail to head faster.
+	 */
+	REGISTER P_NODE_S pcur = *plist, phed = pcur, ptmp, pnil = NULL;
+	while (NULL != pcur)
+	{	/* Break at the header of a circular list. */
+		if (NULL != pnil && pcur == phed)
+			break;
+		/* Dead loop appears only if A->B and B->B.
+		 * We have to prevent it from occurring.
+		 */
+		if (pnil == pcur)
+			break;
+		ptmp = pcur->pnode;
+		strDeleteNodeS(pcur);
+		pnil = pcur;
+		pcur = ptmp;
+	}
 	strInitLinkedListSC(plist);
 }
 
@@ -220,11 +246,11 @@ void strFreeLinkedListSC(P_LIST_S plist)
  */
 P_LIST_S strCreateLinkedListSC(void)
 {
-	P_LIST_S plist = (P_LIST_S) malloc(sizeof(LIST_S));
-	if (NULL == plist)
+	REGISTER P_LIST_S pnew = (P_LIST_S) malloc(sizeof(LIST_S));
+	if (NULL == pnew)
 		return NULL; /* Allocation failure. */
-	strInitLinkedListSC(plist);
-	return plist;
+	strInitLinkedListSC(pnew);
+	return pnew;
 }
 
 /* Function name: strDeleteLinkedListSC_O
@@ -244,7 +270,7 @@ void strDeleteLinkedListSC_O(P_LIST_S plist)
 /* Function name: strLevelLinkedListSC
  * Description:   Return how many nodes there are stored in a single-pointer linked list.
  * Parameter:
- *      list Pointer to the first NODE_S element while traversal.
+ *      list Pointer to the first NODE_S node while traversal.
  * Return value:  The number of nodes in a single-pointer linked list.
  * Tip:           An element of a circular linked list is suitable to be a parameter of this function.
  */
@@ -258,8 +284,8 @@ size_t strLevelLinkedListSC(LIST_S list)
 /* Function name: strCopyLinkedListSC
  * Description:   Copy the entire single linked list.
  * Parameters:
- *       psrc Pointer to the header of a linked list.
- *       size Size of data in each node.
+ *       psrc Pointer to the header of a single linked list.
+ *       size Size of data for each node.
  * Return value:  The first element of new linked list.
  * Caution:       Data in each node of a linked list must be in the same size.
  * Tip:           No dead cycles for circular linked lists.
@@ -415,7 +441,7 @@ P_NODE_S strLocatePreviousItemSC(LIST_S list, P_NODE_S pnode)
 }
 
 /* Function name: strLocateLastItemSC
- * Description:   Locate the last item in a linked list.
+ * Description:   Locate the last item in a single linked list.
  * Parameter:
  *      list Pointer to the first NODE_S element of a linked list.
  * Return value:  Pointer to the last node.
@@ -424,7 +450,7 @@ P_NODE_S strLocatePreviousItemSC(LIST_S list, P_NODE_S pnode)
 P_NODE_S strLocateLastItemSC(LIST_S list)
 {
 	REGISTER P_NODE_S plast = list;
-	REGISTER P_NODE_S ptmp  = NULL;
+	REGISTER P_NODE_S ptemp = NULL;
 	if (NULL != list)
 	{
 		while ((NULL != plast->pnode) && (list != plast->pnode))
@@ -433,9 +459,9 @@ P_NODE_S strLocateLastItemSC(LIST_S list)
 			/* Dead loop appears only if B->B and A->B.
 			 * We have to prevent it from occurring.
 			 */
-			if (ptmp == plast)
+			if (ptemp == plast)
 				break;
-			ptmp = plast;
+			ptemp = plast;
 		}
 	}
 	return plast;
@@ -645,16 +671,19 @@ LIST_S strQuickSortLinkedListS(LIST_S phead, CBF_COMPARE cbfcmp)
 
 /* Function name: strTraverseLinkedListDC_R
  * Description:   Recursively traverse a double-pointer-node linked list.
- *                The order of traversal of this function is reversely form parameter list to its pointed node.
+ *                The sequence of traversal is reversely to strTraverseLinkedListSC_A
+ *                that this function traversals a list form tail to head.
  * Parameters:
  *       list Pointer to the first NODE_D element while traversal.
- *       pnil Please Leave It As NULL.
+ *       pnil Please Leave It As NULL for internal use.
  *     cbftvs Pointer to a callback function.
  *      param Additional information for each node.
  *       brev If brev equaled true, doubly linked list would be traversed reversely.
- *             That is the order of retracting which were from the current one to the previous one.
- *             If brev equaled false, the order of retracting would run from the current one to the next one.
- * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will be returned.
+ *             That is the order from the current one to the previous one.
+ *             If brev equaled false, the order would be from the current one to the next one.
+ * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will be returned that depends on callback function.
+ * Caution:       Returning CBF_TERMINATE in callback function will not break traversal until it ends.
+ *                Returning in callback function only affects the return value of strTraverseLinkedListSC_R.
  * Tip:           No dead cycles for circular linked lists.
  */
 int strTraverseLinkedListDC_R(LIST_D list, P_NODE_D pnil, CBF_TRAVERSE cbftvs, size_t param, bool brev)
@@ -685,16 +714,19 @@ int strTraverseLinkedListDC_R(LIST_D list, P_NODE_D pnil, CBF_TRAVERSE cbftvs, s
 
 /* Function name: strTraverseLinkedListDC_A
  * Description:   Recursively traverse a double-pointer-node linked list.
- *                The order of traversal is opposite of strTraverseLinkedListDC_R.
+ *                The order of traversal is opposite of strTraverseLinkedListDC_R
+ *                that this function traversals a list from head to tail.
  * Parameters:
  *       list Pointer to the first NODE_D element while traversal.
- *       pnil Please Leave It As NULL.
+ *       pnil Please Leave It As NULL for internal use.
  *     cbftvs Pointer to a callback function.
  *      param Additional information for each node.
  *       brev If brev equaled true, a doubly linked list would be traversed reversely.
- *            That is the order of retracting which were from the current one to the previous one.
- *            If brev equaled false, the order of retracting would run from the current one to the next one.
- * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will be returned.
+ *            That is the order from the current one to the previous one.
+ *            If brev equaled false, the order would be from the current one to the next one.
+ * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will be returned that depends on callback function.
+ * Caution:       Returning CBF_TERMINATE in callback function breaks traversal immediately
+ *                and cause function strTraverseLinkedListDC_A to return CBF_TERMINATE to its caller.
  * Tip:           No dead cycles for circular linked lists.
  */
 int strTraverseLinkedListDC_A(LIST_D list, P_NODE_D pnil, CBF_TRAVERSE cbftvs, size_t param, bool brev)
@@ -705,41 +737,35 @@ int strTraverseLinkedListDC_A(LIST_D list, P_NODE_D pnil, CBF_TRAVERSE cbftvs, s
 		{
 			if (NULL == pnil)
 				pnil = list;
-			if (brev)
-			{
-				if (CBF_CONTINUE != cbftvs(list, param))
-					return CBF_TERMINATE;
-				return strTraverseLinkedListDC_A(list->ppnode[PREV], pnil, cbftvs, param, brev);
-			}
-			else
-			{
-				if (CBF_CONTINUE != cbftvs(list, param))
-					return CBF_TERMINATE;
-				return strTraverseLinkedListDC_A(list->ppnode[NEXT], pnil, cbftvs, param, brev);
-			}
+			if (CBF_CONTINUE != cbftvs(list, param))
+				return CBF_TERMINATE;
+			return strTraverseLinkedListDC_A(brev ? list->ppnode[PREV] : list->ppnode[NEXT], pnil, cbftvs, param, brev);
 		}
 	}
 	return CBF_CONTINUE;
 }
 
 /* Function name: strTraverseLinkedListDC_N
- * Description:   Traverse a single-pointer-node linked list using a loop.
- *                The order of traversal is as the same as strTraverseLinkedListDC_A.
+ * Description:   Traverse a double-pointer-node linked list using a loop.
+ *                The order of traversal is as the same as strTraverseLinkedListDC_A
+ *                that this function traversals a list from head to tail.
  * Parameters:
  *       list Pointer to the first NODE_D element while traversal.
- *       pnil Please Leave It As NULL.
+ *       pnil Please Leave It As NULL for internal use.
  *     cbftvs Pointer to a callback function.
  *      param Additional information for each node.
  *       brev If brev equaled true, doubly linked list would be traversed reversely.
- *            That is the order of retracting which were from the current one to the previous one.
- *            If brev equaled false, the order of retracting would run from the current one to the next one.
- * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will be returned.
+ *            That is the order from the current one to the previous one.
+ *            If brev equaled false, the order would be from the current one to the next one.
+ * Return value:  Either CBF_CONTINUE or CBF_TERMINATE will be returned that depends on callback function.
+ * Caution:       Returning CBF_TERMINATE in callback function breaks traversal immediately
+ *                and cause function strTraverseLinkedListDC_N to return CBF_TERMINATE to its caller.
  * Tip:           No dead cycles for circular linked lists.
  */
 int strTraverseLinkedListDC_N(LIST_D list, P_NODE_D pnil, CBF_TRAVERSE cbftvs, size_t param, bool brev)
 {
 	REGISTER P_NODE_D pcur;
-	for (pcur = list; NULL != pcur; pcur = (brev ? pcur->ppnode[PREV] : pcur->ppnode[NEXT]))
+	for (pcur = list; NULL != pcur; pcur = brev ? pcur->ppnode[PREV] : pcur->ppnode[NEXT])
 	{
 		/* Break at the header of a circular list. */
 		if (NULL != pnil && pcur == list)
@@ -780,8 +806,25 @@ void strInitLinkedListDC_O(P_LIST_D plist)
  * Caution:       Address of plist Must Be Allocated first.
  */
 void strFreeLinkedListDC(P_LIST_D plist, bool brev)
-{
-	strTraverseLinkedListDC_R(*plist, NULL, _strCBFDeleteNode, ENT_DOUBLE, brev);
+{	/* Manually use a loop to free linked list rather than use
+	 * strTraverseLinkedListDC_R(*plist, NULL, _strCBFDeleteNode, ENT_DOUBLE, brev);
+	 * to free nodes from tail to head faster.
+	 */
+	REGISTER P_NODE_D pcur = *plist, phed = pcur, pnil = NULL, ptmp;
+	while (NULL != pcur)
+	{	/* Break at the header of a circular list. */
+		if (NULL != pnil && pcur == phed)
+			break;
+		/* Dead loop appears only if A->B and B->B.
+		 * We have to prevent it from occurring.
+		 */
+		if (pnil == pcur)
+			break;
+		ptmp = brev ? pcur->ppnode[PREV] : pcur->ppnode[NEXT];
+		strDeleteNodeD(pcur);
+		pnil = pcur;
+		pcur = ptmp;
+	}
 	strInitLinkedListDC(plist);
 }
 
@@ -1067,7 +1110,7 @@ P_NODE_D strLocateItemDC_N(P_NODE_D pnode, ptrdiff_t incmtl)
  */
 P_NODE_D strInsertItemLinkedListDC(P_NODE_D pdest, P_NODE_D pnode, bool bafter)
 {
-	REGISTER P_NODE_D ptmp  = NULL;
+	REGISTER P_NODE_D ptemp  = NULL;
 	REGISTER P_NODE_D plast = pnode;
 	if (NULL == pnode)
 		return NULL;
@@ -1078,9 +1121,9 @@ P_NODE_D strInsertItemLinkedListDC(P_NODE_D pdest, P_NODE_D pnode, bool bafter)
 		/* Dead loop appears only if A<-B->A.
 		 * We have to prevent it from occurring.
 		 */
-		if (ptmp == plast)
+		if (ptemp == plast)
 			break;
-		ptmp = plast;
+		ptemp = plast;
 	}
 	if (bafter)
 	{
@@ -1158,7 +1201,7 @@ void * strIsCircularLinkedListSD(void * pfirst, NodeType ntp, bool brev)
 #define _P2P_NODE_S(pnode) ((P_NODE_S)(pnode)) /* Cast a pointer to P_NODE_S. */
 #define _P2P_NODE_D(pnode) ((P_NODE_D)(pnode)) /* Cast a pointer to P_NODE_D. */
 	REGISTER void * plast = pfirst;
-	REGISTER void * ptmp  = NULL;
+	REGISTER void * ptemp  = NULL;
 	if (NULL != pfirst && (ENT_SINGLE == ntp || ENT_DOUBLE == ntp))
 	{
 		while
@@ -1183,9 +1226,9 @@ void * strIsCircularLinkedListSD(void * pfirst, NodeType ntp, bool brev)
 					_P2P_NODE_D(plast)->ppnode[NEXT]
 				)
 			);
-			if (ptmp == plast) /* Prevent function from a dead loop. */
+			if (ptemp == plast) /* Prevent function from a dead loop. */
 				break;
-			ptmp = plast;
+			ptemp = plast;
 		}
 	}
 	else
@@ -1193,7 +1236,7 @@ void * strIsCircularLinkedListSD(void * pfirst, NodeType ntp, bool brev)
 	if
 	(
 		(
-			ptmp =
+			ptemp =
 			(
 				(ENT_SINGLE == ntp) ?
 				(void *)(_P2P_NODE_S(plast)->pnode) :

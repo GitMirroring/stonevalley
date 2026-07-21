@@ -2,7 +2,7 @@
  * Name:        svbytree.c
  * Description: Binary trees.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0809171737G0719262322L00642
+ * File ID:     0809171737G0721260300L00695
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -182,40 +182,92 @@ int treTraverseBYLevel(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 /* Function name: treTraverseBYArray
  * Description:   Traverse a binary tree by user defined order.
  * Parameters:
- *      order Three characters that can be any combination of L/l,
- *            D/d and R/r represent left node, current node and right node.
+ *      order Three characters can be any combination of L/l, D/d and R/r representing left node, current node and right node.
  *      pnode Pointer to the node that you want to start traversal in a tree.
- *     cbftvs Pointer to a callback function.
- *      param Parameter which can be transferred into the callback function.
- * Return value:  The same value as callback function returns.
+ *    cbftvs1 Pointer to the first callback function which is called before directing to the first child node.
+ *            Set this pointer to NULL to omit callback.
+ *    cbftvs2 Pointer to the second callback function which is called after directing from the parent node.
+ *            Set this pointer to NULL to omit callback.
+ *    cbftvs3 Pointer to the third callback function which is called before directing to the second child node.
+ *            Set this pointer to NULL to omit callback.
+ *      param Parameter which can be transferred into three callback functions.
+ * Return value:  If any callback function returned CBF_TERMINATE during traversal,
+ *                treTraverseBYArray would return CBF_TERMINATE, otherwise CBF_CONTINUE would be returned.
+ * Tip:           Here is a comprehensive guide to use treTraverseBYArray to print a binary tree on console.
+ *                #include <stdio.h>
+ *                #include "svtree.h"
+ *                #include "svstack.h"
+ *                void PrintBinaryTree(P_TNODE_BY pnode, size_t space) {
+ *                if (NULL == pnode) return;
+ *                ++space;
+ *                PrintBinaryTree(pnode->ppnode[RIGHT], space); // Process right child first.
+ *                for (size_t i = 1; i < space; ++i) printf("\t");
+ *                printf("%zd\n", *(size_t *)pnode->pdata); // Print current node after space count.
+ *                PrintBinaryTree(pnode->ppnode[LEFT], space);
+ *                }
+ *                int tvs1(void * pitem, size_t param) {
+ *                P_STACK_A ps = (P_STACK_A)param; DWC4100(pitem);
+ *                stkPushA(ps, NULL, sizeof(size_t)); return CBF_CONTINUE;
+ *                }
+ *                int tvs2(void * pitem, size_t param) {
+ *                size_t i; P_STACK_A ps = (P_STACK_A)param;
+ *                for (i = 1; i < stkLevelA(ps); ++i) printf("\t");
+ *                printf("%zd\n", *(size_t *)P2P_TNODE_BY(pitem)->pdata);
+ *                stkPopA(NULL, sizeof(size_t), ps); stkPushA(ps, NULL, sizeof(size_t)); // Push after pop.
+ *                return CBF_CONTINUE;
+ *                }
+ *                int tvs3(void * pitem, size_t param) {
+ *                P_STACK_A ps = (P_STACK_A)param;
+ *                stkPopA(NULL, sizeof(size_t), ps); // Eject stack unconditionally.
+ *                DWC4100(pitem); return CBF_CONTINUE;
+ *                }
+ *                #define MAX_TREE_HEIGHT 4
+ *                int main() {
+ *                size_t i; P_NODE_D proot; STACK_A stk;
+ *                stkInitA(&stk, MAX_TREE_HEIGHT, sizeof(size_t));
+ *                i = 1; proot = strCreateNodeD(&i, sizeof i);
+ *                i = 2; proot->ppnode[LEFT] = strCreateNodeD(&i, sizeof i);
+ *                i = 3; proot->ppnode[RIGHT] = strCreateNodeD(&i, sizeof i);
+ *                i = 4; proot->ppnode[LEFT]->ppnode[LEFT] = strCreateNodeD(&i, sizeof i);
+ *                i = 5; proot->ppnode[LEFT]->ppnode[RIGHT] = strCreateNodeD(&i, sizeof i);
+ *                i = 6; proot->ppnode[RIGHT]->ppnode[LEFT] = strCreateNodeD(&i, sizeof i);
+ *                i = 7; proot->ppnode[RIGHT]->ppnode[RIGHT] = strCreateNodeD(&i, sizeof i);
+ *                i = 8; proot->ppnode[LEFT]->ppnode[LEFT]->ppnode[LEFT] = strCreateNodeD(&i, sizeof i);
+ *                treTraverseBYArray("RDL", proot, tvs1, tvs2, tvs3, (size_t)&stk); // So does PrintBinaryTree printing the same tree.
+ *                printf("-------------------------\n"); // Delimiter.
+ *                PrintBinaryTree(proot, 0); // Equivalent to use treTraverseBYArray by RDL order.
+ *                stkFreeA(&stk); treFreeBY(&proot); return 0;
+ *                }
  */
-int treTraverseBYArray(char order[3], P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
+int treTraverseBYArray(char order[3], P_TNODE_BY pnode, CBF_TRAVERSE cbftvs1, CBF_TRAVERSE cbftvs2, CBF_TRAVERSE cbftvs3, size_t param)
 {
 	if (NULL != pnode)
 	{
 		REGISTER size_t i;
-		REGISTER int r1 = CBF_CONTINUE, r2 = CBF_CONTINUE, r3 = CBF_CONTINUE;
+		if (NULL != cbftvs1 && CBF_CONTINUE != cbftvs1(pnode, param))
+			return CBF_TERMINATE;
 		for (i = 0; i < 3; ++i)
 		{
 			switch (order[i])
 			{
-			case 'L':
-			case 'l':
-				r1 = treTraverseBYArray(order, pnode->ppnode[LEFT], cbftvs, param);
+			case 'L': case 'l':
+				if (CBF_CONTINUE != treTraverseBYArray(order, pnode->ppnode[LEFT], cbftvs1, cbftvs2, cbftvs3, param))
+					return CBF_TERMINATE;
 				break;
-			case 'R':
-			case 'r':
-				r2 = treTraverseBYArray(order, pnode->ppnode[RIGHT], cbftvs, param);
+			case 'D': case 'd':
+				if (NULL != cbftvs2 && CBF_CONTINUE != cbftvs2(pnode, param))
+					return CBF_TERMINATE;
 				break;
-			case 'D':
-			case 'd':
-				r3 = cbftvs(pnode, param);
+			case 'R': case 'r':
+				if (CBF_CONTINUE != treTraverseBYArray(order, pnode->ppnode[RIGHT], cbftvs1, cbftvs2, cbftvs3, param))
+					return CBF_TERMINATE;
 				break;
 			default:
 				break;
 			}
 		}
-		return CBF_CONTINUE == r1 ? (CBF_CONTINUE == r2 ? r3 : r2) : r1;
+		if (NULL != cbftvs3 && CBF_CONTINUE != cbftvs3(pnode, param))
+			return CBF_TERMINATE;
 	}
 	return CBF_CONTINUE;
 }
