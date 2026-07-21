@@ -2,7 +2,7 @@
  * Name:        svbytree.c
  * Description: Binary trees.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0809171737G0721260300L00695
+ * File ID:     0809171737G0721260601L00739
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
@@ -42,18 +42,19 @@ int        _treCBFNodeLocator       (void * pitem, size_t param);
  *                If parent node could not be found in a tree, function would return a CBF_CONTINUE.
  */
 int _treCBFParentRetriever(void * pitem, size_t param)
-{
-	/* The current node is the parent node of a searching target. */
+{	/* The current node is the parent node of a searching target. */
 	if (*(P_TNODE_BY *)param == ((P_TNODE_BY)pitem)->ppnode[LEFT])
 	{
 		*(P_TNODE_BY *)param = (P_TNODE_BY)pitem;
 		return CBF_TERMINATE;
 	}
+	
 	if (*(P_TNODE_BY *)param == ((P_TNODE_BY)pitem)->ppnode[RIGHT])
 	{
 		*(P_TNODE_BY *)param = (P_TNODE_BY)pitem;
 		return CBF_TERMINATE;
 	}
+	
 	return CBF_CONTINUE; /* Continue searching. */
 }
 
@@ -69,11 +70,13 @@ int _treCBFParentRetriever(void * pitem, size_t param)
 int _treCBFNodeLocator(void * pitem, size_t param)
 {
 	P_FindingInfo pfi = (P_FindingInfo)param;
+	
 	if (pfi->pitem == pitem)
 	{
 		pfi->result = pitem;
 		return CBF_TERMINATE;
 	}
+	
 	return CBF_CONTINUE;
 }
 
@@ -82,19 +85,25 @@ int _treCBFNodeLocator(void * pitem, size_t param)
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
+ *            Set this pointer to NULL to omit callback.
  *      param Parameter which can be transferred into the callback function.
  * Return value:  The same value as callback function returns.
  */
 int treTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 {
-	REGISTER int r1 = CBF_CONTINUE, r2 = CBF_CONTINUE;
 	if (NULL == pnode)
 		return CBF_CONTINUE;
-	if (CBF_CONTINUE != cbftvs(pnode, param))
+	
+	if (NULL != cbftvs && CBF_CONTINUE != cbftvs(pnode, param))
 		return CBF_TERMINATE;
-	r1 = treTraverseBYPre(pnode->ppnode[LEFT],  cbftvs, param);
-	r2 = treTraverseBYPre(pnode->ppnode[RIGHT], cbftvs, param);
-	return CBF_CONTINUE == r1 ? r2 : r1;
+	
+	if (CBF_CONTINUE != treTraverseBYPre(pnode->ppnode[LEFT],  cbftvs, param))
+		return CBF_TERMINATE;
+	
+	if (CBF_CONTINUE != treTraverseBYPre(pnode->ppnode[RIGHT], cbftvs, param))
+		return CBF_TERMINATE;
+	
+	return CBF_CONTINUE;
 }
 
 /* Function name: treTraverseBYIn
@@ -102,19 +111,25 @@ int treTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
+ *            Set this pointer to NULL to omit callback.
  *      param Parameter which can be transferred into the callback function.
  * Return value:  The same value as callback function returns.
  */
 int treTraverseBYIn(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 {
-	REGISTER int r1 = CBF_CONTINUE, r2 = CBF_CONTINUE;
 	if (NULL == pnode)
 		return CBF_CONTINUE;
-	r1 = treTraverseBYIn(pnode->ppnode[LEFT],  cbftvs, param);
-	if (CBF_CONTINUE != cbftvs(pnode, param))
+	
+	if (CBF_CONTINUE != treTraverseBYIn(pnode->ppnode[LEFT],  cbftvs, param))
 		return CBF_TERMINATE;
-	r2 = treTraverseBYIn(pnode->ppnode[RIGHT], cbftvs, param);
-	return CBF_CONTINUE == r1 ? r2 : r1;
+	
+	if (NULL != cbftvs && CBF_CONTINUE != cbftvs(pnode, param))
+		return CBF_TERMINATE;
+	
+	if (CBF_CONTINUE != treTraverseBYIn(pnode->ppnode[RIGHT], cbftvs, param))
+		return CBF_TERMINATE;
+	
+	return CBF_CONTINUE;
 }
 
 /* Function name: treTraverseBYPost
@@ -122,19 +137,25 @@ int treTraverseBYIn(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
+ *            Set this pointer to NULL to omit callback.
  *      param Parameter which can be transferred into the callback function.
  * Return value:  The same value as callback function returns.
  */
 int treTraverseBYPost(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 {
-	REGISTER int r1 = CBF_CONTINUE, r2 = CBF_CONTINUE;
 	if (NULL == pnode)
 		return CBF_CONTINUE;
-	r1 = treTraverseBYPost(pnode->ppnode[LEFT],  cbftvs, param);
-	r2 = treTraverseBYPost(pnode->ppnode[RIGHT], cbftvs, param);
-	if (CBF_CONTINUE != cbftvs(pnode, param))
+	
+	if (CBF_CONTINUE != treTraverseBYPost(pnode->ppnode[LEFT],  cbftvs, param))
 		return CBF_TERMINATE;
-	return CBF_CONTINUE == r1 ? r2 : r1;
+	
+	if (CBF_CONTINUE != treTraverseBYPost(pnode->ppnode[RIGHT], cbftvs, param))
+		return CBF_TERMINATE;
+	
+	if (NULL != cbftvs && CBF_CONTINUE != cbftvs(pnode, param))
+		return CBF_TERMINATE;
+	
+	return CBF_CONTINUE;
 }
 
 /* Function name: treTraverseBYLevel
@@ -142,6 +163,7 @@ int treTraverseBYPost(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
+ *            Set this pointer to NULL to omit callback.
  *      param Parameter which can be transferred into the callback function.
  * Return value:  The same value as callback function returns.
  *                (*) Especially, if function encountered any error, it would still return CBF_CONTINUE
@@ -150,32 +172,36 @@ int treTraverseBYPost(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
  */
 int treTraverseBYLevel(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 {
-	QUEUE_L q;
-	queInitL(&q);
-	if (! queInsertL(&q, &pnode, sizeof(P_TNODE_BY)))
-		return CBF_CONTINUE; /* Queue insertion failed. */
-	while (! queIsEmptyL(&q))
+	if (NULL != pnode)
 	{
-		if (queRemoveL(&pnode, sizeof(P_TNODE_BY), &q))
+		QUEUE_L q;
+		queInitL(&q);
+		
+		if (! queInsertL(&q, &pnode, sizeof(P_TNODE_BY)))
+			goto Lbl_Exit; /* Queue insertion failed. */
+		
+		while (! queIsEmptyL(&q))
 		{
-			if (CBF_CONTINUE != cbftvs(pnode, param))
-			{	/* Never forget to clean the queue before quit. */
-				queFreeL(&q);
-				return CBF_TERMINATE;
+			if (! queRemoveL(&pnode, sizeof(P_TNODE_BY), &q))
+				goto Lbl_Exit; /* Queue removal failed. */
+			else
+			{
+				if (NULL != cbftvs && CBF_CONTINUE != cbftvs(pnode, param))
+				{
+					queFreeL(&q); /* Never forget to clean the queue before quit. */
+					return CBF_TERMINATE;
+				}
+				
+				if (NULL != pnode->ppnode[LEFT] && ! queInsertL(&q, &(pnode->ppnode[LEFT]), sizeof(P_TNODE_BY)))
+					goto Lbl_Exit; /* Queue insertion failed. */
+				
+				if (NULL != pnode->ppnode[RIGHT] && ! queInsertL(&q, &(pnode->ppnode[RIGHT]), sizeof(P_TNODE_BY)))
+					goto Lbl_Exit; /* Queue insertion failed. */
 			}
-			if (NULL != pnode->ppnode[LEFT] && ! queInsertL(&q, &(pnode->ppnode[LEFT]), sizeof(P_TNODE_BY)))
-				return CBF_CONTINUE; /* Queue insertion failed. */
-			if (NULL != pnode->ppnode[RIGHT] && ! queInsertL(&q, &(pnode->ppnode[RIGHT]), sizeof(P_TNODE_BY)))
-				return CBF_CONTINUE; /* Queue insertion failed. */
 		}
-		else
-		{	/* Never forget to clean the queue before quit. */
-			queFreeL(&q);
-			return CBF_CONTINUE; /* Queue removal failed. */
-		}
+	Lbl_Exit:
+		queFreeL(&q); /* Never forget to clean the queue before quit. */
 	}
-	/* Do NOT forget to clean the queue. */
-	queFreeL(&q);
 	return CBF_CONTINUE;
 }
 
@@ -277,6 +303,7 @@ int treTraverseBYArray(char order[3], P_TNODE_BY pnode, CBF_TRAVERSE cbftvs1, CB
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
+ *            Set this pointer to NULL to omit callback.
  *      param Parameter which can be transferred into the callback function.
  * Return value:  The same value as callback function returns.
  * Caution:       You can NOT break the traversal procedure until it works through a whole tree
@@ -284,10 +311,8 @@ int treTraverseBYArray(char order[3], P_TNODE_BY pnode, CBF_TRAVERSE cbftvs1, CB
  */
 int treMorrisTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 {
-	REGISTER int r, or = CBF_CONTINUE;
-	if (NULL == pnode)
-		return CBF_CONTINUE;
-	else
+	int r = CBF_CONTINUE;
+	if (NULL != pnode)
 	{
 		REGISTER P_TNODE_BY pcur   = pnode;
 		REGISTER P_TNODE_BY pright = NULL;
@@ -304,9 +329,10 @@ int treMorrisTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 				if (NULL == pright->ppnode[RIGHT])
 				{
 					pright->ppnode[RIGHT] = pcur;
-					r = cbftvs(pcur, param);
-					if (r != or)
-						or = r;
+					
+					if (NULL != cbftvs && CBF_CONTINUE != cbftvs(pcur, param) && CBF_CONTINUE == r)
+						r = CBF_TERMINATE;
+					
 					pcur = pcur->ppnode[LEFT];
 					continue;
 				}
@@ -315,15 +341,14 @@ int treMorrisTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 			}
 			else
 			{
-				r = cbftvs(pcur, param);
-				if (r != or)
-					or = r;
+				if (NULL != cbftvs && CBF_CONTINUE != cbftvs(pcur, param) && CBF_CONTINUE == r)
+					r = CBF_TERMINATE;
 			}
 
 			pcur = pcur->ppnode[RIGHT];
 		}
 	}
-	return or;
+	return r;
 }
 
 /* Function name: treMorrisTraverseBYIn
@@ -331,6 +356,7 @@ int treMorrisTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
  * Parameters:
  *      pnode Pointer to the node that you want to start traversal in a tree.
  *     cbftvs Pointer to a callback function.
+ *            Set this pointer to NULL to omit callback.
  *      param Parameter which can be transferred into the callback function.
  * Return value:  The same value as callback function returns.
  * Caution:       You can NOT break the traversal procedure until it works through a whole tree
@@ -338,10 +364,8 @@ int treMorrisTraverseBYPre(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
  */
 int treMorrisTraverseBYIn(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 {
-	REGISTER int r, or = CBF_CONTINUE;
-	if (NULL == pnode)
-		return CBF_CONTINUE;
-	else
+	int r = CBF_CONTINUE;
+	if (NULL != pnode)
 	{
 		REGISTER P_TNODE_BY pcur   = pnode;
 		REGISTER P_TNODE_BY pright = NULL;
@@ -364,13 +388,14 @@ int treMorrisTraverseBYIn(P_TNODE_BY pnode, CBF_TRAVERSE cbftvs, size_t param)
 				else
 					pright->ppnode[RIGHT] = NULL;
 			}
-			r = cbftvs(pcur, param);
-			if (r != or)
-				or = r;
+			
+			if (NULL != cbftvs && CBF_CONTINUE != cbftvs(pcur, param) && CBF_CONTINUE == r)
+				r = CBF_TERMINATE;
+			
 			pcur = pcur->ppnode[RIGHT];
 		}
 	}
-	return or;
+	return r;
 }
 
 /* Function name: treInitBY_O
@@ -406,7 +431,7 @@ void treFreeBY(P_BYTREE ptreb)
  */
 P_BYTREE treCreateBY(void)
 {
-	P_BYTREE ptreb = (P_BYTREE) malloc(sizeof(BYTREE));
+	REGISTER P_BYTREE ptreb = (P_BYTREE) malloc(sizeof(BYTREE));
 	if (NULL == ptreb)
 		return NULL;
 	treInitBY(ptreb);
@@ -440,9 +465,11 @@ P_TNODE_BY treInsertLeftBY(P_TNODE_BY pnode, const void * pitem, size_t size)
 {
 	if (NULL == pnode) /* If and only if pnode is a root node. */
 		return (pnode = strCreateNodeD(pitem, size));
+	
 	if (NULL != pnode->ppnode[LEFT]) /* Left node already exists. */
 		return NULL;
-	return (pnode->ppnode[LEFT] = strCreateNodeD(pitem, size));
+	
+	return pnode->ppnode[LEFT] = strCreateNodeD(pitem, size);
 }
 
 /* Function name: treInsertRightBY
@@ -458,9 +485,11 @@ P_TNODE_BY treInsertRightBY(P_TNODE_BY pnode, const void * pitem, size_t size)
 {
 	if (NULL == pnode) /* If and only if pnode is a root node. */
 		return (pnode = strCreateNodeD(pitem, size));
+	
 	if (NULL != pnode->ppnode[RIGHT]) /* Right node already exists. */
 		return NULL;
-	return (pnode->ppnode[RIGHT] = strCreateNodeD(pitem, size));
+	
+	return pnode->ppnode[RIGHT] = strCreateNodeD(pitem, size);
 }
 
 /* Function name: treRemoveLeftBY
@@ -504,7 +533,7 @@ size_t treArityBY(P_TNODE_BY pnode)
 }
 
 /* Function name: treHeightBY
- * Description:   Test the height of a node in a binary tree.
+ * Description:   Test the height of a node in a binary tree recursively.
  * Parameter:
  *     pnode Pointer to a node of a binary tree.
  * Return value:  The height of a node.
@@ -513,11 +542,14 @@ size_t treArityBY(P_TNODE_BY pnode)
  */
 size_t treHeightBY(P_TNODE_BY pnode)
 {
-	size_t dl = 0, dr = 0;
+	REGISTER size_t dl = 0, dr = 0;
+	
 	if (NULL == pnode)
 		return 0;
+	
 	dl = treHeightBY(pnode->ppnode[LEFT]);
 	dr = treHeightBY(pnode->ppnode[RIGHT]);
+	
 	if (dl > dr)
 		return dl + 1;
 	else
@@ -532,12 +564,12 @@ size_t treHeightBY(P_TNODE_BY pnode)
  * Return value:  Pointer to parent node of pchild.
  */
 P_TNODE_BY treGetParentNodeBY(P_TNODE_BY proot, P_TNODE_BY pchild)
-{
-	/* A pre-order traversal is needed here.
+{	/* A pre-order traversal is needed here.
 	 * Because a parent node is near by the root side.
 	 */
 	if (proot == pchild)
 		return NULL; /* Parent of the root node is NULL. */
+	
 	treTraverseBYPre(proot, _treCBFParentRetriever, (size_t)&pchild);
 	return pchild;
 }
@@ -559,6 +591,7 @@ P_TNODE_BY treSearchDataBY(P_TNODE_BY pnode, const void * pitem, size_t size, Tv
 	fi.pitem  = pitem;
 	fi.size   = size;
 	fi.ntp    = ENT_TNODE_BY;
+	
 	switch (tm)
 	{
 	case ETM_PREORDER:   treTraverseBYPre  (pnode, _strCBFCompareNodeDataSD, (size_t)&fi); break;
@@ -569,6 +602,7 @@ P_TNODE_BY treSearchDataBY(P_TNODE_BY pnode, const void * pitem, size_t size, Tv
 	fi.result = NULL;
 	break;
 	}
+	
 	return (P_TNODE_BY)fi.result;
 }
 
@@ -583,11 +617,14 @@ P_TNODE_BY treSearchDataBY(P_TNODE_BY pnode, const void * pitem, size_t size, Tv
 bool treDescendantBY(P_TNODE_BY proot, P_TNODE_BY pnode)
 {
 	FindingInfo fi;
+	
 	if (proot == pnode || NULL == proot || NULL == pnode)
 		return false;
+	
 	fi.result = NULL;
 	fi.pitem = pnode;
 	treTraverseBYPre(proot, _treCBFNodeLocator, (size_t)&fi);
+	
 	return fi.result != NULL;
 }
 
@@ -606,15 +643,16 @@ bool treDescendantBY(P_TNODE_BY proot, P_TNODE_BY pnode)
  *                pleft shall not equal to pright.
  */
 P_TNODE_BY treMergeNodesBY(P_TNODE_BY proot, const void * pitem, size_t size, P_TNODE_BY pleft, P_TNODE_BY pright)
-{
-	/* Return NULL while pright is a sub tree of pleft or pleft is a sub tree of pright. */
+{	/* Return NULL while pright is a sub tree of pleft or pleft is a sub tree of pright. */
 	if (treDescendantBY(pleft, pright) || treDescendantBY(pright, pleft))
 		return NULL;
-	if (NULL == proot)
-		if (NULL == (proot = strCreateNodeD(pitem, size)))
-			return NULL;
+	
+	if (NULL == proot && NULL == (proot = strCreateNodeD(pitem, size)))
+		return NULL;
+	
 	proot->ppnode[LEFT]  = pleft;
 	proot->ppnode[RIGHT] = pright;
+	
 	return proot;
 }
 
@@ -632,16 +670,18 @@ P_TNODE_BY treMergeNodesBY(P_TNODE_BY proot, const void * pitem, size_t size, P_
  */
 P_TNODE_BY treSwapNodesBY(P_TNODE_BY proot1, P_TNODE_BY pnode1, P_TNODE_BY proot2, P_TNODE_BY pnode2)
 {
-	if (NULL == proot1 || NULL == proot2 ||
-		NULL == pnode1 || NULL == pnode2 ||
-		treDescendantBY(pnode1, pnode2)  ||
-		treDescendantBY(pnode2, pnode1)
-		) return NULL; /* T1 contains T2, or T2 contains T1. */
-	else
+	if
+	(
+		NULL != proot1 && NULL != proot2  &&
+		NULL != pnode1 && NULL != pnode2  &&
+		! treDescendantBY(pnode1, pnode2) &&
+		! treDescendantBY(pnode2, pnode1)
+	)
 	{
-		P_TNODE_BY prt1, prt2;
+		REGISTER P_TNODE_BY prt1, prt2;
 		prt1 = treGetParentNodeBY(proot1, pnode1);
 		prt2 = treGetParentNodeBY(proot2, pnode2);
+		
 		if (pnode1 == prt1->ppnode[LEFT]) /* 1L. */
 		{
 			if (pnode2 == prt2->ppnode[LEFT]) /* 1L.2L */
@@ -670,6 +710,7 @@ P_TNODE_BY treSwapNodesBY(P_TNODE_BY proot1, P_TNODE_BY pnode1, P_TNODE_BY proot
 		}
 		return pnode2;
 	}
+	return NULL; /* T1 contains T2, or T2 contains T1. */
 }
 
 /* Function name: treCopyBY
@@ -683,13 +724,16 @@ P_TNODE_BY treSwapNodesBY(P_TNODE_BY proot1, P_TNODE_BY pnode1, P_TNODE_BY proot
 P_TNODE_BY treCopyBY(P_TNODE_BY proot, size_t size)
 {
 	REGISTER P_TNODE_BY pp;
+	
 	if (NULL == proot)
 		return NULL;
+	
 	if (NULL != (pp = strCreateNodeD(proot->pdata, size)))
 	{
 		pp->ppnode[LEFT]  = treCopyBY(proot->ppnode[LEFT],  size);
 		pp->ppnode[RIGHT] = treCopyBY(proot->ppnode[RIGHT], size);
 	}
+	
 	return pp;
 }
 

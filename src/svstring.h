@@ -2,7 +2,7 @@
  * Name:        svstring.h
  * Description: Strings interface.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0306170921Y0720260014L00505
+ * File ID:     0306170921Y0721260731L00515
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *

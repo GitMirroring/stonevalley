@@ -2,7 +2,7 @@
  * Name:        svarray.c
  * Description: Sized array.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0306170948B0720260013L00910
+ * File ID:     0306170948B0721260727L00908
  * License:     LGPLv3
  * Copyright (C) 2017-2026 John Cage
  *
