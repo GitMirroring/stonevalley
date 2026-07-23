@@ -37,9 +37,9 @@ typedef struct st_VERTEX_L {
 typedef struct st_EDGE {
 	size_t vid; /* Index of the adjacent vertex. */
 	union {     /* An anonymous union includes edge weight for different types of integer. */
-		ptrdiff_t sweight;
-		size_t    uweight;
-		size_t    weight;
+		ptrdiff_t sweight; /* Signed weight. */
+		size_t    uweight; /* Unsigned weight. */
+		size_t    weight;  /* Unsigned generic weight for common purpose. */
 	};
 } EDGE, * P_EDGE;
 
@@ -47,10 +47,10 @@ typedef struct st_EDGE {
 typedef struct st_VTXREC {
 	size_t vid; /* Vertex ID. */
 	union {     /* Here we need an anonymous union to include a distance, a boolean flag and an indegree together for different types. */
-		ptrdiff_t udistance;
-		size_t    sdistance;
-		size_t    uindegree;
-		bool      flag;
+		ptrdiff_t udistance; /* Unsigned distance. */
+		size_t    sdistance; /* Signed distance. */
+		size_t    uindegree; /* Unsigned indegree. */
+		bool      flag;      /* Boolean flag. */
 	};
 } VTXREC, * P_VTXREC;
 
