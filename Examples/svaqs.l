@@ -2,7 +2,7 @@
  * Name:        svaqs.l
  * Description: StoneValley API Query System.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0608260445A0830261200L00734
+ * File ID:     0608260445A0830261242L00722
  * License:     LGPLv3
  * Copyright (C) 2025-2026 John Cage
  *
@@ -57,15 +57,14 @@ bool bIsFunc      = false;
 ARRAY_Z arrbuf;
 PUCHAR  pbuf;
 
-int len;
-int glineno;
+size_t glineno;
 
 typedef struct st_FunRecord {
 	char * fname;
 	char * fdesc;
 	char * record;
 	char * prototype;
-	int    lineno;
+	size_t lineno;
 	size_t filenameindex;
 } FunRecord, * P_FunRecord;
 
@@ -160,46 +159,35 @@ static int cbfcmpstr(const void * px, const void * py)
 	if (false == bIsInComment)
 		bIsInComment = true;
 	pbuf = arrbuf.pdata;
-	len = sprintf((char *)pbuf, "%s", yytext);
-	CheckBufferSize(len);
+	CheckBufferSize(sprintf((char *)pbuf, "%s", yytext));
 }
 \*\/ {
 	if (true == bIsInComment)
 		bIsInComment = false;
-	len = sprintf((char *)pbuf, "%s", yytext);
-	CheckBufferSize(len);
+	CheckBufferSize(sprintf((char *)pbuf, "%s", yytext));
 }
 "Function name: " {
 	if (false == bIsFunc)
 		bIsFunc = true;
-	len = sprintf((char *)pbuf, "%s", yytext);
-	CheckBufferSize(len);
+	CheckBufferSize(sprintf((char *)pbuf, "%s", yytext));
 }
 "Description" {
 	if (false == bIsDesc)
 		bIsDesc = true;
-	len = sprintf((char *)pbuf, "%s", yytext);
-	CheckBufferSize(len);
+	CheckBufferSize(sprintf((char *)pbuf, "%s", yytext));
 }
 "Parameter" {
 	if (true == bIsDesc)
 		bIsDesc = false;
-	len = sprintf((char *)pbuf, "%s", yytext);
-	CheckBufferSize(len);
+	CheckBufferSize(sprintf((char *)pbuf, "%s", yytext));
 }
 . {
 	if (true == bIsInComment)
-	{
-		len = sprintf((char *)pbuf, "%s", yytext);
-		CheckBufferSize(len);
-	}
+		CheckBufferSize(sprintf((char *)pbuf, "%s", yytext));
 }
 \n|\r {
 	if (true == bIsInComment)
-	{
-		len = sprintf((char *)pbuf, "%s", yytext);
-		CheckBufferSize(len);
-	}
+		CheckBufferSize(sprintf((char *)pbuf, "%s", yytext));
 	++glineno;
 }
 
@@ -223,7 +211,7 @@ char column_buffer[4][BUFSIZ] = { 0 };
 	switch (column_content[ncol]) { \
 	case ENC_NONE:  column_buffer[ncol][0] = 0; break; \
 	case ENC_NAME:  sprintf(column_buffer[ncol], "%s\t", pfc->fname); break; \
-	case ENC_FILE:  sprintf(column_buffer[ncol], "%s:%d\t", SZCFILE[pfc->filenameindex], pfc->lineno); break; \
+	case ENC_FILE:  sprintf(column_buffer[ncol], "%s:%zd\t", SZCFILE[pfc->filenameindex], pfc->lineno); break; \
 	case ENC_COUNT: sprintf(column_buffer[ncol], "%zd\t", counter); break; \
 	} \
 } while(0)
