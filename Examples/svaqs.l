@@ -371,7 +371,7 @@ static int cbftvsFuzzyQuery(void * pitem, size_t param)
 	{
 		if (0 == strcmp((const char *)1[(size_t *)param], pfc->fname))
 		{
-			printf("NAME\n%s\nSYNOPSIS\n%c%s.\nDESCRIPTION\n%s\nPROTOTYPE\n%s\n", pfc->fname, toupper(pfc->fdesc[0]), pfc->fdesc + 1, pfc->record, pfc->prototype);
+			printf("NAME___________________________________________________________________________\n%s\n\nSYNOPSIS\n%c%s.\n\nDESCRIPTION\n%s\n\nPROTOTYPE\n%s\n", pfc->fname, toupper(pfc->fdesc[0]), pfc->fdesc + 1, pfc->record, pfc->prototype);
 			return CBF_CONTINUE;
 		}
 	}
