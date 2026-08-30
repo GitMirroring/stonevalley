@@ -20,18 +20,18 @@
  * If not, see <https://www.gnu.org/licenses/>.
  *
  * Tips of usage:
- * SVAPS is a tool to help StoneValley users query library APIs efficiently.
- * Launch svaps after compiling it and type help to show more apropos contents for usage.
+ * SVAQS is a tool to help StoneValley users query library APIs efficiently.
+ * Launch svaqs after compiling it and type help to show more apropos contents for usage.
  * Put svaqs.l(this file) under StoneValley/src/ and run this compound command line under GNU/Linux.
  * $ flex svaqs.l; cc *.c -o svaqs; rm lex.yy.c; ./svaqs;
  * You will get an executable file named svaqs.
- * Usages of svaps:
- * $ ./svaps help
- * $ ./svaps version
- * $ ./svaps list -n 5 str
- * $ ./svaps list 'str*' -n 'str*'
- * $ ./svaps list 'strCreate*'
- * $ ./svaps list strCreateArrayZ strDeleteArrayZ
+ * Usages of svaqs:
+ * $ ./svaqs help
+ * $ ./svaqs version
+ * $ ./svaqs list -n 5 str
+ * $ ./svaqs list 'str*' -n 'str*'
+ * $ ./svaqs list 'strCreate*'
+ * $ ./svaqs list strCreateArrayZ strDeleteArrayZ
  * $ ./svaqs l -fn 'str*' | sort # Sort str leading functions by their file locations.
  */
 %option noyywrap
