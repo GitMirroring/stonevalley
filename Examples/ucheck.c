@@ -70,7 +70,7 @@ const char * SZ_SV_FILE_ALL[FILE_NUM] =
 #define SZ_ALERT_SIZEOF_PLATFORM_INTEGER "\e[46m[ALERT]\e[m   Platform integer size                      = %zu\n"
 #define SZ_ALERT_SIZEOF_UCHART           "\e[46m[ALERT]\e[m   Unsigned char size                         = %zu\n"
 #define SZ_ALERT_SIZEOF_PUCHAR           "\e[46m[ALERT]\e[m   Unsigned char pointer size                 = %zu\n"
-#define SZ_ALERT_SIZEOF_PFUNCTION        "\e[46m[ALERT]\e[m   Platform integer size                      = %zu\n"
+#define SZ_ALERT_SIZEOF_PFUNCTION        "\e[46m[ALERT]\e[m   Function pointer size                      = %zu\n"
 
 #define SZ_WARNING_YES "\e[92mYES\e[m"
 #define SZ_WARNING_NO  "\e[31mNO\e[m"
