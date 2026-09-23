@@ -3,7 +3,7 @@
 //  YoU finish before programming CHECKlist for the library.
 //  Created by cosh.cage#hotmail.com on 09/22/26.
 //  License:  LGPLv3
-//  Platform: Cross Platform.
+//  Platform: Unix|GNU/Linux
 //  Copyright (C) 2017-2026 John Cage
 //
 // This file is part of StoneValley.
@@ -43,6 +43,13 @@
 #include <stdio.h>
 #include "svstring.h"
 #include "svset.h"
+
+enum {
+	ERR_NONE,
+	ERR_INTEGRITY_CHECK,
+	ERR_SV_OPTIMIZATION,
+	ERR_SET_TREE_USING
+};
 
 #define FILE_NUM 23
 
@@ -120,7 +127,7 @@ int main()
 	if (bff)
 	{
 		printf("Library integrity check \e[31mfailed.\e[m\n");
-		return 1;
+		return ERR_INTEGRITY_CHECK;
 	}
 	else
 		printf("Library integrity check \e[92mpassed!\e[m\n");
@@ -172,7 +179,7 @@ int main()
 		break;
 	default:
 		printf(SZ_CONFIG_ERROR, "SV_OPTIMIZATION");
-		return 2;
+		return ERR_SV_OPTIMIZATION;
 	}
 	
 	switch (SET_TREE_USING)
@@ -185,13 +192,13 @@ int main()
 		break;
 	default:
 		printf(SZ_CONFIG_ERROR, "SET_TREE_USING");
-		return 3;
+		return ERR_SET_TREE_USING;
 	}
 	
 	printf("\n");
 	
 	printf("Before programming checklist \e[92mcomplete.\e[m\n");
 	
-	return 0;
+	return ERR_NONE;
 }
 
