@@ -34,10 +34,10 @@
 // 2: SV_OPTIMIZATION failed to configure.
 // 3: SET_TREE_USING  failed to configure.
 //
-// Warning: COMPILE ucheck.c whenever you want to start to program StoneValley.
-//          And then check the output of this program to test configurations.
-//          Do NOT miss a compilation before you run this ucheck.
-//          Cross compilers produce platform specific checks only after you compile and RUN ucheck.
+// Warning:  COMPILE ucheck.c whenever you want to start to program StoneValley.
+//           And then check the output of this program to test configurations.
+//           Do NOT miss a compilation before you run this ucheck.
+//           Cross compilers produce platform specific checks only after you compile and RUN ucheck.
 // Briefing: Compile and run make you strong.
 //
 #include <stdio.h>
@@ -94,7 +94,7 @@ const char * SZ_SV_FILE_ALL[FILE_NUM] =
 #define SZ_CONFIG_SET_TREE_USING_STAT    "\e[105m [CONFIG]\e[m Binary search tree for set:                  %s\n"
 #define SZ_CONFIG_ERROR                  "\e[105m [CONFIG]\e[m \e[31mError configuration:\e[m                         %s\n"
 
-int main(int argc)
+int main()
 {
 	FILE * fp;
 	bool bff = false;
@@ -190,7 +190,7 @@ int main(int argc)
 	
 	printf("\n");
 	
-	printf("Before using checklist \e[92mcomplete.\e[m\n");
+	printf("Before programming checklist \e[92mcomplete.\e[m\n");
 	
 	return 0;
 }
