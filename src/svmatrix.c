@@ -2,7 +2,7 @@
  * Name:        svmatrix.c
  * Description: Matrices.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0213191430N1001260618L01350
+ * File ID:     0213191430N1001260618L01348
  * License:     LGPLv3
  * Copyright (C) 2019-2026 John Cage
  *
@@ -673,7 +673,6 @@ bool strInvertMatrix(P_MATRIX pmtx, const void * pnil, const void * pidt, size_t
 					}
 				}
 			}
-			rtn = true;
 			goto Lbl_End;
 		}
 		
@@ -741,7 +740,6 @@ bool strInvertMatrix(P_MATRIX pmtx, const void * pnil, const void * pidt, size_t
 			{
 				x = aln - i - 1;
 				y = aln - j - 1;
-				
 				if (0 != x)
 				{
 					if (x == y)
