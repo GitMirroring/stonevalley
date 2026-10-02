@@ -715,7 +715,7 @@ bool strInvertMatrix(P_MATRIX pmtx, const void * pnil, const void * pidt, size_t
 								break;
 						}
 						
-						if (n >= aln)
+						if (aln == n)
 						{
 							rtn = false;
 							goto Lbl_End; /* Matrix is singular. */
