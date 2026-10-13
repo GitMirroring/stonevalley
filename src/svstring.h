@@ -272,7 +272,7 @@ int         strMathMatrix                  (P_MATRIX     pmtx,     const void * 
 int         strMatrixMatrix                (P_MATRIX     pmtxa,    P_MATRIX     pmtxb,   size_t       size,    CBF_ALGEBRA  cbfagb);
 bool        strMultiplyMatrix              (P_MATRIX     ppmtx[3], void *       ptemp,   size_t       size,    CBF_ALGEBRA  pcbfagb[2]);
 bool        strInvertMatrix                (P_MATRIX     pmtx,     const void * pnil,    const void * pidt,    size_t       size,   CBF_ALGEBRA pcbfagb[5]);
-P_MATRIX    strStandardMaxSimplexMatrix    (P_MATRIX     pmtx,     const void * pnil,    const void * pidt,    const void * pnbigm, size_t      size,     CBF_ALGEBRA  pcbfagb[5], int *    prpt);
+P_MATRIX    strStandardMaxSimplexMatrix    (P_MATRIX     pmtx,     const void * pnil,    const void * pidt,    const void * pnbm,   size_t      size,     CBF_ALGEBRA  pcbfagb[5], int *    prpt);
 /* Functions for bit matrices/maps. */
 void *      strInitBMap                    (P_BITMAT     pbm,      size_t       ln,      size_t       col,     bool         bini,   bool        bval);
 void        strFreeBMap_O                  (P_BITMAT     pbm);
