@@ -2,7 +2,7 @@
  * Name:        svmatrix.c
  * Description: Matrices.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0213191430N1012262302L01807
+ * File ID:     0213191430N1012262356L01821
  * License:     LGPLv3
  * Copyright (C) 2019-2026 John Cage
  *
@@ -226,7 +226,7 @@ void * strResizeMatrix(P_MATRIX pmtx, size_t ln, size_t col, size_t size)
 	return pmtx->arrz.pdata;
 }
 
-/* Function name: strSetMatrix_O
+/* Function name: strSetMatrix
  * Description:   Fill up a matrix with a specific value.
  * Parameters:
  *       pmtx Pointer to a matrix you want to fill.
@@ -234,11 +234,25 @@ void * strResizeMatrix(P_MATRIX pmtx, size_t ln, size_t col, size_t size)
  *       size Size of each element.
  * Return value:  N/A.
  * Caution:       Address of pmtx Must Be Allocated first.
- * Tip:           A macro version of this function named strSetMatrix_M is available.
  */
-void strSetMatrix_O(P_MATRIX pmtx, const void * pval, size_t size)
+void strSetMatrix(P_MATRIX pmtx, const void * pval, size_t size)
 {
-	strSetArrayZ(&pmtx->arrz, pval, size);
+	if (SV_ASSERT(pmtx->ln > 0 && NULL != pval))
+	{
+		REGISTER size_t i, j, k;
+		ARRAY_Z a;
+		
+		/* Make a dummy header. */
+		a.pdata = pmtx->arrz.pdata;
+		a.num   = pmtx->col;
+		
+		/* Fill one row first. */
+		strSetArrayZ(&a, pval, size);
+		
+		/* Repeat to fill the rest of matrix. */
+		for (j = a.num * size, k = pmtx->ln, i = 1; i < k; ++i)
+			memcpy(&pmtx->arrz.pdata[i * j], &pmtx->arrz.pdata[(i - 1) * j], j);
+	}
 }
 
 /* Function name: strFetchValuePointerMatrix_O
