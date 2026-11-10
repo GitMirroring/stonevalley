@@ -166,7 +166,7 @@ int strTraverseArrayZ(P_ARRAY_Z parrz, size_t size, CBF_TRAVERSE cbftvs, size_t 
  *                    ^--------^      |      ^--------^
  *                    c        d      |      c        d
  *                a >= c && a < d;    | c >= a && b <=d;
- *                ========================================
+ *                =========================================
  *                a = pdest->pdata; b = pdest->pdata + pdest->num;
  *                c = psrc->pdata;  d = psrc->pdata  + psrc->num;
  */
