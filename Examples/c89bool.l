@@ -51,8 +51,8 @@ char * ConvertStringBoolean(char * str);
 	fprintf
 	(
 		fptmp,
-		"%s",
-"/* Boolean type and constants are used to replace stdbool including for C89 compliance. */\ntypedef unsigned int BOOL;\n#define true  1\n#define false 0"
+"/* Boolean type and constants are used to replace stdbool including for C89 compliance. */\ntypedef unsigned int %s;\n#define true  1\n#define false 0",
+		COMPATIBLE_BOOL
 	);
 }
 ^"bool"({SPACE}|{SYMBOL})+ { fprintf(fptmp, "%s", ConvertStringBoolean(yytext)); }
